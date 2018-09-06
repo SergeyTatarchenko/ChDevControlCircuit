@@ -1,8 +1,6 @@
 #include "Util.h"
 #include "stdlib.h"
 
-
-
 /*************************************************
 Convert integer to array
 return number bit

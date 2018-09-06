@@ -11,6 +11,8 @@
 #include "pwm.h"
 #include "usart.h"
 #include "mcp23x17.h"
+
+#include "global.h"
 /*----------------------------------------------*/
 #include "FreeRTOS.h"
 #include "task.h"
@@ -22,5 +24,6 @@
 void LedInit(void);
 /*-----------global function prototypes---------*/
 
-extern void StartInit(void *pvParameters);
-extern void vBlinker (void *pvParameters);
+void StartInit(void *pvParameters);
+void vTestHardvare (void *pvParameters);
+void vBlinker (void *pvParameters);

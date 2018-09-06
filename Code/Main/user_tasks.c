@@ -5,6 +5,8 @@
 * Description        : all code here
 *************************************************/
 #include "user_tasks.h"
+
+PortState_REGISTR IO_STATE;
 /*************************************************
  Initial configuration and start other tasks
 *************************************************/
@@ -22,18 +24,18 @@ void StartInit(void *pvParameters){
 	I2C2Init();
 	/*first config for MCP23017 */
 	MCP23x17_Init();
-	
-	
 	/*usart init*/
 	usart_init();
 	
 	/*start other tasks*/
 	
-	/*test blink*/
-	xTaskCreate(vBlinker, "blink", configMINIMAL_STACK_SIZE, NULL, 1, NULL );
 	
-	PWM_ON;
-	PWMSetValue(4500);
+	/*start diagnostic of charging device*/
+	xTaskCreate(vTestHardvare,"diagnostic", configMINIMAL_STACK_SIZE, NULL, 2, NULL );
+	
+	
+	/*test blink*/
+	xTaskCreate(vBlinker, "blink", configMINIMAL_STACK_SIZE, NULL, 3, NULL );
 	
 	vTaskDelete(NULL); /*delete task*/
 	
@@ -52,9 +54,12 @@ void vBlinker (void *pvParameters){
 }
 
 /*************************************************
- hardware errors handler
+ diagnostic of hardware state (external ADC,
+ check input and output state of MCP23017 )
 *************************************************/
-void vErrorHandler(void *pvParameters){
+void vTestHardvare(void *pvParameters){
+	for(;;){
+	}
 	
 }
 /*************************************************

@@ -60,9 +60,7 @@
 #define OLATB_ADDR1		0x1A
 
 /*----------------------------------------------*/
-/*outputs*/
 #define PORTA	0	
-/*inputs*/
 #define PORTB	1
 /*-----------global typedef----------------------*/
 #pragma pack(push,1)
