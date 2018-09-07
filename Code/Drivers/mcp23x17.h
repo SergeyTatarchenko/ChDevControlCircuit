@@ -93,17 +93,21 @@ extern struct EXP_GPIO_PortConfig EXP_GPIO_CONFIG;
 extern struct EXP_GPIO_PortConfig *PortConfig;
 
 extern struct EXP_GPIO_PortIO EXP_GPIO_A;
+/*output state of GPIOA*/
 extern struct EXP_GPIO_PortIO *PortA;
 extern struct EXP_GPIO_PortIO EXP_GPIO_B;
+/*output state of GPIOB*/
 extern struct EXP_GPIO_PortIO *PortB;
 
 extern struct EXP_GPIO_PortState EXP_STATE_A;
+/*captured state of GPIO (for interrupts)*/
 extern struct EXP_GPIO_PortState *PortAState;
 extern struct EXP_GPIO_PortState EXP_STATE_B;
+/*captured state of GPIO (for interrupts)*/
 extern struct EXP_GPIO_PortState *PortBState;
 
 /*----------- global function prototypes---------*/
 extern void MCP23x17_Init(void);
-extern void MCP23x17_GetState(int Port);
-extern void MCP23x17_SetOutPin(int bit,int state);
+extern _Bool MCP23x17_GetState(int Port);
+extern _Bool MCP23x17_SetOutPin(struct EXP_GPIO_PortIO *pointer,int bit,int bit_state);
 /*-----------local function prototypes----------*/

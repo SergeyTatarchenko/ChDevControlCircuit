@@ -5,38 +5,20 @@
 * Description        : all code here
 *************************************************/
 #include "user_tasks.h"
-
-PortState_REGISTR IO_STATE;
 /*************************************************
  Initial configuration and start other tasks
 *************************************************/
-void StartInit(void *pvParameters){
-	
-	/*init port for led on PC13*/
-	LedInit();
-	/*init channel 1 DMA for ADC*/
-	DMA_ADC1_Setup();
-	/*internal ADC init*/
-	ADC_Init();
-	/* Init internal timer as PWM */
-	PWM_Init();
-	/*init hardware I2C module*/
-	I2C2Init();
-	/*first config for MCP23017 */
-	MCP23x17_Init();
-	/*usart init*/
-	usart_init();
-	
+void StartInit(void *pvParameters){	
+	Core_Init();
 	/*start other tasks*/
-	
 	
 	/*start diagnostic of charging device*/
 	xTaskCreate(vTestHardvare,"diagnostic", configMINIMAL_STACK_SIZE, NULL, 2, NULL );
 	
-	
 	/*test blink*/
 	xTaskCreate(vBlinker, "blink", configMINIMAL_STACK_SIZE, NULL, 3, NULL );
 	
+	LED_OFF;
 	vTaskDelete(NULL); /*delete task*/
 	
 }
@@ -45,11 +27,14 @@ void StartInit(void *pvParameters){
 blink via I2C
 *************************************************/
 void vBlinker (void *pvParameters){
-	for(;;){
-		MCP23x17_SetOutPin(0,1);		
-		vTaskDelay(200);			
-		MCP23x17_SetOutPin(0,0);	
-		vTaskDelay(200);			
+	Set_IO_State(OUT7,1);
+	
+	for(;;){	
+		Set_IO_State(OUT0,1);
+		vTaskDelay(500);			
+		
+		Set_IO_State(OUT0,0);
+		vTaskDelay(500);			
 	}
 }
 
@@ -58,17 +43,20 @@ void vBlinker (void *pvParameters){
  check input and output state of MCP23017 )
 *************************************************/
 void vTestHardvare(void *pvParameters){
-	for(;;){
+	
+	if(Get_IO_State()){
+		/*if state is received successfully (no internal circuit errors)*/
+		
+		
+	}else{
+		/*internal errors*/
 	}
 	
-}
-/*************************************************
-Init blue LED on board (PC13 pin) 
-*************************************************/
-void LedInit(){
-	/* LED on PC13*/
-	RCC->APB2ENR |= RCC_APB2ENR_IOPCEN;
-	GPIOC->CRH &= ~(GPIO_CRH_MODE13|GPIO_CRH_CNF13);	
-	GPIOC->CRH |= (GPIO_CRH_MODE13_0  | GPIO_CRH_MODE13_1);	
+	
+	for(;;){
+		vTaskDelay(500);
+	}
+//	vTaskDelete(NULL); /*delete task*/
+	
 }
 

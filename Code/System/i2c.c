@@ -39,7 +39,8 @@ void I2C2Init(){
 /*************************************************
 Send data I2C
 *************************************************/
-void I2C2SendData(uint8_t adress,uint8_t *data,int lenght){
+_Bool I2C2SendData(uint8_t adress,uint8_t *data,int lenght){
+	_Bool state = 0;
 	int i = 0;
 	I2CSendStart();
 	I2CSendAdress(adress);
@@ -52,11 +53,17 @@ void I2C2SendData(uint8_t adress,uint8_t *data,int lenght){
 		}
 	}
 	I2CSendStop();
+	
+	if(I2C_ERROR){
+		return state;
+	}
+	return !state;
 }
 ///*************************************************
 //Get data I2C
 //*************************************************/
-void I2C2GetData (uint8_t chip_adress,uint8_t adress_byte, uint8_t *data,int lenght){
+_Bool I2C2GetData (uint8_t chip_adress,uint8_t adress_byte, uint8_t *data,int lenght){
+	_Bool state = 0;
 	int i;
 	I2CSendStart();
 	I2CSendAdress(chip_adress); /*R/W = 0 ; Write*/
@@ -74,6 +81,11 @@ void I2C2GetData (uint8_t chip_adress,uint8_t adress_byte, uint8_t *data,int len
 		}	
 	}
 	I2CSendStop();
+	
+	if(I2C_ERROR){
+		return state;
+	}
+	return !state;
 }
 /*************************************************
 Send start bit I2C

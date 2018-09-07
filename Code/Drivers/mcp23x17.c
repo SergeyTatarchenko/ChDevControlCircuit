@@ -84,45 +84,51 @@ void MCP23x17_Init(void){
 /*************************************************
 get global state output pin mcp23x17 
 *************************************************/
-void MCP23x17_GetState(int Port){
+_Bool MCP23x17_GetState(int Port){
+	_Bool state;
 	uint8_t data[2] ={0,0};
-	/* forced copy of chosen port state and */
+	/* forced copy state of chosen port  */
 	switch(Port){
 		case PORTA:
-			I2C2GetData(MCP23017_ADRESS,INTFA_ADDR1,data,sizeof(data));
+			
+			state = I2C2GetData(MCP23017_ADRESS,INTFA_ADDR1,data,sizeof(data));
 		    memcpy(PortAState,data,sizeof(data));
-			I2C2GetData(MCP23017_ADRESS,GPIOA_ADDR1,data,sizeof(data));
+			state &= I2C2GetData(MCP23017_ADRESS,GPIOA_ADDR1,data,sizeof(data));
 		    memcpy(PortA,data,sizeof(data));
 			break;
 		case PORTB:
-			I2C2GetData(MCP23017_ADRESS,INTFB_ADDR1,data,sizeof(data));
+			state = I2C2GetData(MCP23017_ADRESS,INTFB_ADDR1,data,sizeof(data));
 			memcpy(PortBState,data,sizeof(data));	
-			I2C2GetData(MCP23017_ADRESS,GPIOB_ADDR1,data,sizeof(data));
+			state &= I2C2GetData(MCP23017_ADRESS,GPIOB_ADDR1,data,sizeof(data));
 			memcpy(PortB,data,sizeof(data));	
 		break;
 		default:
 			break;
 	}
+	return state;
 }
 /*************************************************
 set state output pin mcp23x17 
 *************************************************/
-void MCP23x17_SetOutPin(int bit,int state){
+_Bool MCP23x17_SetOutPin(struct EXP_GPIO_PortIO *pointer,int bit,int bit_state){
 	/*output array*/
 	uint8_t output [3];
-	switch(state){
+	_Bool state = 0;
+	
+	switch(bit_state){
 		case 1:
-			PortA->OLAT |= (1<<bit);
+			pointer->OLAT |= (1<<bit);
 			break;
 		case 0:
-			PortA->OLAT &= ~(1<<bit);
+			pointer->OLAT &= ~(1<<bit);
 			break;
 		default:
-			PortA->OLAT &= ~(1<<bit);
+			pointer->OLAT &= ~(1<<bit);
 			break;
 	}
 	output[0] = GPIOA_ADDR1;
-	memcpy(output+1,PortA,sizeof(output)-1);
-	I2C2SendData(MCP23017_ADRESS,output,sizeof(output));
+	memcpy(output+1,pointer,sizeof(output)-1);
+	state = I2C2SendData(MCP23017_ADRESS,output,sizeof(output));
+	return state;
 }
 

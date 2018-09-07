@@ -11,7 +11,6 @@
 #include "pwm.h"
 #include "usart.h"
 #include "mcp23x17.h"
-
 #include "global.h"
 /*----------------------------------------------*/
 #include "FreeRTOS.h"

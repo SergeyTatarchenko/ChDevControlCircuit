@@ -24,8 +24,8 @@
 	  6 Ошибка приема PEC*/
 /*-----------global function prototypes---------*/
 extern void I2C2Init(void);
-extern void	I2C2SendData(uint8_t adress,uint8_t *data,int lenght);
-extern void	I2C2GetData (uint8_t chip_adress,uint8_t adress_byte, uint8_t *data,int lenght);
+extern _Bool	I2C2SendData(uint8_t adress,uint8_t *data,int lenght);
+extern _Bool	I2C2GetData (uint8_t chip_adress,uint8_t adress_byte, uint8_t *data,int lenght);
 /*-----------local function prototypes----------*/
 extern void I2CSendStart(void);
 extern void I2CSendAdress( uint8_t adress);
