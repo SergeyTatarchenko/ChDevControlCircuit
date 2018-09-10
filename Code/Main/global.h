@@ -4,6 +4,9 @@
 * Version            : v 1.0
 * Description        : global.c header		
 *************************************************/
+#ifndef GLOBAL_H
+#define GLOBAL_H
+
 #include "stm32f10x.h"
 #include "string.h"
 #include "i2c.h"
@@ -41,19 +44,71 @@ typedef struct{
 			unsigned B6:1;
 			unsigned B7:1;
 			} bit;
-		} PortB_Byte_All;		
+		} PortB_Byte_All;
+		
 }PortState_REGISTR;
+#pragma pack(pop)
+
+/*value in mV(voltage) of avaliable analog inputs */
+#pragma pack(push,1)
+typedef struct{
+	/**/
+	union{
+		uint16_t Value;
+		struct{
+			uint8_t HHalf;
+			uint8_t LHalf;
+		}byte;
+	}AnalogValue1;
+	/**/
+	union{
+		uint16_t Value;
+		struct{
+			uint8_t HHalf;
+			uint8_t LHalf;
+		}byte;
+	}AnalogValue2;
+	/**/
+	union{
+		uint16_t Value;
+		struct{
+			uint8_t HHalf;
+			uint8_t LHalf;
+		}byte;
+	}AnalogValue3;
+	/**/
+	union{
+		uint16_t Value;
+		struct{
+			uint8_t HHalf;
+			uint8_t LHalf;
+		}byte;
+	}AnalogValue4;
+	
+}AnalogState_REGISTR;
 #pragma pack(pop)
 
 /*----------- global variables-------------------*/
 extern PortState_REGISTR IO_STATE;
 extern PortState_REGISTR *IO_Pointer;
+
+
+extern AnalogState_REGISTR AIN_State;
+extern AnalogState_REGISTR *AIN_Pointer;
+
 /*----------- global define----------------------*/
+
+/*I2C chips adressing*/
+//#define MCP23017_ADRESS 0x4E
+//#define ADG729_ADRESS 	0x9E
+/**/
+
 
 #define	OUTPUTS 	PortA_Byte_All.PortA_Byte 
 #define INPUTS		PortB_Byte_All.PortB_Byte 
 
 #ifdef MCP23017_ADRESS
+
 	#define OUT0	0
 	#define OUT1	1
 	#define OUT2	2
@@ -62,9 +117,7 @@ extern PortState_REGISTR *IO_Pointer;
 	#define OUT5	5
 	#define OUT6	6
 	#define OUT7	7
-#endif
 
-#ifdef IO_B
 	#define IN0	PortB_Byte_All.bit.B0
 	#define IN1	PortB_Byte_All.bit.B1
 	#define IN2	PortB_Byte_All.bit.B2
@@ -73,7 +126,14 @@ extern PortState_REGISTR *IO_Pointer;
 	#define IN5	PortB_Byte_All.bit.B5
 	#define IN6	PortB_Byte_All.bit.B6
 	#define IN7	PortB_Byte_All.bit.B7
+	
+	#ifdef	ADG729_ADRESS
+		
+	#endif
 #endif
+
+#define LED_OFF (GPIOC->BSRR = GPIO_BSRR_BS13);
+#define LED_ON 	(GPIOC->BSRR = GPIO_BSRR_BR13);
 
 /*-----------local function prototypes----------*/
 void LedInit(void);
@@ -84,14 +144,23 @@ void LedInit(void);
 /*init all peripherals and external circuits*/
 extern void Core_Init(void);
 
+
+/*run only in high priority tasks*********************************************
+******************************************************************************/
+
 /*get state of all available IO ports and puts it in the appropriate structure,
   return true if success*/
 extern _Bool Get_IO_State(void);
 
-/*get state of chosen IO port and puts it in the appropriate structure, return
+/*set state of chosen IO port and puts it in the appropriate structure, return
   true if success*/
 extern _Bool Set_IO_State(int pin,int pin_state);
 
+/*get analog state in mV of chosen port and puts it in the appropriate structure,
+return true if success*/
+extern _Bool Get_AIn_State(int port);
+
+#endif
 
 
 

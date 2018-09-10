@@ -5,14 +5,19 @@
 * Description        : Global parameters,functions
   and sending messages of charging device 		
 *************************************************/
+
+
 #include "global.h"
 #include "mcp23x17.h"
+#include "adg72x.h"
 /************************************************/
 /*-----------global variables-------------------*/
-/* declared global extern struct for port state */
+/* declared global extern struct for discrete port state */
 PortState_REGISTR IO_STATE;
 PortState_REGISTR *IO_Pointer;
-
+/* declared global extern struct for analog port state */
+AnalogState_REGISTR AIN_State;
+AnalogState_REGISTR *AIN_Pointer;
 
 /*************************************************
 init all system core drivers
@@ -32,10 +37,13 @@ void Core_Init(){
 	MCP23x17_Init();
 	/*usart init*/
 	usart_init();
+	/*external multiplexor init*/
 	
+	//ADG72X_Init();
 	
 	/*get adress, start IO model*/
 	IO_Pointer =&IO_STATE;
+	AIN_Pointer =&AIN_State;
 
 }
 /*************************************************
@@ -72,6 +80,14 @@ _Bool Set_IO_State(int pin,int pin_state){
 	PortA->OLAT = IO_Pointer->OUTPUTS;
 	
 	state = MCP23x17_SetOutPin(PortA,pin,pin_state);
+	return state;
+}
+/*************************************************
+get value from chosen analog input
+*************************************************/
+_Bool Get_AIn_State(int port){
+	_Bool state;
+	
 	return state;
 }
 /*************************************************

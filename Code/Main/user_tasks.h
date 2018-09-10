@@ -17,12 +17,13 @@
 #include "task.h"
 #include "queue.h"
 /*-----------local define-----------------------*/
-#define LED_OFF (GPIOC->BSRR = GPIO_BSRR_BS13);
-#define LED_ON 	(GPIOC->BSRR = GPIO_BSRR_BR13);
-/*-----------local function prototypes----------*/
-void LedInit(void);
-/*-----------global function prototypes---------*/
 
+/*-----------local function prototypes----------*/
+
+/*-----------global function prototypes---------*/
+/*initial task*/
 void StartInit(void *pvParameters);
+/*internal diagnostic task*/
 void vTestHardvare (void *pvParameters);
+/*LED flasher with frequency parameter*/
 void vBlinker (void *pvParameters);

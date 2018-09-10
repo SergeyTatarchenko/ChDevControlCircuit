@@ -5,6 +5,12 @@
 * Description        : all code here
 *************************************************/
 #include "user_tasks.h"
+/************************************************/
+/*----------- global variables-------------------*/
+/*----------- local variables--------------------*/
+uint32_t BlinkFrequency; //LED flashing frequency
+
+
 /*************************************************
  Initial configuration and start other tasks
 *************************************************/
@@ -14,27 +20,26 @@ void StartInit(void *pvParameters){
 	
 	/*start diagnostic of charging device*/
 	xTaskCreate(vTestHardvare,"diagnostic", configMINIMAL_STACK_SIZE, NULL, 2, NULL );
-	
-	/*test blink*/
-	xTaskCreate(vBlinker, "blink", configMINIMAL_STACK_SIZE, NULL, 3, NULL );
-	
-	LED_OFF;
+
+	//LED_OFF;
 	vTaskDelete(NULL); /*delete task*/
 	
 }
 
 /*************************************************
-blink via I2C
+LED blink (get blink frequency in ms
+as task parameter)
 *************************************************/
 void vBlinker (void *pvParameters){
-	Set_IO_State(OUT7,1);
+	
+	volatile TickType_t *BlinkFreq;
+	BlinkFreq =(TickType_t*)pvParameters;
 	
 	for(;;){	
-		Set_IO_State(OUT0,1);
-		vTaskDelay(500);			
-		
-		Set_IO_State(OUT0,0);
-		vTaskDelay(500);			
+		LED_ON;
+		vTaskDelay(*BlinkFreq);			
+		LED_OFF;
+		vTaskDelay(*BlinkFreq);			
 	}
 }
 
@@ -47,14 +52,21 @@ void vTestHardvare(void *pvParameters){
 	if(Get_IO_State()){
 		/*if state is received successfully (no internal circuit errors)*/
 		
+		/*beginning test of correct connecting */
+		BlinkFrequency = 500;
+		/*test blink*/
+		xTaskCreate(vBlinker, "blink", configMINIMAL_STACK_SIZE,(void*)&BlinkFrequency, 3, NULL );
+		
 		
 	}else{
 		/*internal errors*/
 	}
-	
+
 	
 	for(;;){
-		vTaskDelay(500);
+		vTaskDelay(1500);
+	//	vTaskDelete(vBlinker);
+		
 	}
 //	vTaskDelete(NULL); /*delete task*/
 	

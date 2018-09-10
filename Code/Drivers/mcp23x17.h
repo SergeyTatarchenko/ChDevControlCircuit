@@ -4,11 +4,18 @@
 * Version            : v 1.0
 * Description        : mcp23x17.c header
 *************************************************/
+#ifndef MCP23X17_H
+#define MCP23X17_H
+
 #include "stm32f10x.h"
 #include "string.h"
 #include "i2c.h"
+
+#include "global.h"
+
 /*-----------global define----------------------*/
 #define MCP23017_ADRESS 0x4E
+
 /*mcp23x17 registers adress from datasheet------*/
 #define IODIRA_ADDR0	0x00
 #define IODIRB_ADDR0	0x01
@@ -111,3 +118,5 @@ extern void MCP23x17_Init(void);
 extern _Bool MCP23x17_GetState(int Port);
 extern _Bool MCP23x17_SetOutPin(struct EXP_GPIO_PortIO *pointer,int bit,int bit_state);
 /*-----------local function prototypes----------*/
+
+#endif
