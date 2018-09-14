@@ -8,8 +8,7 @@
 
 
 #include "global.h"
-#include "mcp23x17.h"
-#include "adg72x.h"
+
 /************************************************/
 /*-----------global variables-------------------*/
 /* declared global extern struct for discrete port state */
@@ -37,8 +36,13 @@ void Core_Init(){
 	MCP23x17_Init();
 	/*usart init*/
 	usart_init();
-	/*external multiplexor init*/
+	/*external interrupt init (for MCP23017)*/
+	EXTI_Init();
+	/*NVIC config */
+	NVIC_Init();
 	
+	/*not tested*/
+	/*external multiplexor init*/
 	//ADG72X_Init();
 	
 	/*get adress, start IO model*/
@@ -86,7 +90,48 @@ _Bool Set_IO_State(int pin,int pin_state){
 get value from chosen analog input
 *************************************************/
 _Bool Get_AIn_State(int port){
+	
 	_Bool state;
+	
+	uint16_t voltage;
+	uint8_t value[2];
+	int adc_value;
+	/*connect to chosen port with multiplexor*/
+	//
+	if((AnalogPortPointer->byte&(1<<port))== 0){
+		state = ADG72X_SetInput(port);
+	}
+	/*calc value from ADC*/
+	state |= MCP3221_Get_Value(value);
+	
+	if(state !=0 ){
+		
+		adc_value = value[0];
+		adc_value<<=8;
+		adc_value |= value[1];
+		
+		/*get value in mV*/
+		voltage = (uint16_t)((adc_value*ADC_REF*1000)>>12);
+		
+		switch(port){
+			case 1:
+				AIN_Pointer->AnalogValue1.Value = voltage;	
+				break;
+			case 2:
+				AIN_Pointer->AnalogValue2.Value = voltage;
+				break;
+			case 3:
+				AIN_Pointer->AnalogValue3.Value = voltage;
+				break;
+			case 4:
+				AIN_Pointer->AnalogValue4.Value = voltage;
+				break;
+			default:
+				break;
+		}
+		
+	}
+	
 	
 	return state;
 }

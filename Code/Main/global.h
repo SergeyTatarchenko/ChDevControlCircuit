@@ -13,7 +13,11 @@
 #include "adc.h"
 #include "dma.h"
 #include "pwm.h"
+#include "ext.h"
 #include "usart.h"
+#include "mcp23x17.h"
+#include "adg72x.h"
+#include "mcp3221.h"
 /*----------- global typedef---------------------*/
 
 /*state of all io port */
@@ -99,8 +103,9 @@ extern AnalogState_REGISTR *AIN_Pointer;
 /*----------- global define----------------------*/
 
 /*I2C chips adressing*/
-//#define MCP23017_ADRESS 0x4E
-//#define ADG729_ADRESS 	0x9E
+	//#define MCP23017_ADRESS 0x4E
+	//#define ADG729_ADRESS 	0x9E
+	#define EC_PACKAGE
 /**/
 
 
@@ -128,7 +133,12 @@ extern AnalogState_REGISTR *AIN_Pointer;
 	#define IN7	PortB_Byte_All.bit.B7
 	
 	#ifdef	ADG729_ADRESS
-		
+	
+		#define AIN1	AnalogValue1.Value
+		#define AIN2	AnalogValue2.Value
+		#define AIN3	AnalogValue3.Value
+		#define AIN4	AnalogValue4.Value
+	
 	#endif
 #endif
 

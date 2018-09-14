@@ -1,20 +1,20 @@
 /*************************************************
-* File Name          : adc.h
+* File Name          : ext.h
 * Author             : Tatarchenko S.
 * Version            : v 1.0
-* Description        : adc.c header
+* Description        : ext.c header
 *************************************************/
-#ifndef ADC_H
-#define ADC_H
-
+#ifndef EXT_H
+#define EXT_H
 
 #include "stm32f10x.h"
 /*-----------local define-----------------------*/
-#define ADC1_TimeOut	500
-#define ADC1_On		(ADC1->CR2 |= ADC_CR2_SWSTART);
-#define ADC1_Off	(ADC1->CR2 &= ~ADC_CR2_SWSTART);
+#define EXTI_ENABLE 	(EXTI->IMR |= EXTI_IMR_MR6|EXTI_IMR_MR7)
+#define EXTI_DISABLE 	(EXTI->IMR &= ~(EXTI_IMR_MR6|EXTI_IMR_MR7))
 /*-----------global function prototypes---------*/
-extern void ADC_Init(void);
+extern void EXTI_Init(void);
+extern void NVIC_Init(void);
 /*-----------local function prototypes----------*/
+
 
 #endif

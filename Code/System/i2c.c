@@ -67,7 +67,11 @@ _Bool I2C2GetData (uint8_t chip_adress,uint8_t adress_byte, uint8_t *data,int le
 	int i;
 	I2CSendStart();
 	I2CSendAdress(chip_adress); /*R/W = 0 ; Write*/
-	I2CSendByte(adress_byte);
+	
+	/*send adress of first byte to read(if needed)*/
+	if(adress_byte!= NULL){
+		I2CSendByte(adress_byte);
+	}
 	I2CSendStop();
 	/*restart transmit*/
 	I2CSendStart();

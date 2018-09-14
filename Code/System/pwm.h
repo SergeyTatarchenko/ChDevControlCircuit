@@ -4,6 +4,10 @@
 * Version            : v 1.0
 * Description        : pwm.c header
 *************************************************/
+#ifndef PWM_H
+#define PWM_H
+
+
 #include "stm32f10x.h"
 #include "system_stm32f10x.h"
 /*-----------local define-----------------------*/
@@ -18,3 +22,5 @@
 /*-----------global function prototypes---------*/
 extern void PWM_Init(void);
 extern void PWMSetValue(uint16_t value); 
+
+#endif

@@ -4,8 +4,12 @@
 * Version            : v 1.0
 * Description        : i2c.c header
 *************************************************/
+#ifndef I2C_H
+#define I2C_H
+
 #include "stm32f10x.h"
 #include "system_stm32f10x.h"
+#include "string.h"
 /*-----------local define-----------------------*/
 #define I2C_SPEED	400000UL
 #define I2C_TimeOut	1000UL
@@ -32,3 +36,5 @@ extern void I2CSendAdress( uint8_t adress);
 extern void I2CSendByte(uint8_t data);
 extern uint8_t I2CGetByte(void);
 extern void I2CSendStop(void);
+
+#endif

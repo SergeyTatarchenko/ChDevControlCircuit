@@ -11,8 +11,6 @@
 #include "string.h"
 #include "i2c.h"
 
-#include "global.h"
-
 /*-----------global define----------------------*/
 #define MCP23017_ADRESS 0x4E
 
@@ -120,3 +118,5 @@ extern _Bool MCP23x17_SetOutPin(struct EXP_GPIO_PortIO *pointer,int bit,int bit_
 /*-----------local function prototypes----------*/
 
 #endif
+
+

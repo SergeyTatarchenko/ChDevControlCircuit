@@ -58,7 +58,7 @@ void MCP23x17_Init(void){
 	PortConfig->GPINTEN = 0x00;
 	PortConfig->DEFVAL  = 0x00;
 	PortConfig->INTCON  = 0x00;
-	PortConfig->IOCON   = 0x80;
+	PortConfig->IOCON   = 0x82;
 	PortConfig->GPPU    = 0xFF;
 	
 	config[0] = IODIRA_ADDR1;
@@ -74,7 +74,7 @@ void MCP23x17_Init(void){
 	PortConfig->GPINTEN = 0x0F;
 	PortConfig->DEFVAL  = 0x00;
 	PortConfig->INTCON  = 0x00;
-	PortConfig->IOCON   = 0x80;
+	PortConfig->IOCON   = 0x82;
 	PortConfig->GPPU    = 0xFF;
 	config[0] = IODIRB_ADDR1;
 	
