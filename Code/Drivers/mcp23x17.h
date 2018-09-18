@@ -115,6 +115,7 @@ extern struct EXP_GPIO_PortState *PortBState;
 extern void MCP23x17_Init(void);
 extern _Bool MCP23x17_GetState(int Port);
 extern _Bool MCP23x17_SetOutPin(struct EXP_GPIO_PortIO *pointer,int bit,int bit_state);
+extern _Bool MCP23x17_SetOutByte(struct EXP_GPIO_PortIO *pointer,uint8_t byte);
 /*-----------local function prototypes----------*/
 
 #endif

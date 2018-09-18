@@ -142,11 +142,16 @@ extern AnalogState_REGISTR *AIN_Pointer;
 	#endif
 #endif
 
-#define LED_OFF (GPIOC->BSRR = GPIO_BSRR_BS13);
-#define LED_ON 	(GPIOC->BSRR = GPIO_BSRR_BR13);
+#define LED_OFF 		(GPIOC->BSRR = GPIO_BSRR_BS13);
+#define LED_ON 			(GPIOC->BSRR = GPIO_BSRR_BR13);
+
+
+#define MCP23017_START 	(GPIOB->BSRR = GPIO_BSRR_BS5);
+#define MCP23017_RESET 	(GPIOB->BSRR = GPIO_BSRR_BR5);
+
 
 /*-----------local function prototypes----------*/
-void LedInit(void);
+void DifPinInit(void);
 /*----------- global function prototypes---------*/
 
 /*Тут прототипы готовых функций для работы с ядром и периферийными устройствами */
@@ -162,13 +167,20 @@ extern void Core_Init(void);
   return true if success*/
 extern _Bool Get_IO_State(void);
 
-/*set state of chosen IO port and puts it in the appropriate structure, return
+/*set state of chosen IO pin and puts it in the appropriate structure, return
   true if success*/
 extern _Bool Set_IO_State(int pin,int pin_state);
+
+/*set state of all chosen IO port and puts it in the appropriate structure, 
+return true if success*/
+extern _Bool Set_IO_Byte(uint8_t byte);
 
 /*get analog state in mV of chosen port and puts it in the appropriate structure,
 return true if success*/
 extern _Bool Get_AIn_State(int port);
+
+/*error handler for internal errors during execution ( MCP23017 error )*/
+extern void ResetIO_Model(void);
 
 #endif
 

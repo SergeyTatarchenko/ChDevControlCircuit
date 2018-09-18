@@ -22,8 +22,8 @@ AnalogState_REGISTR *AIN_Pointer;
 init all system core drivers
 *************************************************/
 void Core_Init(){
-	/*init port for led on PC13*/
-	LedInit();
+	/*init MCU pins*/
+	DifPinInit();
 	/*init channel 1 DMA for ADC*/
 	DMA_ADC1_Setup();
 	/*internal ADC init*/
@@ -44,6 +44,9 @@ void Core_Init(){
 	/*not tested*/
 	/*external multiplexor init*/
 	//ADG72X_Init();
+	
+	/*disable reset pin on MCP23017*/
+	MCP23017_START;
 	
 	/*get adress, start IO model*/
 	IO_Pointer =&IO_STATE;
@@ -66,7 +69,7 @@ _Bool Get_IO_State(){
 	return state;
 }
 /*************************************************
-set state of chosen port
+set state of chosen pins
 *************************************************/
 _Bool Set_IO_State(int pin,int pin_state){
 	_Bool state;	
@@ -85,6 +88,25 @@ _Bool Set_IO_State(int pin,int pin_state){
 	
 	state = MCP23x17_SetOutPin(PortA,pin,pin_state);
 	return state;
+}
+/*************************************************
+internal error handler 
+*************************************************/
+void ResetIO_Model(){
+	
+	MCP23017_RESET;
+	
+}
+
+/*************************************************
+set output byte of chosen port
+*************************************************/
+_Bool Set_IO_Byte(uint8_t byte){	
+	_Bool state;
+	IO_Pointer->OUTPUTS = byte;
+	PortA->OLAT = IO_Pointer->OUTPUTS;
+	state = MCP23x17_SetOutByte(PortA,byte);
+	return state;	
 }
 /*************************************************
 get value from chosen analog input
@@ -136,11 +158,22 @@ _Bool Get_AIn_State(int port){
 	return state;
 }
 /*************************************************
-Init blue LED on board (PC13 pin) 
+Init different MCU pins
 *************************************************/
-void LedInit(){
-	/* LED on PC13*/
+void DifPinInit(){
+	
+	/* config  LED on PC13*/
 	RCC->APB2ENR |= RCC_APB2ENR_IOPCEN;
 	GPIOC->CRH &= ~(GPIO_CRH_MODE13|GPIO_CRH_CNF13);	
 	GPIOC->CRH |= (GPIO_CRH_MODE13_0  | GPIO_CRH_MODE13_1);	
+	
+	LED_OFF;
+	
+	/*config MCP23017 Reset pin*/
+	RCC->APB2ENR |= RCC_APB2ENR_IOPBEN;
+	GPIOB->CRL &= ~(GPIO_CRL_MODE5|GPIO_CRL_CNF5);	
+	GPIOB->CRL |= (GPIO_CRL_MODE5_0  | GPIO_CRL_MODE5_1);	
+
+	MCP23017_RESET;
+	
 }

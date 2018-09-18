@@ -28,7 +28,9 @@ void StartInit(void *pvParameters);
 void vTestHardvare (void *pvParameters);
 /*LED flasher with frequency parameter*/
 void vBlinker (void *pvParameters);
-
 /* the task of reading the state of the I/O ports */
 void vGetIOState(void *pvParameters);
+
+/* the task for error handling */
+void vInternalErrorHandler(void *pvParameters);
 #endif

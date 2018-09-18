@@ -131,4 +131,17 @@ _Bool MCP23x17_SetOutPin(struct EXP_GPIO_PortIO *pointer,int bit,int bit_state){
 	state = I2C2SendData(MCP23017_ADRESS,output,sizeof(output));
 	return state;
 }
+/*************************************************
+set state output byte mcp23x17 
+*************************************************/
+_Bool MCP23x17_SetOutByte(struct EXP_GPIO_PortIO *pointer,uint8_t byte){
+	/*output array*/
+	uint8_t output [3];
+	_Bool state = 0;
+	pointer->OLAT = byte;
+	output[0] = GPIOA_ADDR1;
+	memcpy(output+1,pointer,sizeof(output)-1);
+	state = I2C2SendData(MCP23017_ADRESS,output,sizeof(output));
+	return state;
+}
 

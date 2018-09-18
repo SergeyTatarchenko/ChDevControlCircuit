@@ -7,12 +7,15 @@
 #include "user_tasks.h"
 /*************************************************/
 /*----------- global variables-------------------*/
+/*semaphore for I/O pool*/
+xSemaphoreHandle InputEvent;
+
+_Bool DeviceError = 0;
+
 /*----------- local variables--------------------*/
 uint32_t BlinkFrequency; //LED flashing frequency
 
-/*semaphore for I/O pool*/
-xSemaphoreHandle InputEvent;
-/*mutex for I2C bus , perform correct transmit */
+/*mutex for I2C/USART bus , perform correct transmit */
 xSemaphoreHandle xMutex_BUS_BUSY;
 
 /*************************************************
@@ -21,7 +24,6 @@ xSemaphoreHandle xMutex_BUS_BUSY;
 void StartInit(void *pvParameters){	
 	_Bool state;
 	Core_Init();
-	
 	
 	/**/
 	InputEvent = xSemaphoreCreateCounting(3,0);
@@ -44,7 +46,10 @@ void StartInit(void *pvParameters){
 		vTaskDelete(NULL); /*delete task*/		
 	}else{
 		/*internal error, loading aborted*/
-		LED_OFF;
+		
+		/*start error handling task*/
+		xTaskCreate(vInternalErrorHandler,"error handling", configMINIMAL_STACK_SIZE, NULL, 10, NULL );
+		
 		// add error handler
 		vTaskDelete(NULL); /*delete task*/
 	}
@@ -64,17 +69,32 @@ void vGetIOState(void *pvParameters){
 		if(!Get_IO_State()){
 			// internal circuit error (add handler)
 		}
+		Set_IO_Byte(0x01);
+
 		xSemaphoreGive(xMutex_BUS_BUSY);
 			
 		SemaphoreCount = uxSemaphoreGetCount(InputEvent);	
 		if(SemaphoreCount > 1){
 			
+			vTaskDelete(vBlinker);
 			//error overclocking IO port(add handler)
 		}
 	}
 	//vTaskDelete(NULL);
 }
-
+/*************************************************
+internal error handler task (max priority )
+*************************************************/
+void vInternalErrorHandler(void *pvParameters){
+	
+	ResetIO_Model();
+	LED_OFF;
+	for(;;){
+		vTaskDelay(1500);
+		/* add sending error message handler (USART)*/
+	}
+	
+}
 /*************************************************
 LED blink (get blink frequency in ms
 as task parameter)
@@ -97,14 +117,15 @@ void vBlinker (void *pvParameters){
  check input and output state of MCP23017 )
 *************************************************/
 void vTestHardvare(void *pvParameters){
-	
-	BlinkFrequency = 250;
+		
 	/*test blink*/
+	BlinkFrequency = 500;
 	xTaskCreate(vBlinker, "blink", configMINIMAL_STACK_SIZE,(void*)&BlinkFrequency, 4, NULL );	
-	
-	
 		
 	for(;;){
+		xSemaphoreTake(xMutex_BUS_BUSY,portMAX_DELAY);
+		//Set_IO_Byte(0x00);
+		xSemaphoreGive(xMutex_BUS_BUSY);
 		vTaskDelay(1500);
 	}
 //	vTaskDelete(NULL); /*delete task*/
