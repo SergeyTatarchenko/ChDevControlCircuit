@@ -184,6 +184,7 @@ extern void ResetIO_Model(void);
 
 #endif
 
+#define MESSAGE_BUF_SIZE	16
 
 
 

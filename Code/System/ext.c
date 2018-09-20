@@ -6,8 +6,6 @@
 	interrupt control and semaphore handlers
 *************************************************/
 #include "ext.h"
-#include "user_tasks.h"
-
 /************************************************
 EXTI 5-19 line handler
 *************************************************/

@@ -70,7 +70,7 @@ void vGetIOState(void *pvParameters){
 			// internal circuit error (add handler)
 		}
 		Set_IO_Byte(0x01);
-
+		
 		xSemaphoreGive(xMutex_BUS_BUSY);
 			
 		SemaphoreCount = uxSemaphoreGetCount(InputEvent);	
@@ -117,16 +117,18 @@ void vBlinker (void *pvParameters){
  check input and output state of MCP23017 )
 *************************************************/
 void vTestHardvare(void *pvParameters){
-		
+	
 	/*test blink*/
 	BlinkFrequency = 500;
 	xTaskCreate(vBlinker, "blink", configMINIMAL_STACK_SIZE,(void*)&BlinkFrequency, 4, NULL );	
 		
 	for(;;){
 		xSemaphoreTake(xMutex_BUS_BUSY,portMAX_DELAY);
-		//Set_IO_Byte(0x00);
+		DMA1_USART_ON;
 		xSemaphoreGive(xMutex_BUS_BUSY);
-		vTaskDelay(1500);
+		vTaskDelay(500);
+		DMA_Ch4_Reload();
+		vTaskDelay(500);
 	}
 //	vTaskDelete(NULL); /*delete task*/
 	

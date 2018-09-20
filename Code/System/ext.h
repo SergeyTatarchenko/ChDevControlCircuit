@@ -8,6 +8,8 @@
 #define EXT_H
 
 #include "stm32f10x.h"
+#include "user_tasks.h"
+
 /*-----------local define-----------------------*/
 #define EXTI_ENABLE 	(EXTI->IMR |= EXTI_IMR_MR6|EXTI_IMR_MR7)
 #define EXTI_DISABLE 	(EXTI->IMR &= ~(EXTI_IMR_MR6|EXTI_IMR_MR7))

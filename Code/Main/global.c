@@ -44,7 +44,7 @@ void Core_Init(){
 	/*not tested*/
 	/*external multiplexor init*/
 	//ADG72X_Init();
-	
+	DMA_USART1_Setup();
 	/*disable reset pin on MCP23017*/
 	MCP23017_START;
 	

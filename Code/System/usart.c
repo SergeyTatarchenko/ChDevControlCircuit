@@ -71,10 +71,10 @@ void usart_init(void)
 	;
 
 
-////	USART1->CR3 |= /*USART_CR3_CTSIE			// bit_10	CTS interrupt enable	1: An interrupt is generated whenever CTS=1 in the USART_SR register
-////				|*/ USART_CR3_CTSE			// bit_9	CTS	enable 	0: CTS hardware flow control disabled
+	USART1->CR3 |= /*USART_CR3_CTSIE			// bit_10	CTS interrupt enable	1: An interrupt is generated whenever CTS=1 in the USART_SR register
+////				|*/ //USART_CR3_CTSE			// bit_9	CTS	enable 	0: CTS hardware flow control disabled
 //				| USART_CR3_RTSE			// bit_8	RTS enable	0: RTS hardware flow control disabled
-//				| USART_CR3_DMAT			// bit_7	DMA enable transmitter
+				 USART_CR3_DMAT			// bit_7	DMA enable transmitter
 //				| USART_CR3_DMAR			// bit_6	DMA enable receiver
 //				| USART_CR3_SCEN			// bit_5	Smartcard mode enable
 //				| USART_CR3_NACK			// bit_4	Smartcard NACK enable	0: NACK transmission in case of parity error is disabled	1: NACK transmission during parity error is enabled
