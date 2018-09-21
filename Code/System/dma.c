@@ -7,8 +7,7 @@
 #include "dma.h"
 /*-----------global variables-------------------*/
 uint16_t ADC1_DataArray[ADC1_BUF_SIZE];
-uint8_t USART1_DataArray[USART1_BUF_SIZE]={'0','1','2','3','4','5','6','7','8','9','A','B','C','D','\n','\r'};
-
+uint8_t USART1_DataArray[USART1_BUF_SIZE]={"voltage\r\n"};
 /*************************************************
 Init DMA Channel for ADC1  
 *************************************************/
@@ -39,7 +38,7 @@ void DMA_USART1_Setup(){
 	RCC->AHBENR |= RCC_AHBENR_DMA1EN;
 	/*memory increment mode enabled,
 	memory\peripheral size size 8 bit
-	circular mode					*/
+	circular mode,memory to peripheral direction*/
 	DMA1_Channel4->CCR |= DMA_CCR1_MINC|DMA_CCR1_DIR;
 	/*peripheral address*/
 	DMA1_Channel4->CPAR |= (uint32_t)&(USART1->DR);

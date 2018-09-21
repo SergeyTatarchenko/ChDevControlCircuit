@@ -17,7 +17,7 @@ PortState_REGISTR *IO_Pointer;
 /* declared global extern struct for analog port state */
 AnalogState_REGISTR AIN_State;
 AnalogState_REGISTR *AIN_Pointer;
-
+  
 /*************************************************
 init all system core drivers
 *************************************************/

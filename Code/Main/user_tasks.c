@@ -15,7 +15,7 @@ _Bool DeviceError = 0;
 /*----------- local variables--------------------*/
 uint32_t BlinkFrequency; //LED flashing frequency
 
-/*mutex for I2C/USART bus , perform correct transmit */
+/*mutex for I2C , perform correct transmit */
 xSemaphoreHandle xMutex_BUS_BUSY;
 
 /*************************************************
@@ -87,7 +87,7 @@ internal error handler task (max priority )
 *************************************************/
 void vInternalErrorHandler(void *pvParameters){
 	
-	ResetIO_Model();
+	ResetIO_Model();  
 	LED_OFF;
 	for(;;){
 		vTaskDelay(1500);
@@ -123,12 +123,10 @@ void vTestHardvare(void *pvParameters){
 	xTaskCreate(vBlinker, "blink", configMINIMAL_STACK_SIZE,(void*)&BlinkFrequency, 4, NULL );	
 		
 	for(;;){
-		xSemaphoreTake(xMutex_BUS_BUSY,portMAX_DELAY);
-		DMA1_USART_ON;
-		xSemaphoreGive(xMutex_BUS_BUSY);
-		vTaskDelay(500);
 		DMA_Ch4_Reload();
-		vTaskDelay(500);
+//		xSemaphoreTake(xMutex_BUS_BUSY,portMAX_DELAY);
+//		xSemaphoreGive(xMutex_BUS_BUSY);
+		vTaskDelay(1500);
 	}
 //	vTaskDelete(NULL); /*delete task*/
 	

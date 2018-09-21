@@ -92,6 +92,13 @@ typedef struct{
 }AnalogState_REGISTR;
 #pragma pack(pop)
 
+/*USART message*/
+#pragma pack(push,1)
+typedef struct {
+	int a;
+} USART_Message;
+#pragma pack(pop)
+
 /*----------- global variables-------------------*/
 extern PortState_REGISTR IO_STATE;
 extern PortState_REGISTR *IO_Pointer;
@@ -102,10 +109,7 @@ extern AnalogState_REGISTR *AIN_Pointer;
 
 /*----------- global define----------------------*/
 
-/*I2C chips adressing*/
-	//#define MCP23017_ADRESS 0x4E
-	//#define ADG729_ADRESS 	0x9E
-	#define EC_PACKAGE
+#define EC_PACKAGE
 /**/
 
 
@@ -179,6 +183,8 @@ extern _Bool Set_IO_Byte(uint8_t byte);
 return true if success*/
 extern _Bool Get_AIn_State(int port);
 
+/*low priority tasks**********************************************************
+******************************************************************************/
 /*error handler for internal errors during execution ( MCP23017 error )*/
 extern void ResetIO_Model(void);
 
