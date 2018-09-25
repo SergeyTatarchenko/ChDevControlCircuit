@@ -1,8 +1,8 @@
 /*************************************************
 * File Name          : global.h
 * Author             : Tatarchenko S.
-* Version            : v 1.0
-* Description        : global.c header		
+* Version            : v 1.1
+* Description        : global.c header	
 *************************************************/
 #ifndef GLOBAL_H
 #define GLOBAL_H
@@ -18,6 +18,86 @@
 #include "mcp23x17.h"
 #include "adg72x.h"
 #include "mcp3221.h"
+
+/*----------- global define----------------------*/
+
+#define EC_PACKAGE
+/**/
+#define	OUTPUTS 	PortA_Byte_All.PortA_Byte 
+#define INPUTS		PortB_Byte_All.PortB_Byte 
+
+#ifdef MCP23017_ADRESS
+
+	#define OUT0	PortA_Byte_All.bit.B0
+	#define OUT1	PortA_Byte_All.bit.B1
+	#define OUT2	PortA_Byte_All.bit.B2
+	#define OUT3	PortA_Byte_All.bit.B3
+	#define OUT4	PortA_Byte_All.bit.B4
+	#define OUT5	PortA_Byte_All.bit.B5
+	#define OUT6	PortA_Byte_All.bit.B6
+	#define OUT7	PortA_Byte_All.bit.B7
+
+	#define IN0		PortB_Byte_All.bit.B0
+	#define IN1		PortB_Byte_All.bit.B1
+	#define IN2		PortB_Byte_All.bit.B2
+	#define IN3		PortB_Byte_All.bit.B3
+	#define IN4		PortB_Byte_All.bit.B4
+	#define IN5		PortB_Byte_All.bit.B5
+	#define IN6		PortB_Byte_All.bit.B6
+	#define IN7		PortB_Byte_All.bit.B7
+	
+#endif
+
+#ifdef	ADG729_ADRESS
+	
+	#define AIN1	AnalogValue1.Value
+	#define AIN2	AnalogValue2.Value
+	#define AIN3	AnalogValue3.Value
+	#define AIN4	AnalogValue4.Value
+	
+	#endif
+
+#define LED_OFF 		(GPIOC->BSRR = GPIO_BSRR_BS13);
+#define LED_ON 			(GPIOC->BSRR = GPIO_BSRR_BR13);
+
+
+#define MCP23017_START 	(GPIOB->BSRR = GPIO_BSRR_BS5);
+#define MCP23017_RESET 	(GPIOB->BSRR = GPIO_BSRR_BR5);
+
+
+/*-----------local function prototypes----------*/
+void DifPinInit(void);
+/*----------- global function prototypes---------*/
+
+/*Тут прототипы готовых функций для работы с ядром и периферийными устройствами */
+
+/*init all peripherals and external circuits*/
+extern void Core_Init(void);
+
+
+/*run only in high priority tasks*********************************************
+******************************************************************************/
+
+/*get state of all available IO ports and puts it in the appropriate structure,
+  return true if success*/
+extern _Bool Get_IO_State(void);
+
+/*set state of chosen IO pin and puts it in the appropriate structure, return
+  true if success*/
+extern _Bool Set_IO_State(int pin,int pin_state);
+
+/*set state of all chosen IO port and puts it in the appropriate structure, 
+return true if success*/
+extern _Bool Set_IO_Byte(uint8_t byte);
+
+/*get analog state in mV of chosen port and puts it in the appropriate structure,
+return true if success*/
+extern _Bool Get_AIn_State(int port);
+
+/*low priority tasks**********************************************************
+******************************************************************************/
+/*error handler for internal errors during execution ( MCP23017 error )*/
+extern void ResetIO_Model(void);
 /*----------- global typedef---------------------*/
 
 /*state of all io port */
@@ -87,8 +167,7 @@ typedef struct{
 			uint8_t HHalf;
 			uint8_t LHalf;
 		}byte;
-	}AnalogValue4;
-	
+	}AnalogValue4;	
 }AnalogState_REGISTR;
 #pragma pack(pop)
 
@@ -100,93 +179,12 @@ typedef struct {
 #pragma pack(pop)
 
 /*----------- global variables-------------------*/
+
 extern PortState_REGISTR IO_STATE;
 extern PortState_REGISTR *IO_Pointer;
-
-
+/**/
 extern AnalogState_REGISTR AIN_State;
 extern AnalogState_REGISTR *AIN_Pointer;
-
-/*----------- global define----------------------*/
-
-#define EC_PACKAGE
-/**/
-
-
-#define	OUTPUTS 	PortA_Byte_All.PortA_Byte 
-#define INPUTS		PortB_Byte_All.PortB_Byte 
-
-#ifdef MCP23017_ADRESS
-
-	#define OUT0	0
-	#define OUT1	1
-	#define OUT2	2
-	#define OUT3	3
-	#define OUT4	4
-	#define OUT5	5
-	#define OUT6	6
-	#define OUT7	7
-
-	#define IN0	PortB_Byte_All.bit.B0
-	#define IN1	PortB_Byte_All.bit.B1
-	#define IN2	PortB_Byte_All.bit.B2
-	#define IN3	PortB_Byte_All.bit.B3
-	#define IN4	PortB_Byte_All.bit.B4
-	#define IN5	PortB_Byte_All.bit.B5
-	#define IN6	PortB_Byte_All.bit.B6
-	#define IN7	PortB_Byte_All.bit.B7
-	
-	#ifdef	ADG729_ADRESS
-	
-		#define AIN1	AnalogValue1.Value
-		#define AIN2	AnalogValue2.Value
-		#define AIN3	AnalogValue3.Value
-		#define AIN4	AnalogValue4.Value
-	
-	#endif
-#endif
-
-#define LED_OFF 		(GPIOC->BSRR = GPIO_BSRR_BS13);
-#define LED_ON 			(GPIOC->BSRR = GPIO_BSRR_BR13);
-
-
-#define MCP23017_START 	(GPIOB->BSRR = GPIO_BSRR_BS5);
-#define MCP23017_RESET 	(GPIOB->BSRR = GPIO_BSRR_BR5);
-
-
-/*-----------local function prototypes----------*/
-void DifPinInit(void);
-/*----------- global function prototypes---------*/
-
-/*Тут прототипы готовых функций для работы с ядром и периферийными устройствами */
-
-/*init all peripherals and external circuits*/
-extern void Core_Init(void);
-
-
-/*run only in high priority tasks*********************************************
-******************************************************************************/
-
-/*get state of all available IO ports and puts it in the appropriate structure,
-  return true if success*/
-extern _Bool Get_IO_State(void);
-
-/*set state of chosen IO pin and puts it in the appropriate structure, return
-  true if success*/
-extern _Bool Set_IO_State(int pin,int pin_state);
-
-/*set state of all chosen IO port and puts it in the appropriate structure, 
-return true if success*/
-extern _Bool Set_IO_Byte(uint8_t byte);
-
-/*get analog state in mV of chosen port and puts it in the appropriate structure,
-return true if success*/
-extern _Bool Get_AIn_State(int port);
-
-/*low priority tasks**********************************************************
-******************************************************************************/
-/*error handler for internal errors during execution ( MCP23017 error )*/
-extern void ResetIO_Model(void);
 
 #endif
 

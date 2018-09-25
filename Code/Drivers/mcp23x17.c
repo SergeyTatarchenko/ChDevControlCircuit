@@ -8,24 +8,23 @@
 /*-----------local define-----------------------*/
 
 /*-----------local variables--------------------*/
-struct EXP_GPIO_PortConfig EXP_GPIO_CONFIG;
-struct EXP_GPIO_PortConfig *PortConfig;
+EXP_GPIO_PortConfig EXP_GPIO_CONFIG;
+EXP_GPIO_PortConfig *PortConfig;
 
-struct EXP_GPIO_PortIO EXP_GPIO_A;
-struct EXP_GPIO_PortIO *PortA;
-struct EXP_GPIO_PortIO EXP_GPIO_B;
-struct EXP_GPIO_PortIO *PortB;
+EXP_GPIO_PortIO EXP_GPIO_A;
+EXP_GPIO_PortIO *PortA;
+EXP_GPIO_PortIO EXP_GPIO_B;
+EXP_GPIO_PortIO *PortB;
 
-struct EXP_GPIO_PortState EXP_STATE_A;
-struct EXP_GPIO_PortState *PortAState;
-struct EXP_GPIO_PortState EXP_STATE_B;
-struct EXP_GPIO_PortState *PortBState;
+EXP_GPIO_PortState EXP_STATE_A;
+EXP_GPIO_PortState *PortAState;
+EXP_GPIO_PortState EXP_STATE_B;
+EXP_GPIO_PortState *PortBState;
 
 /*************************************************
 init mcp23x17 
 *************************************************/
 void MCP23x17_Init(void){	
-	
 	uint8_t data[2];
 	/*config array*/
 	uint8_t config [8];
@@ -110,7 +109,7 @@ _Bool MCP23x17_GetState(int Port){
 /*************************************************
 set state output pin mcp23x17 
 *************************************************/
-_Bool MCP23x17_SetOutPin(struct EXP_GPIO_PortIO *pointer,int bit,int bit_state){
+_Bool MCP23x17_SetOutPin(EXP_GPIO_PortIO *pointer,int bit,int bit_state){
 	/*output array*/
 	uint8_t output [3];
 	_Bool state = 0;
@@ -134,7 +133,7 @@ _Bool MCP23x17_SetOutPin(struct EXP_GPIO_PortIO *pointer,int bit,int bit_state){
 /*************************************************
 set state output byte mcp23x17 
 *************************************************/
-_Bool MCP23x17_SetOutByte(struct EXP_GPIO_PortIO *pointer,uint8_t byte){
+_Bool MCP23x17_SetOutByte(EXP_GPIO_PortIO *pointer,uint8_t byte){
 	/*output array*/
 	uint8_t output [3];
 	_Bool state = 0;

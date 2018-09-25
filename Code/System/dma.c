@@ -7,7 +7,7 @@
 #include "dma.h"
 /*-----------global variables-------------------*/
 uint16_t ADC1_DataArray[ADC1_BUF_SIZE];
-uint8_t USART1_DataArray[USART1_BUF_SIZE]={"voltage\r\n"};
+uint8_t USART1_DataArray[USART1_DEFAULT_BUF_SIZE]={"voltage\r\n"};
 /*************************************************
 Init DMA Channel for ADC1  
 *************************************************/
@@ -45,18 +45,17 @@ void DMA_USART1_Setup(){
 	/*pointer to memory address*/
 	DMA1_Channel4->CMAR |= (uint32_t)&USART1_DataArray[0];
 	/*number of data to transfer*/
-	DMA1_Channel4->CNDTR = USART1_BUF_SIZE;
+	DMA1_Channel4->CNDTR = USART1_DEFAULT_BUF_SIZE;
 	/*medium priority level */
 	DMA1_Channel4->CCR |= DMA_CCR1_PL_1;
 }
 /*************************************************
 Reload DMA Channel 4 
 *************************************************/
-void DMA_Ch4_Reload(){
+void DMA_Ch4_Reload(int new_buf_size){
 	DMA1_Channel4->CCR &= ~DMA_CCR1_EN;
-	DMA1_Channel4->CNDTR = USART1_BUF_SIZE;
+	DMA1_Channel4->CNDTR = new_buf_size;
 	DMA1_Channel4->CCR |= DMA_CCR1_EN;
-	
 }
 
 

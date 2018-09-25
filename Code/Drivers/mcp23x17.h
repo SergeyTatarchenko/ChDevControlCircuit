@@ -37,9 +37,7 @@
 #define GPIOB_ADDR0		0x13
 #define OLATA_ADDR0		0x14
 #define OLATB_ADDR0		0x14
-
 /*----------------------------------------------*/
-
 #define IODIRA_ADDR1	0x00
 #define IPOLA_ADDR1		0x01
 #define GPINTENA_ADDR1	0x02
@@ -69,7 +67,7 @@
 #define PORTB	1
 /*-----------global typedef----------------------*/
 #pragma pack(push,1)
-struct EXP_GPIO_PortConfig{
+typedef struct {
 	uint8_t IODIR;
 	uint8_t IPOL;
 	uint8_t GPINTEN;
@@ -77,47 +75,47 @@ struct EXP_GPIO_PortConfig{
 	uint8_t INTCON;
 	uint8_t IOCON;
 	uint8_t GPPU;
-};
+}EXP_GPIO_PortConfig;
 #pragma pack(pop)
 /*----------------------------------------------*/
 #pragma pack(push,1)
-struct EXP_GPIO_PortState{
+typedef struct {
 	uint8_t INTF;
 	uint8_t INTCAP;
-};
+} EXP_GPIO_PortState;
 #pragma pack(pop)
 /*----------------------------------------------*/
 #pragma pack(push,1)
-struct EXP_GPIO_PortIO{
+typedef struct {
 	uint8_t GPIO;
 	uint8_t OLAT;
-};
+}EXP_GPIO_PortIO;
 #pragma pack(pop)
 /*-----------global variables-------------------*/
-extern struct EXP_GPIO_PortConfig EXP_GPIO_CONFIG;
-extern struct EXP_GPIO_PortConfig *PortConfig;
+extern EXP_GPIO_PortConfig EXP_GPIO_CONFIG;
+extern EXP_GPIO_PortConfig *PortConfig;
 
-extern struct EXP_GPIO_PortIO EXP_GPIO_A;
-/*output state of GPIOA*/
-extern struct EXP_GPIO_PortIO *PortA;
-extern struct EXP_GPIO_PortIO EXP_GPIO_B;
-/*output state of GPIOB*/
-extern struct EXP_GPIO_PortIO *PortB;
+/*for fast pin config*/
 
-extern struct EXP_GPIO_PortState EXP_STATE_A;
-/*captured state of GPIO (for interrupts)*/
-extern struct EXP_GPIO_PortState *PortAState;
-extern struct EXP_GPIO_PortState EXP_STATE_B;
-/*captured state of GPIO (for interrupts)*/
-extern struct EXP_GPIO_PortState *PortBState;
+/*captured state of GPIOA (for interrupts)*/
+extern EXP_GPIO_PortState EXP_STATE_A;
+extern EXP_GPIO_PortState *PortAState;
+/*captured state of GPIOA (for interrupts)*/
+extern EXP_GPIO_PortState EXP_STATE_B;
+extern EXP_GPIO_PortState *PortBState;
 
+/*state of GPIOA*/
+extern EXP_GPIO_PortIO EXP_GPIO_A;
+extern EXP_GPIO_PortIO *PortA;
+/*state of GPIOB*/
+extern EXP_GPIO_PortIO EXP_GPIO_B;
+extern EXP_GPIO_PortIO *PortB;
 /*----------- global function prototypes---------*/
 extern void MCP23x17_Init(void);
 extern _Bool MCP23x17_GetState(int Port);
-extern _Bool MCP23x17_SetOutPin(struct EXP_GPIO_PortIO *pointer,int bit,int bit_state);
-extern _Bool MCP23x17_SetOutByte(struct EXP_GPIO_PortIO *pointer,uint8_t byte);
+extern _Bool MCP23x17_SetOutPin(EXP_GPIO_PortIO *pointer,int bit,int bit_state);
+extern _Bool MCP23x17_SetOutByte(EXP_GPIO_PortIO *pointer,uint8_t byte);
 /*-----------local function prototypes----------*/
-
 #endif
 
 
