@@ -21,12 +21,11 @@
 
 /*----------- global define----------------------*/
 
-#define EC_PACKAGE
 /**/
-#define	OUTPUTS 	PortA_Byte_All.PortA_Byte 
-#define INPUTS		PortB_Byte_All.PortB_Byte 
-
 #ifdef MCP23017_ADRESS
+	
+	#define	OUTPUTS 	PortA_Byte_All.PortA_Byte 
+	#define INPUTS		PortB_Byte_All.PortB_Byte 
 
 	#define OUT0	PortA_Byte_All.bit.B0
 	#define OUT1	PortA_Byte_All.bit.B1
@@ -55,7 +54,7 @@
 	#define AIN3	AnalogValue3.Value
 	#define AIN4	AnalogValue4.Value
 	
-	#endif
+#endif
 
 #define LED_OFF 		(GPIOC->BSRR = GPIO_BSRR_BS13);
 #define LED_ON 			(GPIOC->BSRR = GPIO_BSRR_BR13);
@@ -66,14 +65,12 @@
 
 
 /*-----------local function prototypes----------*/
+/*init different IO pins*/
 void DifPinInit(void);
-/*----------- global function prototypes---------*/
-
-/*Тут прототипы готовых функций для работы с ядром и периферийными устройствами */
-
 /*init all peripherals and external circuits*/
-extern void Core_Init(void);
-
+void Core_Init(void);
+/*----------- global function prototypes---------*/
+/*Тут прототипы готовых функций для работы с ядром и периферийными устройствами */
 
 /*run only in high priority tasks*********************************************
 ******************************************************************************/

@@ -12,9 +12,9 @@
 
 /*-----------global define----------------------*/
 
-#ifdef EC_PACKAGE
+//#ifdef EC_PACKAGE
 	#define MCP3221_ADRESS	0x96
-#endif
+//#endif
 
 /*12 bit ADC*/
 #define ADC_RATE	4095

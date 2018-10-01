@@ -38,7 +38,7 @@ void MCP23x17_Init(void){
 	PortBState = &EXP_STATE_B;
 	
 	/*default config PORTB (0-3) is input
-	PORTA (0-7) is output
+	PORTB (0-3) is input
 	PORTB (4-7) is unused (NC on PCB)*/
 	
 	/* config registers, segregated mapping,
