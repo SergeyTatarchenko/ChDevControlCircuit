@@ -70,7 +70,7 @@ void vGetIOState(void *pvParameters){
 			//error overclocking IO port(add handler)
 		}
 	}
-	//vTaskDelete(NULL);
+	vTaskDelete(NULL);
 }
 /*************************************************
 internal error handler task (max priority )
@@ -119,6 +119,6 @@ void vTestHardvare(void *pvParameters){
 		xSemaphoreGive(xMutex_BUS_BUSY);
 		vTaskDelay(1500);
 	}
-//	vTaskDelete(NULL); /*delete task*/
+	vTaskDelete(NULL); /*delete task*/
 	
 }
