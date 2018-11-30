@@ -32,17 +32,12 @@ void StartInit(void *pvParameters){
 	/*high level tasks*/
 	if(state){
 		/*run with higher priority (use I2C)*/
-		xTaskCreate(vGetIOState,"I/O pool ", configMINIMAL_STACK_SIZE, NULL, 6, NULL );	
+		xTaskCreate(vGetIOState,"I/O pool ", configMINIMAL_STACK_SIZE, NULL, 5, NULL );	
 	
-		/*start diagnostic of charging device*/
-		xTaskCreate(vTestHardvare,"diagnostic", configMINIMAL_STACK_SIZE, NULL, 3, NULL );
 	
 		vTaskDelete(NULL); /*delete task*/		
 	}else{
 		/*internal error, loading aborted*/
-		
-		/*start error handling task*/
-		xTaskCreate(vInternalErrorHandler,"error handling", configMINIMAL_STACK_SIZE, NULL, 10, NULL );
 		
 		// add error handler
 		vTaskDelete(NULL); /*delete task*/
@@ -70,21 +65,9 @@ void vGetIOState(void *pvParameters){
 			//error overclocking IO port(add handler)
 		}
 	}
-	vTaskDelete(NULL);
+//	vTaskDelete(NULL);
 }
-/*************************************************
-internal error handler task (max priority )
-*************************************************/
-void vInternalErrorHandler(void *pvParameters){
-	
-	ResetIO_Model();  
-	LED_OFF;
-	for(;;){
-		vTaskDelay(1500);
-		/* add sending error message handler (USART)*/
-	}
-	
-}
+
 /*************************************************
 LED blink (get blink frequency in ms
 as task parameter)
@@ -102,23 +85,11 @@ void vBlinker (void *pvParameters){
 	}
 }
 
-/*************************************************
- diagnostic of hardware state (external ADC,
- check input and output state of MCP23017 )
-*************************************************/
-void vTestHardvare(void *pvParameters){
 	
-	/*test blink*/
-	BlinkFrequency = 500;
-	xTaskCreate(vBlinker, "blink", configMINIMAL_STACK_SIZE,(void*)&BlinkFrequency, 4, NULL );	
-		
-	for(;;){
-		DMA_Ch4_Reload(USART1_DEFAULT_BUF_SIZE);
-		xSemaphoreTake(xMutex_BUS_BUSY,portMAX_DELAY);
-		Get_IO_State();
-		xSemaphoreGive(xMutex_BUS_BUSY);
-		vTaskDelay(1500);
-	}
-	vTaskDelete(NULL); /*delete task*/
-	
-}
+//	for(;;){
+//		DMA_Ch4_Reload(USART1_DEFAULT_BUF_SIZE);
+//		xSemaphoreTake(xMutex_BUS_BUSY,portMAX_DELAY);
+//		Get_IO_State();
+//		xSemaphoreGive(xMutex_BUS_BUSY);
+//		vTaskDelay(1500);
+//	}
