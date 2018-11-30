@@ -15,7 +15,7 @@
 Main program 
 *************************************************/
 int main(void){
-	xTaskCreate(StartInit, "Program start", configMINIMAL_STACK_SIZE, NULL, 1, NULL );
+	xTaskCreate(StartInit, "Program start", configMINIMAL_STACK_SIZE, NULL, 5, NULL );
 	
 	/*run RTOS*/
 	vTaskStartScheduler();

@@ -21,7 +21,7 @@ void ADG72X_Init(){
 	AnalogPortPointer->byte = 0;
 	
 	memcpy(pointer,AnalogPortPointer,sizeof(unsigned char));
-	I2C2SendData(ADG729_ADRESS,pointer,sizeof(unsigned char));
+	I2CSendData(ADG729_ADRESS,pointer,sizeof(unsigned char));
 }
 /*************************************************
 chose analog input for external ADC
@@ -32,7 +32,7 @@ _Bool ADG72X_SetInput(int port){
 	AnalogPortPointer->byte &= (1<<port);
 	
 	memcpy(pointer,AnalogPortPointer,sizeof(unsigned char));
-	state = I2C2SendData(ADG729_ADRESS,pointer,sizeof(unsigned char));
+	state = I2CSendData(ADG729_ADRESS,pointer,sizeof(unsigned char));
 	
 	return state;	
 	

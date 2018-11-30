@@ -1,7 +1,7 @@
 /*************************************************
 * File Name          : mcp23x17.h
 * Author             : Tatarchenko S.
-* Version            : v 1.0
+* Version            : v 1.1
 * Description        : mcp23x17.c header
 *************************************************/
 #ifndef MCP23X17_H
@@ -111,10 +111,17 @@ extern EXP_GPIO_PortIO *PortA;
 extern EXP_GPIO_PortIO EXP_GPIO_B;
 extern EXP_GPIO_PortIO *PortB;
 /*----------- global function prototypes---------*/
+
+
 extern void MCP23x17_Init(void);
 extern _Bool MCP23x17_GetState(int Port);
 extern _Bool MCP23x17_SetOutPin(EXP_GPIO_PortIO *pointer,int bit,int bit_state);
 extern _Bool MCP23x17_SetOutByte(EXP_GPIO_PortIO *pointer,uint8_t byte);
+
+/*
+ it is necessary to implement functions  _Bool I2CSendData(uint8_t adress,uint8_t *data,int lenght)
+										_Bool I2CGetData (uint8_t chip_adress,uint8_t adress_byte, uint8_t *data,int lenght)
+*/
 /*-----------local function prototypes----------*/
 #endif
 

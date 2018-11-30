@@ -1,7 +1,7 @@
 /*************************************************
 * File Name          : mcp23x17.c
 * Author             : Tatarchenko S.
-* Version            : v 1.0
+* Version            : v 1.1
 * Description        : mcp23x17 i2c driver
 *************************************************/
 #include "mcp23x17.h"
@@ -46,7 +46,7 @@ void MCP23x17_Init(void){
 	PortConfig->IOCON = 0x80;
 	data[0] = IOCONB_ADDR0;
 	data[1] = PortConfig->IOCON;
-	I2C2SendData(MCP23017_ADRESS,data,sizeof(data));
+	I2CSendData(MCP23017_ADRESS,data,sizeof(data));
 	
 	/* config PortA,  pins 0-7 config as output,
 	   not inverted output, disable interrupt,
@@ -62,7 +62,7 @@ void MCP23x17_Init(void){
 	
 	config[0] = IODIRA_ADDR1;
 	memcpy(config+1,PortConfig,sizeof(config));
-	I2C2SendData(MCP23017_ADRESS,config,sizeof(config));
+	I2CSendData(MCP23017_ADRESS,config,sizeof(config));
 	
 	/* config PortB, pins 0-3 is input
 	   not inverted input, enable interrupts,pins compare
@@ -78,7 +78,7 @@ void MCP23x17_Init(void){
 	config[0] = IODIRB_ADDR1;
 	
 	memcpy(config+1,PortConfig,sizeof(config));
-	I2C2SendData(MCP23017_ADRESS,config,sizeof(config));
+	I2CSendData(MCP23017_ADRESS,config,sizeof(config));
 }
 /*************************************************
 get global state output pin mcp23x17 
@@ -90,15 +90,15 @@ _Bool MCP23x17_GetState(int Port){
 	switch(Port){
 		case PORTA:
 			
-			state = I2C2GetData(MCP23017_ADRESS,INTFA_ADDR1,data,sizeof(data));
+			state = I2CGetData(MCP23017_ADRESS,INTFA_ADDR1,data,sizeof(data));
 		    memcpy(PortAState,data,sizeof(data));
-			state &= I2C2GetData(MCP23017_ADRESS,GPIOA_ADDR1,data,sizeof(data));
+			state &= I2CGetData(MCP23017_ADRESS,GPIOA_ADDR1,data,sizeof(data));
 		    memcpy(PortA,data,sizeof(data));
 			break;
 		case PORTB:
-			state = I2C2GetData(MCP23017_ADRESS,INTFB_ADDR1,data,sizeof(data));
+			state = I2CGetData(MCP23017_ADRESS,INTFB_ADDR1,data,sizeof(data));
 			memcpy(PortBState,data,sizeof(data));	
-			state &= I2C2GetData(MCP23017_ADRESS,GPIOB_ADDR1,data,sizeof(data));
+			state &= I2CGetData(MCP23017_ADRESS,GPIOB_ADDR1,data,sizeof(data));
 			memcpy(PortB,data,sizeof(data));	
 		break;
 		default:
@@ -127,7 +127,7 @@ _Bool MCP23x17_SetOutPin(EXP_GPIO_PortIO *pointer,int bit,int bit_state){
 	}
 	output[0] = GPIOA_ADDR1;
 	memcpy(output+1,pointer,sizeof(output)-1);
-	state = I2C2SendData(MCP23017_ADRESS,output,sizeof(output));
+	state = I2CSendData(MCP23017_ADRESS,output,sizeof(output));
 	return state;
 }
 /*************************************************
@@ -140,7 +140,7 @@ _Bool MCP23x17_SetOutByte(EXP_GPIO_PortIO *pointer,uint8_t byte){
 	pointer->OLAT = byte;
 	output[0] = GPIOA_ADDR1;
 	memcpy(output+1,pointer,sizeof(output)-1);
-	state = I2C2SendData(MCP23017_ADRESS,output,sizeof(output));
+	state = I2CSendData(MCP23017_ADRESS,output,sizeof(output));
 	return state;
 }
 

@@ -31,7 +31,7 @@ void Core_Init(){
 	/* Init internal timer as PWM */
 	PWM_Init();
 	/*init hardware I2C module*/
-	I2C2Init();
+	I2CInit();
 	/*first config for MCP23017 */
 	MCP23x17_Init();
 	/*usart init*/

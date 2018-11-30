@@ -665,9 +665,9 @@
               <FilePath>.\Code\FreeRTOS\timers.c</FilePath>
             </File>
             <File>
-              <FileName>heap_1.c</FileName>
+              <FileName>heap_2.c</FileName>
               <FileType>1</FileType>
-              <FilePath>.\Code\FreeRTOS\heap_1.c</FilePath>
+              <FilePath>.\Code\FreeRTOS\heap_2.c</FilePath>
             </File>
           </Files>
         </Group>

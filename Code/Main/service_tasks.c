@@ -31,12 +31,13 @@ void StartInit(void *pvParameters){
 	
 	/*high level tasks*/
 	if(state){
+		
+		
 		/*run with higher priority (use I2C)*/
 		xTaskCreate(vGetIOState,"I/O pool ", configMINIMAL_STACK_SIZE, NULL, 5, NULL );	
-	
-	
 		vTaskDelete(NULL); /*delete task*/		
-	}else{
+	}
+	else{
 		/*internal error, loading aborted*/
 		
 		// add error handler
