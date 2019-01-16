@@ -32,14 +32,15 @@ void Core_Init(){
 	PWM_Init();
 	/*init hardware I2C module*/
 	I2CInit();
-	/*first config for MCP23017 */
-	MCP23x17_Init();
 	/*usart init*/
 	usart_init();
 	/*external interrupt init (for MCP23017)*/
 	EXTI_Init();
 	/*NVIC config */
 	NVIC_Init();
+	
+	/*first config for MCP23017 */
+	MCP23x17_Init();
 	
 	/*not tested*/
 	/*external multiplexor init*/

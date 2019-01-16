@@ -96,7 +96,6 @@ extern EXP_GPIO_PortConfig EXP_GPIO_CONFIG;
 extern EXP_GPIO_PortConfig *PortConfig;
 
 /*for fast pin config*/
-
 /*captured state of GPIOA (for interrupts)*/
 extern EXP_GPIO_PortState EXP_STATE_A;
 extern EXP_GPIO_PortState *PortAState;
@@ -120,8 +119,8 @@ extern _Bool MCP23x17_SetOutByte(EXP_GPIO_PortIO *pointer,uint8_t byte);
 
 /*
  it is necessary to implement functions  _Bool I2CSendData(uint8_t adress,uint8_t *data,int lenght)
-										_Bool I2CGetData (uint8_t chip_adress,uint8_t adress_byte, uint8_t *data,int lenght)
-*/
+										 _Bool I2CGetData (uint8_t chip_adress,uint8_t adress_byte, uint8_t *data,int lenght)
+*/ 
 /*-----------local function prototypes----------*/
 #endif
 
