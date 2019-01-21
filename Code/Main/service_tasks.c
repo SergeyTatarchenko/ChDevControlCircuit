@@ -34,15 +34,19 @@ void StartInit(void *pvParameters){
 		
 		
 		/*run with higher priority (use I2C)*/
-		xTaskCreate(vGetIOState,"I/O pool ", configMINIMAL_STACK_SIZE, NULL, 5, NULL );	
-		vTaskDelete(NULL); /*delete task*/		
+		xTaskCreate(vGetIOState,"I/O pool ", configMINIMAL_STACK_SIZE, NULL, 5, NULL );
+		/*run with higher priority (use I2C)*/
+		
+			/*create test blinker */
+			xTaskCreate(vBlinker,"blink",configMINIMAL_STACK_SIZE, (void*)500, 5, NULL );	
+
+		
 	}
 	else{
-		/*internal error, loading aborted*/
-		
+		/*internal error, loading aborted*/		
 		// add error handler
-		vTaskDelete(NULL); /*delete task*/
 	}
+	vTaskDelete(NULL); /*delete task*/	
 }
 /*************************************************
 the task is performed on a semaphore "InputEvent"

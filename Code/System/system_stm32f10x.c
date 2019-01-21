@@ -37,8 +37,9 @@ void SystemInit(void) {
 	if(HSEStatus == (uint32_t)0x01) {
 			/* Flash memory config*/
 			FLASH->ACR |= (FLASH_ACR_PRFTBE|FLASH_ACR_LATENCY_2);
+			
 			/*clock config for APB1/2*/
-			RCC->CFGR |= (RCC_CFGR_HPRE_DIV1|RCC_CFGR_PPRE1_DIV1|RCC_CFGR_PPRE2_DIV1);
+			RCC->CFGR |= (RCC_CFGR_HPRE_DIV1|RCC_CFGR_PPRE1_DIV2|RCC_CFGR_PPRE2_DIV1);
 			/*clock config for ADC1 12 MHz max
 		      HSE oscillator clock selected as PLL input clock
 	 	      72 Mhz PLL clock  when HSE is 12 MHz*/
