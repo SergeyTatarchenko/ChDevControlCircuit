@@ -42,13 +42,13 @@ void Core_Init(){
 	/*first config for MCP23017 */
 	MCP23x17_Init();
 	
-	/*not tested*/
-	/*external multiplexor init*/
-	//ADG72X_Init();
 	DMA_USART1_Setup();
 	/*disable reset pin on MCP23017*/
 	MCP23017_START;
 	
+		/*not used */
+	/*external multiplexor init*/
+	//ADG72X_Init();
 	/*get adress, start IO model*/
 	IO_Pointer =&IO_STATE;
 	AIN_Pointer =&AIN_State;
@@ -110,55 +110,6 @@ _Bool Set_IO_Byte(uint8_t byte){
 	return state;	
 }
 /*************************************************
-get value from chosen analog input
-*************************************************/
-_Bool Get_AIn_State(int port){
-	
-	_Bool state;
-	
-	uint16_t voltage;
-	uint8_t value[2];
-	int adc_value;
-	/*connect to chosen port with multiplexor*/
-	//
-	if((AnalogPortPointer->byte&(1<<port))== 0){
-		state = ADG72X_SetInput(port);
-	}
-	/*calc value from ADC*/
-	state |= MCP3221_Get_Value(value);
-	
-	if(state !=0 ){
-		
-		adc_value = value[0];
-		adc_value<<=8;
-		adc_value |= value[1];
-		
-		/*get value in mV*/
-		voltage = (uint16_t)((adc_value*ADC_REF*1000)>>12);
-		
-		switch(port){
-			case 1:
-				AIN_Pointer->AnalogValue1.Value = voltage;	
-				break;
-			case 2:
-				AIN_Pointer->AnalogValue2.Value = voltage;
-				break;
-			case 3:
-				AIN_Pointer->AnalogValue3.Value = voltage;
-				break;
-			case 4:
-				AIN_Pointer->AnalogValue4.Value = voltage;
-				break;
-			default:
-				break;
-		}
-		
-	}
-	
-	
-	return state;
-}
-/*************************************************
 Init different MCU pins
 *************************************************/
 void DifPinInit(){
@@ -175,6 +126,56 @@ void DifPinInit(){
 	GPIOB->CRL &= ~(GPIO_CRL_MODE5|GPIO_CRL_CNF5);	
 	GPIOB->CRL |= (GPIO_CRL_MODE5_0  | GPIO_CRL_MODE5_1);	
 
-	MCP23017_RESET;
+	MCP23017_START;
 	
 }
+/*************************************************
+get value from chosen analog input - not used 
+*************************************************/
+//_Bool Get_AIn_State(int port){
+//	
+//	_Bool state;
+//	
+//	uint16_t voltage;
+//	uint8_t value[2];
+//	int adc_value;
+//	/*connect to chosen port with multiplexor*/
+//	//
+//	if((AnalogPortPointer->byte&(1<<port))== 0){
+//		state = ADG72X_SetInput(port);
+//	}
+//	/*calc value from ADC*/
+//	state |= MCP3221_Get_Value(value);
+//	
+//	if(state !=0 ){
+//		
+//		adc_value = value[0];
+//		adc_value<<=8;
+//		adc_value |= value[1];
+//		
+//		/*get value in mV*/
+//		voltage = (uint16_t)((adc_value*ADC_REF*1000)>>12);
+//		
+//		switch(port){
+//			case 1:
+//				AIN_Pointer->AnalogValue1.Value = voltage;	
+//				break;
+//			case 2:
+//				AIN_Pointer->AnalogValue2.Value = voltage;
+//				break;
+//			case 3:
+//				AIN_Pointer->AnalogValue3.Value = voltage;
+//				break;
+//			case 4:
+//				AIN_Pointer->AnalogValue4.Value = voltage;
+//				break;
+//			default:
+//				break;
+//		}
+//		
+//	}
+//	
+//	
+//	return state;
+//}
+

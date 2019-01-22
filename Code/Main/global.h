@@ -60,8 +60,8 @@
 #define LED_ON 			(GPIOC->BSRR = GPIO_BSRR_BR13);
 
 
-#define MCP23017_START 	(GPIOB->BSRR = GPIO_BSRR_BS5);
-#define MCP23017_RESET 	(GPIOB->BSRR = GPIO_BSRR_BR5);
+#define MCP23017_RESET 	(GPIOB->BSRR = GPIO_BSRR_BS5);
+#define MCP23017_START 	(GPIOB->BSRR = GPIO_BSRR_BR5);
 
 
 /*-----------local function prototypes----------*/

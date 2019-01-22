@@ -36,9 +36,10 @@ void StartInit(void *pvParameters){
 		/*run with higher priority (use I2C)*/
 		xTaskCreate(vGetIOState,"I/O pool ", configMINIMAL_STACK_SIZE, NULL, 5, NULL );
 		/*run with higher priority (use I2C)*/
-		
+			
 			/*create test blinker */
-			xTaskCreate(vBlinker,"blink",configMINIMAL_STACK_SIZE, (void*)500, 5, NULL );	
+			BlinkFrequency = 500;
+			xTaskCreate(vBlinker,"blink",configMINIMAL_STACK_SIZE, (void*)&BlinkFrequency, 2, NULL );	
 
 		
 	}
@@ -84,8 +85,9 @@ void vBlinker (void *pvParameters){
 	
 	for(;;){	
 		LED_ON;
-		vTaskDelay(*BlinkFreq);			
+		vTaskDelay((*BlinkFreq)/4);			
 		LED_OFF;
+		vTaskDelay(3*(*BlinkFreq)/4);
 		vTaskDelay(*BlinkFreq);			
 	}
 }
