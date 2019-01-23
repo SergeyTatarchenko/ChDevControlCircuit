@@ -1,7 +1,7 @@
 /*************************************************
 * File Name          : i2c.h
 * Author             : Tatarchenko S.
-* Version            : v 1.1
+* Version            : v 1.2
 * Description        : i2c.c header
 *************************************************/
 #ifndef I2C_H
@@ -13,7 +13,7 @@
 /*-----------local define-----------------------*/
 #define I2C_MODULE	I2C2
 #define I2C_SPEED	400000UL
-#define I2C_TimeOut	1000UL
+#define I2C_TimeOut	PLL_FREQ/1000;
 
 #define I2C_ERROR	\
 	((I2C_MODULE->SR1 & I2C_SR1_TIMEOUT)\
@@ -39,4 +39,5 @@ extern void I2CSendByte(uint8_t data);
 extern uint8_t I2CGetByte(void);
 extern void I2CSendStop(void);
 
+extern int bus_error;
 #endif

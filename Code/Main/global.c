@@ -129,6 +129,7 @@ void DifPinInit(){
 	MCP23017_START;
 	
 }
+
 /*************************************************
 get value from chosen analog input - not used 
 *************************************************/

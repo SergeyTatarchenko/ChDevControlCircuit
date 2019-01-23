@@ -20,7 +20,7 @@ xSemaphoreHandle xMutex_BUS_BUSY;
 void StartInit(void *pvParameters){	
 	_Bool state;
 	Core_Init();
-	
+	LED_ON;
 	/**/
 	InputEvent = xSemaphoreCreateCounting(3,0);
 	xMutex_BUS_BUSY = xSemaphoreCreateMutex();
@@ -35,15 +35,21 @@ void StartInit(void *pvParameters){
 		
 		/*run with higher priority (use I2C)*/
 		xTaskCreate(vGetIOState,"I/O pool ", configMINIMAL_STACK_SIZE, NULL, 5, NULL );
-		/*run with higher priority (use I2C)*/
-			
-			/*create test blinker */
-			BlinkFrequency = 500;
-			xTaskCreate(vBlinker,"blink",configMINIMAL_STACK_SIZE, (void*)&BlinkFrequency, 2, NULL );	
-
+		/************************************/
+		
+		/*program timers*/
+		xTaskCreate(vTask_1000ms,"1000 ms pool",configMINIMAL_STACK_SIZE, NULL, 3, NULL );	
+		
+		/*create test blinker */
+		BlinkFrequency = 500;
+		xTaskCreate(vBlinker,"blink",configMINIMAL_STACK_SIZE, (void*)&BlinkFrequency, 2, NULL );	
+		
+		
 		
 	}
 	else{
+		
+		LED_ON;
 		/*internal error, loading aborted*/		
 		// add error handler
 	}
@@ -91,12 +97,3 @@ void vBlinker (void *pvParameters){
 		vTaskDelay(*BlinkFreq);			
 	}
 }
-
-	
-//	for(;;){
-//		DMA_Ch4_Reload(USART1_DEFAULT_BUF_SIZE);
-//		xSemaphoreTake(xMutex_BUS_BUSY,portMAX_DELAY);
-//		Get_IO_State();
-//		xSemaphoreGive(xMutex_BUS_BUSY);
-//		vTaskDelay(1500);
-//	}

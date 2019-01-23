@@ -8,6 +8,7 @@
 #define SERVICE_TASKS_H
 
 #include "global.h"
+#include "user_tasks.h"
 /*----------------------------------------------*/
 #include "FreeRTOS.h"
 #include "task.h"

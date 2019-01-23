@@ -18,8 +18,10 @@
 Main program 
 *************************************************/
 int main(void){
+	
 	xTaskCreate(StartInit, "Program start", configMINIMAL_STACK_SIZE, NULL, 5, NULL );
 	
+	vTaskStartScheduler();
 	/*add handler for stack overflow */
 	while(1);
 	

@@ -1,10 +1,12 @@
 /*************************************************
 * File Name          : i2c.c
 * Author             : Tatarchenko S.
-* Version            : v 1.1
+* Version            : v 1.2
 * Description        : I2C bus module for stm32f1x
 *************************************************/
 #include "i2c.h"
+
+int bus_error = 0;
 /*************************************************
 Init I2C module, Master mode, speed 400 KHz Fm
 *************************************************/
@@ -53,7 +55,7 @@ _Bool I2CSendData(uint8_t adress,uint8_t *data,int lenght){
 	}
 	I2CSendStop();
 	
-	if(I2C_ERROR){
+	if(I2C_ERROR||bus_error){
 		return state;
 	}
 	return !state;
@@ -85,7 +87,7 @@ _Bool I2CGetData (uint8_t chip_adress,uint8_t adress_byte, uint8_t *data,int len
 	}
 	I2CSendStop();
 	
-	if(I2C_ERROR){
+	if(I2C_ERROR||bus_error){
 		return state;
 	}
 	return !state;
@@ -94,16 +96,30 @@ _Bool I2CGetData (uint8_t chip_adress,uint8_t adress_byte, uint8_t *data,int len
 Send start bit I2C
 *************************************************/
 void I2CSendStart(){
+	int TimeOut = I2C_TimeOut;
 	I2C_MODULE->CR1 |= I2C_CR1_START; //send start bit
-	while(((I2C_MODULE->SR1 & I2C_SR1_SB) == 0)||I2C_ERROR);
+	while((((I2C_MODULE->SR1 & I2C_SR1_SB) == 0) &&!I2C_ERROR)){
+		TimeOut --;
+		if(TimeOut<0){
+			bus_error = 1;
+			break;
+		}
+	}
 }
 /*************************************************
 Send adress byte I2C
 *************************************************/
 void I2CSendAdress(uint8_t adress){
+	int TimeOut = I2C_TimeOut;
 	(void) I2C2->SR1;
 	I2C_MODULE->DR =(uint8_t)adress;
-	while(!(I2C_MODULE->SR1 & I2C_SR1_ADDR)||I2C_ERROR);
+	while(!(I2C_MODULE->SR1 & I2C_SR1_ADDR) &&!I2C_ERROR){
+		TimeOut --;
+		if(TimeOut<0){
+			bus_error = 1;
+			break;
+		}
+	}
 	(void) I2C_MODULE->SR1;
 	(void) I2C_MODULE->SR2;
 }
@@ -111,15 +127,29 @@ void I2CSendAdress(uint8_t adress){
 Send byte I2C
 *************************************************/
 void I2CSendByte(uint8_t byte){
+	int TimeOut = I2C_TimeOut;
 	I2C_MODULE->DR = (uint8_t)byte;
-	while(!(I2C_MODULE->SR1 & I2C_SR1_BTF)||I2C_ERROR);
+	while(!(I2C_MODULE->SR1 & I2C_SR1_BTF) &&!I2C_ERROR){
+		TimeOut --;
+		if(TimeOut<0){
+			bus_error = 1;
+			break;
+		}
+	}
 }
 /*************************************************
 Get byte I2C
 *************************************************/
 uint8_t I2CGetByte(){
+	int TimeOut = I2C_TimeOut;
 	uint8_t data;
-	while(!(I2C_MODULE->SR1 & I2C_SR1_RXNE)||I2C_ERROR);
+	while(!(I2C_MODULE->SR1 & I2C_SR1_RXNE)&&!I2C_ERROR){
+		TimeOut --;
+		if(TimeOut<0){
+			bus_error = 1;
+			break;
+		}
+	}
 	data = I2C_MODULE->DR;
 	return data;
 }
@@ -127,8 +157,15 @@ uint8_t I2CGetByte(){
 Send stop bit I2C
 *************************************************/
 void I2CSendStop(){
+	int TimeOut = I2C_TimeOut;
 	I2C_MODULE->CR1 |= I2C_CR1_STOP;
-	while(((I2C_MODULE->SR2 & I2C_SR2_BUSY)!=0)||I2C_ERROR); 
+	while(((I2C_MODULE->SR2 & I2C_SR2_BUSY)!=0) &&!I2C_ERROR){
+		TimeOut --;
+		if(TimeOut<0){
+			bus_error = 1;
+			break;
+		}
+	} 
 }
 
 /******************* end of file ****************/
