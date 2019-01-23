@@ -14,6 +14,10 @@
 /* declared global extern struct for discrete port state */
 PortState_REGISTR IO_STATE;
 PortState_REGISTR *IO_Pointer;
+
+value_ADC_REGISTR value_ADC;
+value_ADC_REGISTR *adc_val;
+
 /* declared global extern struct for analog port state */
 AnalogState_REGISTR AIN_State;
 AnalogState_REGISTR *AIN_Pointer;
@@ -52,6 +56,8 @@ void Core_Init(){
 	/*get adress, start IO model*/
 	IO_Pointer =&IO_STATE;
 	AIN_Pointer =&AIN_State;
+	
+	adc_val = &value_ADC;
 
 }
 /*************************************************
@@ -129,7 +135,29 @@ void DifPinInit(){
 	MCP23017_START;
 	
 }
-
+/*************************************************
+send USART message, use DMA , low priority 
+*************************************************/
+void send_usart_message(uint8_t *buf,uint32_t buf_size){
+	
+	memcpy(USART1_DataArray,buf,buf_size);
+	DMA_Ch4_Reload(buf_size);
+}                                                                     
+/*************************************************
+calc adc value, fill struct with mv 
+*************************************************/
+void adc_calc_value(){
+	
+	adc_val->CH1_ADC = (ADC1_DataArray[0]*(uint16_t)INT_ADC_REF)/(uint16_t)ADC_DEPTH;
+	adc_val->CH2_ADC = (ADC1_DataArray[1]*(uint16_t)INT_ADC_REF)/(uint16_t)ADC_DEPTH;
+	adc_val->CH3_ADC = (ADC1_DataArray[2]*(uint16_t)INT_ADC_REF)/(uint16_t)ADC_DEPTH;
+	adc_val->CH4_ADC = (ADC1_DataArray[3]*(uint16_t)INT_ADC_REF)/(uint16_t)ADC_DEPTH;
+	adc_val->CH5_ADC = (ADC1_DataArray[4]*(uint16_t)INT_ADC_REF)/(uint16_t)ADC_DEPTH;
+	adc_val->CH6_ADC = (ADC1_DataArray[5]*(uint16_t)INT_ADC_REF)/(uint16_t)ADC_DEPTH;
+	
+	ADC1_DataArray[0] = 1;
+	
+}
 /*************************************************
 get value from chosen analog input - not used 
 *************************************************/

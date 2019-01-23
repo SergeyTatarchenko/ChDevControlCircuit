@@ -20,7 +20,7 @@
 #define ADC_RATE	4095
 
 /* default 5V reference voltage*/
-#define ADC_REF		5
+#define EXT_ADC_REF		5
 
 /*----------- global function prototypes---------*/
 extern _Bool MCP3221_Get_Value(uint8_t *pointer);

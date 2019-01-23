@@ -91,6 +91,11 @@ extern _Bool Set_IO_Byte(uint8_t byte);
 return true if success*/
 extern _Bool Get_AIn_State(int port);
 
+/*send data via usart, use dma*/
+void send_usart_message(uint8_t *arr,uint32_t buf_size);
+
+/*calc adc value*/
+void adc_calc_value(void);
 /*low priority tasks**********************************************************
 ******************************************************************************/
 /*error handler for internal errors during execution ( MCP23017 error )*/
@@ -130,6 +135,19 @@ typedef struct{
 }PortState_REGISTR;
 #pragma pack(pop)
 
+#pragma pack(push,1)
+
+typedef struct{
+	uint16_t CH1_ADC;
+	uint16_t CH2_ADC;
+	uint16_t CH3_ADC;
+	uint16_t CH4_ADC;
+	uint16_t CH5_ADC;
+	uint16_t CH6_ADC;
+
+}value_ADC_REGISTR;
+
+#pragma pack(pop)
 /*value in mV(voltage) of avaliable analog inputs */
 #pragma pack(push,1)
 typedef struct{
@@ -179,6 +197,10 @@ typedef struct {
 
 extern PortState_REGISTR IO_STATE;
 extern PortState_REGISTR *IO_Pointer;
+
+extern value_ADC_REGISTR value_ADC;
+extern value_ADC_REGISTR *adc_val;
+
 /**/
 extern AnalogState_REGISTR AIN_State;
 extern AnalogState_REGISTR *AIN_Pointer;

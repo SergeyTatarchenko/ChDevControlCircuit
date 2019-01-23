@@ -15,7 +15,6 @@
 #include "semphr.h"
 /*-----------local define-----------------------*/
 /*-----------local function prototypes----------*/
-void send_usart_message(uint8_t *arr,uint32_t buf_size);
 /*-----------global variables-------------------*/
 /*-----------global function prototypes---------*/
 extern void vTask_1000ms(void *pvParameters);

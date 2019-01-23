@@ -13,6 +13,10 @@
 #define ADC1_TimeOut	500
 #define ADC1_On		(ADC1->CR2 |= ADC_CR2_SWSTART);
 #define ADC1_Off	(ADC1->CR2 &= ~ADC_CR2_SWSTART);
+
+#define ADC_DEPTH		4096
+#define INT_ADC_REF		3300	/*mV*/
+
 /*-----------global function prototypes---------*/
 extern void ADC_Init(void);
 /*-----------local function prototypes----------*/
