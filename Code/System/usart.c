@@ -49,10 +49,10 @@ void usart_init(void)
 //				| USART_CR1_PEIE			// bit_8	PE interrupt enable - 1: A USART interrupt is generated whenever PE=1 in the USART_SR register
 //				| USART_CR1_TXEIE			// bit_7	TXE interrupt enable - 1: A USART interrupt is generated whenever TXE=1 in the USART_SR register
 //				| USART_CR1_TCIE			// bit_6	Transmission complete interrupt enable - 1: A USART interrupt is generated whenever TC=1 in the USART_SR register
-//				| USART_CR1_RXNEIE			// bit_5	RXNE interrupt enable - 1: A USART interrupt is generated whenever ORE=1 or RXNE=1 in the USART_SR register
+				| USART_CR1_RXNEIE			// bit_5	RXNE interrupt enable - 1: A USART interrupt is generated whenever ORE=1 or RXNE=1 in the USART_SR register
 //				| USART_CR1_IDLEIE			// bit_4	IDLE interrupt enable - 1: A USART interrupt is generated whenever IDLE=1 in the USART_SR register
 				| USART_CR1_TE				// bit_3	Transmitter enable
-//				| USART_CR1_RE				// bit_2	Receiver enable	 
+				| USART_CR1_RE				// bit_2	Receiver enable	 
 //				| USART_CR1_RWU				// bit_1	Receiver wakeup - 0: Receiver in active mode	1: Receiver in mute mode
 //				| USART_CR1_SBK				// bit_0	Send break - 0: No break character is transmitted	1: Break character will be transmitted
 	;
@@ -90,13 +90,17 @@ void usart_init(void)
 
 }
 
-uint8_t	usart_rx(uint8_t usart_port)
+uint8_t	usart_rx(uint8_t *st)
 {
-	USART1->CR1 &= ~USART_CR1_TE;	// disable TX
-	USART1->CR1 |= USART_CR1_RE;	// enable RX
+//	USART1->CR1 &= ~USART_CR1_TE;	// disable TX
+	//USART1->CR1 |= USART_CR1_RE;	// enable RX
 	if(USART1->SR & USART_SR_RXNE)	// Read data register not empty
 	{
+		*st = 1;
 		return 	USART1->DR;
+	}else{
+		*st = 0;
+		
 	}
 //	if(USART1->SR & USART_SR_PE)			// Parity error
 //	{
@@ -109,7 +113,8 @@ void usart_tx(uint8_t *bytes, uint8_t length)
 {
 	uint8_t i = 0;
 	
-	USART1->CR1 &= ~USART_CR1_RE;	// disable RX
+//	USART1->CR1 &= ~USART_CR1_RE;	// disable RX
+	USART1->CR1 |= USART_CR1_RE;	// enable RX
 	USART1->CR1 |= USART_CR1_TE;	// enable TX
 	
 //	//USART1->CR1 &= ~USART_CR1_PCE;				// bit_10	Parity control enable

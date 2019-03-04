@@ -20,13 +20,15 @@ xSemaphoreHandle xMutex_BUS_BUSY;
 void StartInit(void *pvParameters){	
 	_Bool state;
 	Core_Init();
+	
+	Conf_INDEX_OBJ();
+	
 	LED_ON;
 	/**/
 	InputEvent = xSemaphoreCreateCounting(3,0);
 	xMutex_BUS_BUSY = xSemaphoreCreateMutex();
 	//
 	state = Get_IO_State();
-	
 	/*start other tasks*/
 	
 	/*high level tasks*/
@@ -40,14 +42,23 @@ void StartInit(void *pvParameters){
 		/*program timers*/
 		xTaskCreate(vTask_1000ms,"1000 ms pool",configMINIMAL_STACK_SIZE, NULL, 3, NULL );	
 		
+		/* Transfer obj Data */
+		xTaskCreate(vTask_Transfer_Data,"Transfer obj to USART",configMINIMAL_STACK_SIZE, NULL, 3, NULL );
+		
 		/*create test blinker */
 		BlinkFrequency = 500;
 		xTaskCreate(vBlinker,"blink",configMINIMAL_STACK_SIZE, (void*)&BlinkFrequency, 2, NULL );	
 		
 		
 		
-	}
-	else{
+	}else{
+		
+		/* Transfer obj Data */
+		xTaskCreate(vTask_Transfer_Data,"Transfer obj to USART",configMINIMAL_STACK_SIZE, NULL, 3, NULL );
+		/* Receive obj Data */
+		xTaskCreate(vTask_Receive_Data,"Receive obj from USART",configMINIMAL_STACK_SIZE, NULL, 3, NULL );
+		/* Handler */
+		xTaskCreate(vTask_Handler_Data,"Handler",configMINIMAL_STACK_SIZE, NULL, 3, NULL );
 		
 		LED_ON;
 		/*internal error, loading aborted*/		

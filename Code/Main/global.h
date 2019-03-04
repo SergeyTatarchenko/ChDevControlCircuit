@@ -193,6 +193,7 @@ typedef struct {
 } USART_Message;
 #pragma pack(pop)
 
+
 /*----------- global variables-------------------*/
 
 extern PortState_REGISTR IO_STATE;
