@@ -5,9 +5,18 @@
 * Description        : DMA configuration
 *************************************************/
 #include "dma.h"
-/*-----------global variables-------------------*/
+
+/*----------- global variables-------------------*/
+
+/*data array for adc*/
 uint16_t ADC1_DataArray[ADC1_BUF_SIZE];
-uint8_t USART1_DataArray[USART1_DEFAULT_BUF_SIZE];
+
+/* data array for usart obj transfer */
+uint8_t USART1_transmit_array[LEN_MSG_OBJ];
+
+/* data array for usart obj receive */
+uint8_t USART1_receive_array[LEN_MSG_OBJ];
+
 /*************************************************
 Init DMA Channel for ADC1  
 *************************************************/
@@ -36,18 +45,53 @@ Init DMA Channel for USART1
 void DMA_USART1_Setup(){
 	/*DMA1 clock*/
 	RCC->AHBENR |= RCC_AHBENR_DMA1EN;
+	
+	/*init DMA for USART1 transmit*/
+	
 	/*memory increment mode enabled,
 	memory\peripheral size size 8 bit
 	single mode,memory to peripheral direction*/
+	DMA1_Channel4->CCR &= 0;
 	DMA1_Channel4->CCR |= DMA_CCR1_MINC|DMA_CCR1_DIR;
 	/*peripheral address*/
 	DMA1_Channel4->CPAR |= (uint32_t)&(USART1->DR);
 	/*pointer to memory address*/
-	DMA1_Channel4->CMAR |= (uint32_t)&USART1_DataArray[0];
+	DMA1_Channel4->CMAR |= (uint32_t)&USART1_transmit_array[0];
 	/*number of data to transfer*/
 	DMA1_Channel4->CNDTR = (uint32_t)USART1_DEFAULT_BUF_SIZE;
 	/*medium priority level */
 	DMA1_Channel4->CCR |= DMA_CCR1_PL_1;
+	
+	/*init DMA for USART1 receive*/
+	/*memory increment mode enabled,
+	memory\peripheral size size 8 bit
+	single mode,peripheral to memory direction*/
+	DMA1_Channel5->CCR &= 0;
+	DMA1_Channel5->CCR |= DMA_CCR1_MINC;
+	/*peripheral address*/
+	DMA1_Channel5->CPAR |= (uint32_t)&(USART1->DR);
+	/*pointer to memory address*/
+	DMA1_Channel5->CMAR |= (uint32_t)&USART1_receive_array[0];
+	/*number of data to transfer*/
+	DMA1_Channel5->CNDTR = (uint32_t)USART1_DEFAULT_BUF_SIZE;
+	/*medium priority level */
+	DMA1_Channel5->CCR |= DMA_CCR1_PL_1;
+	
+}
+void DMA1_Channel4_IRQHandler(){
+	
+	static portBASE_TYPE xTaskWoken = pdFALSE;
+	/*interrupt on transfer complete */
+	if(DMA1->ISR &= DMA_ISR_TCIF4){
+		DMA1->IFCR |= DMA_IFCR_CTCIF4;
+	}
+	/*return mutex for other tasks to usart transmit*/
+	xSemaphoreGiveFromISR(xMutex_USART_BUSY,&xTaskWoken);
+	
+	if(xTaskWoken == pdTRUE){
+		taskYIELD();
+	}
+	
 }
 /*************************************************
 Reload DMA Channel 4 

@@ -29,6 +29,8 @@ void NVIC_Init(){
 	
 	/*enable external interrupt on NVIC*/
 	NVIC_EnableIRQ (EXTI9_5_IRQn);
+	/*DMA transfer complete interrupt on NVIC*/
+	NVIC_EnableIRQ (DMA1_Channel4_IRQn);
 	
 	NVIC_SetPriority (EXTI9_5_IRQn, 2);
 	

@@ -20,7 +20,6 @@
 /*-----------local define-----------------------*/
 /*-----------local function prototypes----------*/
 /*-----------global variables-------------------*/
-
 /*-----------global function prototypes---------*/
 extern void vTask_1000ms(void *pvParameters);
 extern void vTask_Transfer_Data(void *pvParameters);

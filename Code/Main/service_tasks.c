@@ -21,8 +21,6 @@ void StartInit(void *pvParameters){
 	_Bool state;
 	Core_Init();
 	
-	Conf_INDEX_OBJ();
-	
 	LED_ON;
 	/**/
 	InputEvent = xSemaphoreCreateCounting(3,0);
@@ -34,6 +32,7 @@ void StartInit(void *pvParameters){
 	/*high level tasks*/
 	if(state){
 		
+		OBJ_Init();
 		
 		/*run with higher priority (use I2C)*/
 		xTaskCreate(vGetIOState,"I/O pool ", configMINIMAL_STACK_SIZE, NULL, 5, NULL );
@@ -43,7 +42,7 @@ void StartInit(void *pvParameters){
 		xTaskCreate(vTask_1000ms,"1000 ms pool",configMINIMAL_STACK_SIZE, NULL, 3, NULL );	
 		
 		/* Transfer obj Data */
-		xTaskCreate(vTask_Transfer_Data,"Transfer obj to USART",configMINIMAL_STACK_SIZE, NULL, 3, NULL );
+	//	xTaskCreate(vTask_Transfer_Data,"Transfer obj to USART",configMINIMAL_STACK_SIZE, NULL, 3, NULL );
 		
 		/*create test blinker */
 		BlinkFrequency = 500;
@@ -54,11 +53,11 @@ void StartInit(void *pvParameters){
 	}else{
 		
 		/* Transfer obj Data */
-		xTaskCreate(vTask_Transfer_Data,"Transfer obj to USART",configMINIMAL_STACK_SIZE, NULL, 3, NULL );
+	//	xTaskCreate(vTask_Transfer_Data,"Transfer obj to USART",configMINIMAL_STACK_SIZE, NULL, 3, NULL );
 		/* Receive obj Data */
-		xTaskCreate(vTask_Receive_Data,"Receive obj from USART",configMINIMAL_STACK_SIZE, NULL, 3, NULL );
+	//	xTaskCreate(vTask_Receive_Data,"Receive obj from USART",configMINIMAL_STACK_SIZE, NULL, 3, NULL );
 		/* Handler */
-		xTaskCreate(vTask_Handler_Data,"Handler",configMINIMAL_STACK_SIZE, NULL, 3, NULL );
+	//	xTaskCreate(vTask_Handler_Data,"Handler",configMINIMAL_STACK_SIZE, NULL, 3, NULL );
 		
 		LED_ON;
 		/*internal error, loading aborted*/		

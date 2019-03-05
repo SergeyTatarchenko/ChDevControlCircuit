@@ -18,6 +18,8 @@
 #include "mcp23x17.h"
 #include "adg72x.h"
 #include "mcp3221.h"
+/*-----------------------------------------------*/
+#include "OBJ_DATA.h"
 
 /*----------- global define----------------------*/
 
@@ -92,7 +94,7 @@ return true if success*/
 extern _Bool Get_AIn_State(int port);
 
 /*send data via usart, use dma*/
-void send_usart_message(uint8_t *arr,uint32_t buf_size);
+void send_usart_message(uint8_t *message,uint32_t buf_size);
 
 /*calc adc value*/
 void adc_calc_value(void);
@@ -185,14 +187,6 @@ typedef struct{
 	}AnalogValue4;	
 }AnalogState_REGISTR;
 #pragma pack(pop)
-
-/*USART message*/
-#pragma pack(push,1)
-typedef struct {
-	int a;
-} USART_Message;
-#pragma pack(pop)
-
 
 /*----------- global variables-------------------*/
 

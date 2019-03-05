@@ -20,6 +20,7 @@
 /*-----------local function prototypes----------*/
 /*-----------global variables-------------------*/
 extern xSemaphoreHandle InputEvent;
+extern xSemaphoreHandle xMutex_USART_BUSY;
 /*-----------global function prototypes---------*/
 /*initial task*/
 void StartInit(void *pvParameters);

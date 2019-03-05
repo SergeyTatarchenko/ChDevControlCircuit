@@ -1,226 +1,78 @@
 #include "OBJ_DATA.h"
 
+
+/*----------- global variables-------------------*/
+uint8_t obj_mem_area[sizeof(OBJ_STRUCT)*num_of_all_obj];
+OBJ_STRUCT *objDefault;
+
+xSemaphoreHandle xMutex_USART_BUSY;
+/*-----------------------------------------------*/
+
+
+/*-----------------------------------------------*/
 uint8_t	FLAG_RECEIVE;
-
-ST_CHARGER Status_Charger;
-
-
 //TX_RX_FRAME	Rx_obj;
 volatile uint8_t buff_rx[LEN_MSG_OBJ];
 uint8_t st_rx;
-static uint8_t n_byte = 0;
+//static uint8_t n_byte = 0;
+/*-----------------------------------------------*/
 
-void USART1_IRQHandler(void)
-{
-	volatile unsigned int IIR;
+
+
+/*init obj model*/
+void OBJ_Init(){
 	
-	IIR = USART1->SR;
+	/*create mutex for correct usart transmit*/
+	xMutex_USART_BUSY = xSemaphoreCreateMutex();
 	
-//    if (IIR & USART_FLAG_RXNE) {                  // read interrupt
-//		USART1->SR &= ~USART_FLAG_RXNE;	          // clear interrupt
-		//buff_rx[n_byte] = usart_rx(&st_rx);
-		buff_rx[n_byte] = USART1->DR;
-		//objd_STATUS.data.data8b[0] = (uint8_t)USART1->DR;
-		if(buff_rx[0] == ID_NETWORK)
-		{
-			if(n_byte < LEN_MSG_OBJ)
-			{
-				//buff_rx[++n_byte] = usart_rx(&st_rx);
-				buff_rx[++n_byte] = USART1->DR;
-			}else{
-				
-				n_byte = 0;	
-			}
-			
-			if(n_byte == LEN_MSG_OBJ)
-			{
-				if(buff_rx[1] == ID_REMOTE_CNTRL)
-				{
-					FLAG_RECEIVE |= FLAG_RX_REMOTE_CTRL;
-				}
-			}
-			
-		}else{
-			n_byte = 0;
-		}
-//	}
+	objDefault =(OBJ_STRUCT*)obj_mem_area;
+	OBJ_create(objDefault);
+	
 }
 
+void OBJ_event(OBJ_STRUCT *obj,void(*obj_func)(void)){
+	obj_func();
+	OBJ_Upd(obj);	
+}
 
-
-/* Transfer Data Obj */
-uint8_t	Tx_OBJ_Data(OBJ_STRUCT *obj)
-{
-	uint8_t buff[LEN_MSG_OBJ];
-	uint8_t n_byte = 0;
+/*           update this obj             */
+void	OBJ_Upd(OBJ_STRUCT *obj){
+	
+	uint8_t *pointer;
+	uint8_t buff[sizeof(TX_RX_FRAME)];
+	TX_RX_FRAME message;
+	TX_RX_FRAME *message_pointer;
 	uint16_t _CRC_ = 0;
-	uint8_t i = 0;
 	
-	buff[n_byte] = ID_NETWORK;			// byte[0]
-	buff[++n_byte] = MY_ID;				// byte[1]
-	buff[++n_byte] = obj->id;			// byte[2]	index lsb
-	buff[++n_byte] = ((obj->id) >> 8);	// byte[3]	index msb
-	
-	//n_byte = 0;
-	for(i = 0; i < LEN_DATA; i++)
-	{
-		buff[++n_byte] = obj->data.d8b[i];	// byte[4]...byte[11]
-	}
-
+	pointer = buff;
+	/*create default message with obj info*/
+	message.d_struct.id_netw = ID_NETWORK;
+	message.d_struct.id_modul = MY_ID;
+	pointer += (sizeof(message.d_struct.id_netw)+sizeof(message.d_struct.id_modul));
+	memcpy(pointer,obj,sizeof(OBJ_STRUCT));
 	
 	/* Calc check summ */
-	for(i = 0; i < LEN_MSG_OBJ - LEN_CRC; i++)
+	for(int i = 0; i < LEN_MSG_OBJ - LEN_CRC; i++)
 	{
 		_CRC_ += buff[i];
 	}
+	message.d_struct.crc = _CRC_;
 	
-	buff[++n_byte] = _CRC_;					// byte[12]
-	buff[++n_byte]	= (_CRC_ >> 8);				// byte[13]
+	message_pointer =&message;
 	
-	usart_tx(buff, LEN_MSG_OBJ);	// transfer data to usart
-	//send_usart_message(buff, (uint32_t)LEN_MSG_OBJ);	// transfer data to usart
-	
-	return 0;
+	/*mutex return in dma transfer complete interrupt*/
+	xSemaphoreTake(xMutex_USART_BUSY,portMAX_DELAY);
+	send_usart_message((uint8_t*)message_pointer,sizeof(TX_RX_FRAME));	// transfer data to usart
 }
 
+/*             update all obj                */
+void Upd_All_OBJ(){
 
-///* Receive Data Obj */
-//uint8_t	Rx_OBJ_Data(void)
-//{
-//	//uint8_t buff[LEN_MSG_OBJ];
-//	TX_RX_FRAME	Rx_obj;
-//	uint8_t st_rx = 0;
-//	uint8_t i = 0;
+		for(int counter = 0; counter < num_of_all_obj; counter ++){
+		OBJ_Upd(this_obj(counter));
+	}
 
-////	Rx_obj.d_struct.id_netw = ID_NETWORK;			// byte[0]
-////	Rx_obj.d_struct.id_modul = ID_REMOTE_CNTRL;		// byte[1]
-//	Rx_obj.d_struct.index = IND_obj_STATUS;			// byte[2:3]
-////	
-////	/* data byte[4:11] */
-////	Rx_obj.d_struct.data[0] = 0x01;
-////	Rx_obj.d_struct.data[1] = 0x01;
-////	Rx_obj.d_struct.data[2] = 0x01;
-////	Rx_obj.d_struct.data[3] = 0x00;
-////	Rx_obj.d_struct.data[4] = 0x00;
-////	Rx_obj.d_struct.data[5] = 0x00;
-////	Rx_obj.d_struct.data[6] = 0x00;
-////	Rx_obj.d_struct.data[7] = 0x00;
-////	
-////	Rx_obj.d_struct.crc = 0x0A;	
-////	Rx_obj.byte[4] = usart_rx(&st_rx);
-////	if(st_rx)
-////	{
-////		for(i = 5; i < LEN_MSG_OBJ; i++)
-////		{
-////			Rx_obj.byte[i] = usart_rx(&st_rx);
-////		}
-////	}
-//	//Rx_obj.byte[i] = usart_rx(1);
-//	//Data_to_OBJ(&Rx_obj);
-//	
-//	//buff[0] = usart_rx(1);
-//	Rx_obj.d_struct.id_netw = usart_rx(&st_rx);
-//	if(st_rx && (Rx_obj.d_struct.id_netw == ID_NETWORK))
-//	{
-//		st_rx = 0;
-//		//buff[1] = usart_rx(1);
-
-//		Rx_obj.d_struct.id_modul = usart_rx(&st_rx);
-
-//		if(Rx_obj.d_struct.id_modul == ID_REMOTE_CNTRL)
-//		{
-//			
-//			/* Read byte index, data, crc */
-//			for(i = 2; i < LEN_MSG_OBJ; i++)
-//			{
-//				st_rx = 0;
-//				while(!st_rx)
-//				{
-//					Rx_obj.byte[i] = usart_rx(&st_rx);
-//				}
-//			}
-//			
-//			/* check crc*/
-//			if(Check_CRC(&Rx_obj))
-//			{
-//				/* check index */
-//				Data_to_OBJ(&Rx_obj);
-//				return 1;
-//			}
-//		}
-//	}
-//		
-//	return 0;
-//}
-
-///* Receive Data Obj */
-//uint8_t	Rx_OBJ_Data(void)
-//{
-//	//uint8_t buff[LEN_MSG_OBJ];
-//	TX_RX_FRAME	Rx_obj;
-//	uint8_t i = 0;
-
-//	
-//	st_rx = 0;
-//	
-////	Rx_obj.d_struct.id_netw = ID_NETWORK;			// byte[0]
-////	Rx_obj.d_struct.id_modul = ID_REMOTE_CNTRL;		// byte[1]
-//	Rx_obj.d_struct.index = IND_obj_STATUS;			// byte[2:3]
-////	
-////	/* data byte[4:11] */
-////	Rx_obj.d_struct.data[0] = 0x01;
-////	Rx_obj.d_struct.data[1] = 0x01;
-////	Rx_obj.d_struct.data[2] = 0x01;
-////	Rx_obj.d_struct.data[3] = 0x00;
-////	Rx_obj.d_struct.data[4] = 0x00;
-////	Rx_obj.d_struct.data[5] = 0x00;
-////	Rx_obj.d_struct.data[6] = 0x00;
-////	Rx_obj.d_struct.data[7] = 0x00;
-////	
-////	Rx_obj.d_struct.crc = 0x0A;	
-////	Rx_obj.byte[4] = usart_rx(&st_rx);
-////	if(st_rx)
-////	{
-////		for(i = 5; i < LEN_MSG_OBJ; i++)
-////		{
-////			Rx_obj.byte[i] = usart_rx(&st_rx);
-////		}
-////	}
-//	//Rx_obj.byte[i] = usart_rx(1);
-//	//Data_to_OBJ(&Rx_obj);
-//	
-//	//buff[0] = usart_rx(1);
-//	Rx_obj.d_struct.id_netw = usart_rx(&st_rx);
-//	if(st_rx && (Rx_obj.d_struct.id_netw == ID_NETWORK))
-//	{
-//		st_rx = 0;
-//		//buff[1] = usart_rx(1);
-
-//		Rx_obj.d_struct.id_modul = usart_rx(&st_rx);
-
-//		if(Rx_obj.d_struct.id_modul == ID_REMOTE_CNTRL)
-//		{
-//			
-//			/* Read byte index, data, crc */
-//			for(i = 2; i < LEN_MSG_OBJ; i++)
-//			{
-//				st_rx = 0;
-//				Rx_obj.byte[i] = usart_rx(&st_rx);
-//			}
-//			
-//			/* check crc*/
-//			if(Check_CRC(&Rx_obj))
-//			{
-//				/* check index */
-//				Data_to_OBJ(&Rx_obj);
-//				return 1;
-//			}
-//		}
-//	}
-//		
-//	return 0;
-//}
-
+}
 
 
 /* Receive Data Obj */

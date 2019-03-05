@@ -6,11 +6,11 @@
   and sending messages of charging device 		
 *************************************************/
 
-
 #include "global.h"
 
 /************************************************/
 /*-----------global variables-------------------*/
+
 /* declared global extern struct for discrete port state */
 PortState_REGISTR IO_STATE;
 PortState_REGISTR *IO_Pointer;
@@ -131,16 +131,14 @@ void DifPinInit(){
 	RCC->APB2ENR |= RCC_APB2ENR_IOPBEN;
 	GPIOB->CRL &= ~(GPIO_CRL_MODE5|GPIO_CRL_CNF5);	
 	GPIOB->CRL |= (GPIO_CRL_MODE5_0  | GPIO_CRL_MODE5_1);	
-
-	MCP23017_START;
 	
 }
 /*************************************************
-send USART message, use DMA , low priority 
+send USART message, use DMA , medium priority 
 *************************************************/
-void send_usart_message(uint8_t *buf,uint32_t buf_size){
+void send_usart_message(uint8_t *message,uint32_t buf_size){
 	
-	memcpy(USART1_DataArray,buf,buf_size);
+	memcpy(USART1_transmit_array,message,buf_size);
 	DMA_Ch4_Reload(buf_size);
 }                                                                     
 /*************************************************
@@ -158,53 +156,3 @@ void adc_calc_value(){
 	ADC1_DataArray[0] = 1;
 	
 }
-/*************************************************
-get value from chosen analog input - not used 
-*************************************************/
-//_Bool Get_AIn_State(int port){
-//	
-//	_Bool state;
-//	
-//	uint16_t voltage;
-//	uint8_t value[2];
-//	int adc_value;
-//	/*connect to chosen port with multiplexor*/
-//	//
-//	if((AnalogPortPointer->byte&(1<<port))== 0){
-//		state = ADG72X_SetInput(port);
-//	}
-//	/*calc value from ADC*/
-//	state |= MCP3221_Get_Value(value);
-//	
-//	if(state !=0 ){
-//		
-//		adc_value = value[0];
-//		adc_value<<=8;
-//		adc_value |= value[1];
-//		
-//		/*get value in mV*/
-//		voltage = (uint16_t)((adc_value*ADC_REF*1000)>>12);
-//		
-//		switch(port){
-//			case 1:
-//				AIN_Pointer->AnalogValue1.Value = voltage;	
-//				break;
-//			case 2:
-//				AIN_Pointer->AnalogValue2.Value = voltage;
-//				break;
-//			case 3:
-//				AIN_Pointer->AnalogValue3.Value = voltage;
-//				break;
-//			case 4:
-//				AIN_Pointer->AnalogValue4.Value = voltage;
-//				break;
-//			default:
-//				break;
-//		}
-//		
-//	}
-//	
-//	
-//	return state;
-//}
-
