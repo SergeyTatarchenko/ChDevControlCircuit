@@ -11,48 +11,30 @@
 *************************************************/	
 
 void vTask_1000ms(void *pvParameters){	
-	
+		
 	for(;;){
 		
-		OBJ_Upd(this_obj(IND_obj_STATUS));	
+		
+		this_obj(IND_obj_CTRL)->obj_field.d8b[0] = 0xff;
+		this_obj(IND_obj_PID2_1)->obj_field.d8b[0] = 0xAA;
+		
+		/*test obj upd*/
+		OBJ_Upd(this_obj(IND_obj_CTRL));	
+		OBJ_Upd(this_obj(IND_obj_PID2_1));
+		
+		/*test obj event*/
+		OBJ_Event(IND_obj_SetPWM);
 		
 		vTaskDelay(1000);
 	}
 }
-
-
 /*************************************************
 
 *************************************************/
-void vTask_Transfer_Data(void *pvParameters)
-{
-	uint16_t index = 0;
+void vTask_Handler_Data(void *pvParameters){
 	
-	for(;;){
-		Tx_OBJ(&index);
-		index++;
-//		objd_CNT.data.d64b++;
-		vTaskDelay(30);
-	}
-}
-
-
-/*************************************************
-
-*************************************************/
-void vTask_Receive_Data(void *pvParameters)
-{
-	for(;;){
-		Rx_OBJ_Data();
-		vTaskDelay(10);
-	}
-}
-
-/*************************************************
-
-*************************************************/
-void vTask_Handler_Data(void *pvParameters)
-{
+	TX_RX_FRAME rx_buffer;
+	
 	/* Init parameters for pid cintroller */
 	pid_inductance.Kp = 0.0187;
 	pid_inductance.Ki = 400;
@@ -63,35 +45,8 @@ void vTask_Handler_Data(void *pvParameters)
 	pid_current_out.Kd = 0.0;
 	
 	for(;;){
-		
-		/* PID */
-//		objd_PID1_0.data.d32b[0] = (uint32_t)(pid_inductance.Kp * 10000);
-//		objd_PID1_0.data.d32b[1] = (uint32_t)(pid_inductance.Ki * 10000);
-//		objd_PID1_1.data.d32b[0] = (uint32_t)(pid_inductance.Kd * 10000);
-
-//		objd_PID2_0.data.d32b[0] = (uint32_t)(pid_current_out.Kp * 10000);
-//		objd_PID2_0.data.d32b[1] = (uint32_t)(pid_current_out.Ki * 10000);
-//		objd_PID2_1.data.d32b[0] = (uint32_t)(pid_current_out.Kd * 10000);
-//		
-//		/*STATUS*/
-//		Status_Charger.st.error.bus_err = bus_error;
-//		Status_Charger.st.error.i2c_err = I2C_ERROR;
-//		objd_STATUS.data.d64b = Status_Charger.st_All;
-//		
-//		/* PORT_IO */
-//		objd_fb_PORT_DIO.data.d8b[0] = IO_STATE.OUTPUTS;	// outputs
-//		objd_fb_PORT_DIO.data.d8b[1] = IO_STATE.INPUTS;	// inputs
-//				
-//		/* Voltage AIN */
-//		objd_VOLTAGE.data.d16b[0] = AIN_State.AIN1;
-//		objd_VOLTAGE.data.d16b[1] = AIN_State.AIN2;
-//		objd_VOLTAGE.data.d16b[2] = AIN_State.AIN3;
-//		objd_VOLTAGE.data.d16b[3] = AIN_State.AIN4;
-//		
-//		/* PWM */
-//		objd_PWM.data.d16b[0] = TIM3->CCR3;
-//		objd_PWM.data.d16b[1] = TIM3->CCR4;
-//		
-		vTaskDelay(1);
+		xQueueReceive(usart_receive_buffer,&rx_buffer,portMAX_DELAY);
+		Rx_OBJ_Data(&rx_buffer);	
+		vTaskDelay(100);
 	}
 }

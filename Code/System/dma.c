@@ -59,6 +59,9 @@ void DMA_USART1_Setup(){
 	DMA1_Channel4->CMAR |= (uint32_t)&USART1_transmit_array[0];
 	/*number of data to transfer*/
 	DMA1_Channel4->CNDTR = (uint32_t)USART1_DEFAULT_BUF_SIZE;
+	/*Transfer complete interrupt enable */
+	DMA1_Channel4->CCR |= DMA_CCR6_TCIE;
+	
 	/*medium priority level */
 	DMA1_Channel4->CCR |= DMA_CCR1_PL_1;
 	

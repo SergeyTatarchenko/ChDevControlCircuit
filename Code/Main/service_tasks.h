@@ -9,7 +9,6 @@
 
 #include "global.h"
 #include "user_tasks.h"
-#include "List_OBJ.h"
 /*----------------------------------------------*/
 #include "FreeRTOS.h"
 #include "task.h"
@@ -20,7 +19,6 @@
 /*-----------local function prototypes----------*/
 /*-----------global variables-------------------*/
 extern xSemaphoreHandle InputEvent;
-extern xSemaphoreHandle xMutex_USART_BUSY;
 /*-----------global function prototypes---------*/
 /*initial task*/
 void StartInit(void *pvParameters);

@@ -14,7 +14,6 @@
 #include "queue.h"
 #include "semphr.h"
 
-#include "List_OBJ.h"
 #include "PID.h"
 
 /*-----------local define-----------------------*/
@@ -25,5 +24,8 @@ extern void vTask_1000ms(void *pvParameters);
 extern void vTask_Transfer_Data(void *pvParameters);
 extern void vTask_Receive_Data(void *pvParameters);
 extern void vTask_Handler_Data(void *pvParameters);
+
+
+
 
 #endif

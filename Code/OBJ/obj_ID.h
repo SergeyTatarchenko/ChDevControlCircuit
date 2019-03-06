@@ -12,13 +12,22 @@
 #define	IND_obj_NULL			0x0000
 #define	IND_obj_END				0x00FF
 
-
-/*control without status*/
-#define IND_obj_CWS				(IND_obj_NULL +   1)
 /*control and status*/
-#define IND_obj_CAS				(IND_obj_NULL +  64)	
+#define IND_obj_CAS				2
+/*control without status*/
+#define IND_obj_CWS				1
 /*status without control*/
-#define IND_obj_SWC				(IND_obj_NULL + 128)
+#define IND_obj_SWC				0
+
+
+/*
+v 0.1
+1) create object name like obj_name	(IND_obj_NULL + x)
+3) create prototype of object handler in List-OBJ.h
+4) create object handler in List_OBJ.c
+5) spap object with handler in List_OBJ.c
+*/
+
 
 /*-----------------------------------------------*/
 #define IND_obj_CTRL            (IND_obj_NULL + 1)
@@ -40,7 +49,7 @@
 #define IND_obj_PID2_0          (IND_obj_NULL +16)
 #define	IND_obj_PID2_1          (IND_obj_NULL +17)
 
-#define	num_of_all_obj			17
+#define	num_of_all_obj			17		//! counter
 /*-----------------------------------------------*/
 
 #endif
