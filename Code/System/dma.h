@@ -10,6 +10,7 @@
 #include "stm32f10x.h"
 
 #include "global.h"
+
 /*-----------local define-----------------------*/
 /**/
 #define ADC1_DR_ADDR	((uint32_t)(ADC1_BASE + 0x4C))

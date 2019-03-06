@@ -15,12 +15,12 @@ void vTask_1000ms(void *pvParameters){
 	for(;;){
 		
 		
-		this_obj(IND_obj_CTRL)->obj_field.d8b[0] = 0xff;
-		this_obj(IND_obj_PID2_1)->obj_field.d8b[0] = 0xAA;
+	//	this_obj(IND_obj_CTRL)->obj_field.d8b[0] = 0xff;
+	//	this_obj(IND_obj_PID2_1)->obj_field.d8b[0] = 0xAA;
 		
 		/*test obj upd*/
-		OBJ_Upd(this_obj(IND_obj_CTRL));	
-		OBJ_Upd(this_obj(IND_obj_PID2_1));
+	//	OBJ_Upd(this_obj(IND_obj_CTRL));	
+	//	OBJ_Upd(this_obj(IND_obj_PID2_1));
 		
 		/*test obj event*/
 		OBJ_Event(IND_obj_SetPWM);

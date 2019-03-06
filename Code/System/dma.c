@@ -60,7 +60,7 @@ void DMA_USART1_Setup(){
 	/*number of data to transfer*/
 	DMA1_Channel4->CNDTR = (uint32_t)USART1_DEFAULT_BUF_SIZE;
 	/*Transfer complete interrupt enable */
-	DMA1_Channel4->CCR |= DMA_CCR6_TCIE;
+	DMA1_Channel4->CCR |= DMA_CCR1_TCIE;
 	
 	/*medium priority level */
 	DMA1_Channel4->CCR |= DMA_CCR1_PL_1;
@@ -79,6 +79,11 @@ void DMA_USART1_Setup(){
 	DMA1_Channel5->CNDTR = (uint32_t)USART1_DEFAULT_BUF_SIZE;
 	/*medium priority level */
 	DMA1_Channel5->CCR |= DMA_CCR1_PL_1;
+	/*Transfer complete interrupt enable */
+	DMA1_Channel5->CCR |= DMA_CCR1_TCIE;
+	
+	/*DMA ch5 on*/
+	DMA1_Channel5->CCR |= DMA_CCR1_EN;
 	
 }
 void DMA1_Channel4_IRQHandler(){
@@ -95,6 +100,15 @@ void DMA1_Channel4_IRQHandler(){
 		taskYIELD();
 	}
 	
+}
+
+void DMA1_Channel5_IRQHandler(){
+	
+		/*interrupt on transfer complete */
+	if(DMA1->ISR &= DMA_ISR_TCIF5){
+		DMA1->IFCR |= DMA_IFCR_CTCIF5;
+	}
+	xQueueSendFromISR(usart_receive_buffer,USART1_receive_array,0);
 }
 /*************************************************
 Reload DMA Channel 4 

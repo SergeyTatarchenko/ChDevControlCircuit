@@ -22,10 +22,10 @@
 
 /*
 v 0.1
-1) create object name like obj_name	(IND_obj_NULL + x)
+1) create object name  example   " #define obj_name	(IND_obj_NULL + x)"
 3) create prototype of object handler in List-OBJ.h
 4) create object handler in List_OBJ.c
-5) spap object with handler in List_OBJ.c
+5) span object with handler in List_OBJ.c
 */
 
 
