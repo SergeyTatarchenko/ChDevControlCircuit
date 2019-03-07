@@ -13,16 +13,17 @@
 #define	IND_obj_END				0x00FF
 
 /*control and status*/
-#define IND_obj_CAS				2
+#define IND_obj_CAS				3
 /*control without status*/
-#define IND_obj_CWS				1
+#define IND_obj_CWS				2
 /*status without control*/
-#define IND_obj_SWC				0
+#define IND_obj_SWC				1
 
 
 /*
 v 0.1
 1) create object name  example   " #define obj_name	(IND_obj_NULL + x)"
+2) create object type in List_OBJ.c
 3) create prototype of object handler in List-OBJ.h
 4) create object handler in List_OBJ.c
 5) span object with handler in List_OBJ.c

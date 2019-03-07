@@ -82,6 +82,26 @@ typedef	struct{
 		uint32_t	d32b[2];
 		
 		uint64_t	d64b;
+		
+		struct{
+			union{
+				uint8_t byte;
+				struct{
+					uint8_t state : 1;
+					uint8_t event : 1;
+					uint8_t rez2  : 1;
+					uint8_t rez3  : 1;
+					uint8_t rez4  : 1;
+					uint8_t rez5  : 1;
+					uint8_t rez6  : 1;
+					uint8_t rez7  : 1;
+				}bit;
+			}control_byte;
+			
+			uint8_t command_byte;
+			uint8_t data[6];
+		}default_field;
+		
 	
 	}obj_field;
 	
@@ -126,8 +146,12 @@ extern xQueueHandle usart_receive_buffer;
 /*array of object handlers*/
 extern void ((*obj_handlers[num_of_all_obj +1]))(OBJ_STRUCT*);
 /*-----------------------------------------------*/
+
 /*init obj model*/
 extern void OBJ_Init(void);
+
+/*create object*/
+extern OBJ_STRUCT* Obj_Create(int obj_id, int obj_type);
 
 /*object event*/
 extern void OBJ_Event(int obj_id);
@@ -137,6 +161,8 @@ extern void OBJ_Upd(OBJ_STRUCT *obj);
 
 /*update all obj */
 extern void Upd_All_OBJ(void);
+
+
 
 /*receive object data from message*/
 void Rx_OBJ_Data(TX_RX_FRAME *mes);
@@ -150,6 +176,7 @@ uint8_t Check_CRC(TX_RX_FRAME *Rx_obj_c);
 
 #define this_obj(obj_id)		(objDefault + obj_id)
 
+#define event_mask			0x01	
 
 /*-----------------------------------------------*/
 /*include object handlers*/

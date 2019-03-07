@@ -6,9 +6,16 @@
 /************************************************************************************/
 void obj_snap(void){
 	
-	/*obj_handlers[object name] = name of object handler;*/
+	/*---------------------------------------------------*/
+	/*           object type assignment                  */
+	/*---------------------------------------------------*/
 	
-	/*test */
+	Obj_Create(IND_obj_SetPWM,IND_obj_CWS);
+	
+	/*---------------------------------------------------*/
+	/*obj_handlers[object name] = name of object handler;*/
+	/*---------------------------------------------------*/
+	
 	obj_handlers[IND_obj_SetPWM] = SetPWM_Handler;
 	
 }

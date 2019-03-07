@@ -36,15 +36,25 @@ void OBJ_Init(){
 		obj = objDefault + counter;
 		obj->id[0] = counter;	
 	}
-	/* object handler mapping*/
+	/* object create and handler mapping*/
 	obj_snap();
+}
+
+/*create object, return pointer to obj */
+OBJ_STRUCT* Obj_Create(int obj_id, int obj_type ){
+	
+	OBJ_STRUCT* obj;
+	obj = objDefault + obj_id;
+	obj->id[1] = obj_type;
+	return obj;
 }
 
 /* object event, call object handler and call update function */
 void OBJ_Event(int obj_id){
 	
-	OBJ_Upd(this_obj(obj_id));	
 	obj_handlers[obj_id](this_obj(obj_id));
+	OBJ_Upd(this_obj(obj_id));	
+	
 }
 
 /*           update this object             */
@@ -100,9 +110,12 @@ void Rx_OBJ_Data(TX_RX_FRAME *mes){
 	if( mes->d_struct.index[1]& (IND_obj_CAS|IND_obj_CWS)){
 			pointer = (uint8_t*)mes;
 			pointer += (sizeof(mes->d_struct.id_netw)+sizeof(mes->d_struct.id_modul));
-			memcpy(obj,pointer,sizeof(OBJ_STRUCT));
-			obj_handlers[id](this_obj(id));
-			OBJ_Upd(this_obj(id));
+			/*if state change */
+			if((mes->d_struct.data[0]&event_mask)!=(obj->obj_field.default_field.command_byte&event_mask)){
+				memcpy(obj,pointer,sizeof(OBJ_STRUCT));
+				OBJ_Upd(this_obj(id));
+				obj_handlers[id](this_obj(id));
+			}
 	}
 }
 
