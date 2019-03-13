@@ -105,17 +105,17 @@ void Rx_OBJ_Data(TX_RX_FRAME *mes){
 	uint8_t *pointer;
 	id = mes->d_struct.index[0];
 	obj = objDefault + id;
-	
+	/*add check crc*/
 	/*if it is a control object*/	
 	if( mes->d_struct.index[1]& (IND_obj_CAS|IND_obj_CWS)){
 			pointer = (uint8_t*)mes;
 			pointer += (sizeof(mes->d_struct.id_netw)+sizeof(mes->d_struct.id_modul));
 			/*if state change */
-			if((mes->d_struct.data[0]&event_mask)!=(obj->obj_field.default_field.command_byte&event_mask)){
-				memcpy(obj,pointer,sizeof(OBJ_STRUCT));
-				OBJ_Upd(this_obj(id));
-				obj_handlers[id](this_obj(id));
-			}
+//			if((mes->d_struct.data[0]&event_mask)!=(obj->obj_field.default_field.command_byte&event_mask)){	
+//				OBJ_Event(id);
+//			}
+			memcpy(obj,pointer,sizeof(OBJ_STRUCT));
+
 	}
 }
 

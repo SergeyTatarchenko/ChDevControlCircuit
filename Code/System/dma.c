@@ -104,10 +104,12 @@ void DMA1_Channel4_IRQHandler(){
 
 void DMA1_Channel5_IRQHandler(){
 	
+	
 		/*interrupt on transfer complete */
 	if(DMA1->ISR &= DMA_ISR_TCIF5){
 		DMA1->IFCR |= DMA_IFCR_CTCIF5;
 	}
+	
 	xQueueSendFromISR(usart_receive_buffer,USART1_receive_array,0);
 }
 /*************************************************

@@ -21,7 +21,7 @@ void StartInit(void *pvParameters){
 	_Bool state;
 	Core_Init();
 	
-	LED_ON;
+	LED_OFF;
 	/**/
 	InputEvent = xSemaphoreCreateCounting(3,0);
 	xMutex_BUS_BUSY = xSemaphoreCreateMutex();
@@ -66,7 +66,9 @@ void vGetIOState(void *pvParameters){
 			// internal circuit error (add handler)
 		}
 		xSemaphoreGive(xMutex_BUS_BUSY);
-			
+		
+		/*add obj snap to mcp23x17 event !!*/
+		
 		SemaphoreCount = uxSemaphoreGetCount(InputEvent);	
 		if(SemaphoreCount > 1){
 			//error overclocking IO port(add handler)

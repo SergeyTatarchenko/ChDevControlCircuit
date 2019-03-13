@@ -49,7 +49,7 @@ void usart_init(void)
 //				| USART_CR1_PEIE			// bit_8	PE interrupt enable - 1: A USART interrupt is generated whenever PE=1 in the USART_SR register
 //				| USART_CR1_TXEIE			// bit_7	TXE interrupt enable - 1: A USART interrupt is generated whenever TXE=1 in the USART_SR register
 //				| USART_CR1_TCIE			// bit_6	Transmission complete interrupt enable - 1: A USART interrupt is generated whenever TC=1 in the USART_SR register
-				| USART_CR1_RXNEIE			// bit_5	RXNE interrupt enable - 1: A USART interrupt is generated whenever ORE=1 or RXNE=1 in the USART_SR register
+//				| USART_CR1_RXNEIE			// bit_5	RXNE interrupt enable - 1: A USART interrupt is generated whenever ORE=1 or RXNE=1 in the USART_SR register
 //				| USART_CR1_IDLEIE			// bit_4	IDLE interrupt enable - 1: A USART interrupt is generated whenever IDLE=1 in the USART_SR register
 				| USART_CR1_TE				// bit_3	Transmitter enable
 				| USART_CR1_RE				// bit_2	Receiver enable	 
@@ -75,7 +75,7 @@ void usart_init(void)
 ////				|*/ //USART_CR3_CTSE			// bit_9	CTS	enable 	0: CTS hardware flow control disabled
 //				| USART_CR3_RTSE			// bit_8	RTS enable	0: RTS hardware flow control disabled
 				 USART_CR3_DMAT			// bit_7	DMA enable transmitter
-//				| USART_CR3_DMAR			// bit_6	DMA enable receiver
+				| USART_CR3_DMAR			// bit_6	DMA enable receiver
 //				| USART_CR3_SCEN			// bit_5	Smartcard mode enable
 //				| USART_CR3_NACK			// bit_4	Smartcard NACK enable	0: NACK transmission in case of parity error is disabled	1: NACK transmission during parity error is enabled
 //				| USART_CR3_HDSEL			// bit_3	Half-duplex selection

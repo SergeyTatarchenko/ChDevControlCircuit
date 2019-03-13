@@ -18,12 +18,10 @@ void vTask_1000ms(void *pvParameters){
 	//	this_obj(IND_obj_CTRL)->obj_field.d8b[0] = 0xff;
 	//	this_obj(IND_obj_PID2_1)->obj_field.d8b[0] = 0xAA;
 		
-		/*test obj upd*/
-	//	OBJ_Upd(this_obj(IND_obj_CTRL));	
-	//	OBJ_Upd(this_obj(IND_obj_PID2_1));
-		
+		/*test obj upd*/		
+		OBJ_Upd(this_obj(IND_obj_SetPWM));
 		/*test obj event*/
-		OBJ_Event(IND_obj_SetPWM);
+	//	OBJ_Event(IND_obj_SetPWM);
 		
 		vTaskDelay(1000);
 	}
@@ -46,7 +44,7 @@ void vTask_Handler_Data(void *pvParameters){
 	
 	for(;;){
 		xQueueReceive(usart_receive_buffer,&rx_buffer,portMAX_DELAY);
-		Rx_OBJ_Data(&rx_buffer);	
-		vTaskDelay(100);
+		Rx_OBJ_Data(&rx_buffer);
+		vTaskDelay(10);
 	}
 }

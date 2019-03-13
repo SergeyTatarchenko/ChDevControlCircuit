@@ -35,7 +35,7 @@ void NVIC_Init(){
 	NVIC_EnableIRQ (DMA1_Channel4_IRQn);
 	
 	/*DMA receive complete interrupt on NVIC*/
-	//NVIC_EnableIRQ (DMA1_Channel5_IRQn);
+	NVIC_EnableIRQ (DMA1_Channel5_IRQn);
 	
 	NVIC_SetPriority (EXTI9_5_IRQn, 2);
 	

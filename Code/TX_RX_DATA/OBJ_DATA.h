@@ -55,7 +55,10 @@ typedef union{
 
 #define	LEN_MSG_OBJ		(LEN_NETW + LEN_ID + LEN_INDEX + LEN_DATA + LEN_CRC)
 
+
+/**/
 #define MES_BUF_SIZE	10
+
 
 #define	FLAG_RX_REMOTE_CTRL		0x02
 #define	FLAG_RX_ALL				0xFF
