@@ -5,7 +5,7 @@
 #define	ID_NETWORK			0x01
 
 /* byte[1]*/
-#define	MY_ID				0x72
+#define	ID_DEVICE			0x72
 #define ID_REMOTE_CNTRL		0x02
 
 /* byte[2] & byte[3]*/

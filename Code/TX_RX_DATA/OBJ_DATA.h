@@ -53,6 +53,7 @@ typedef union{
 #define LEN_DATA	8
 #define	LEN_CRC		2
 
+#define LEN_HEAD_SIZE	(LEN_NETW + LEN_ID)
 #define	LEN_MSG_OBJ		(LEN_NETW + LEN_ID + LEN_INDEX + LEN_DATA + LEN_CRC)
 
 
@@ -135,6 +136,9 @@ extern uint8_t	USART1_transmit_array[LEN_MSG_OBJ];
 /* data array for usart obj receive */
 extern uint8_t USART1_receive_array[LEN_MSG_OBJ];
 
+/*test*/
+extern int temptemp;
+extern uint8_t usart_irq_counter;
 /*-----------------------------------------------*/
 /*pointer to memory space of objects*/
 extern OBJ_STRUCT *objDefault;

@@ -10,13 +10,6 @@
 
 /*data array for adc*/
 uint16_t ADC1_DataArray[ADC1_BUF_SIZE];
-
-/* data array for usart obj transfer */
-uint8_t USART1_transmit_array[LEN_MSG_OBJ];
-
-/* data array for usart obj receive */
-uint8_t USART1_receive_array[LEN_MSG_OBJ];
-
 /*************************************************
 Init DMA Channel for ADC1  
 *************************************************/
@@ -83,7 +76,7 @@ void DMA_USART1_Setup(){
 	DMA1_Channel5->CCR |= DMA_CCR1_TCIE;
 	
 	/*DMA ch5 on*/
-	DMA1_Channel5->CCR |= DMA_CCR1_EN;
+//	DMA1_Channel5->CCR |= DMA_CCR1_EN;
 	
 }
 void DMA1_Channel4_IRQHandler(){

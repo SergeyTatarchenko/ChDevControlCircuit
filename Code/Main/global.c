@@ -44,7 +44,7 @@ void Core_Init(){
 	NVIC_Init();
 	
 	/*first config for MCP23017 */
-	MCP23x17_Init();
+//	MCP23x17_Init();
 	
 	DMA_USART1_Setup();
 	/*disable reset pin on MCP23017*/

@@ -27,11 +27,11 @@ void obj_snap(void){
 
 void SetPWM_Handler(OBJ_STRUCT *obj){
 	
-	if(obj->obj_field.d8b[0] == 0){
-		obj->obj_field.d8b[0] = 0xff;
+	if(temptemp == 0){
+		temptemp = 1;
 		LED_ON;
 	}else{
-		obj->obj_field.d8b[0] = 0x00;
+		temptemp = 0;
 		LED_OFF;
 	}
 }

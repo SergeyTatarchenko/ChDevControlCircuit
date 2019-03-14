@@ -5,10 +5,83 @@ uint8_t obj_mem_area[sizeof(OBJ_STRUCT)*num_of_all_obj];
 OBJ_STRUCT *objDefault;
 void ((*obj_handlers[num_of_all_obj+1]))(OBJ_STRUCT*);
 
+/* data array for usart obj receive */
+uint8_t USART1_receive_array[LEN_MSG_OBJ];
+
+/* data array for usart obj transfer */
+uint8_t USART1_transmit_array[LEN_MSG_OBJ];
+
+uint8_t usart_irq_counter = 0;
+
+int temptemp;
+
 xSemaphoreHandle xMutex_USART_BUSY;
 xQueueHandle usart_receive_buffer;
-/*-----------------------------------------------*/
 
+/*-----------------------------------------------*/
+void USART1_IRQHandler(){
+	uint8_t buff;
+	
+	if(USART1->SR &= USART_SR_RXNE){
+		
+		buff = USART1->DR;
+		
+		switch(buff){
+			/**/
+			case ID_NETWORK:
+				if(usart_irq_counter == 0){
+					USART1_receive_array[usart_irq_counter] = buff;
+					usart_irq_counter++;
+				}else{
+					if((usart_irq_counter < LEN_MSG_OBJ) && (usart_irq_counter > (LEN_HEAD_SIZE -1))){
+						/**/
+						USART1_receive_array[usart_irq_counter] = buff;
+						if(usart_irq_counter == (LEN_MSG_OBJ -1)){
+							break;
+						}
+						usart_irq_counter++;
+					}else{
+						usart_irq_counter = 0;
+					}
+				}
+				break;
+			/**/	
+			case ID_DEVICE:
+				if(usart_irq_counter == 1){
+					USART1_receive_array[usart_irq_counter] = buff;
+					usart_irq_counter++;
+				}else{
+					if((usart_irq_counter < LEN_MSG_OBJ) && (usart_irq_counter > (LEN_HEAD_SIZE -1))){
+						USART1_receive_array[usart_irq_counter] = buff;
+						if(usart_irq_counter == (LEN_MSG_OBJ -1)){
+							break;
+						}
+						usart_irq_counter++;
+					}else{
+						usart_irq_counter = 0;
+					}
+				}
+				break;
+			/**/	
+			default:
+				if((usart_irq_counter < LEN_MSG_OBJ) && (usart_irq_counter > (LEN_HEAD_SIZE -1))){
+					USART1_receive_array[usart_irq_counter] = buff;
+					if(usart_irq_counter == (LEN_MSG_OBJ -1)){
+							break;
+						}
+						usart_irq_counter++;
+					}else{
+						usart_irq_counter = 0;
+					}
+				break;
+		}
+		
+		if(usart_irq_counter == (LEN_MSG_OBJ -1)){
+			xQueueSendFromISR(usart_receive_buffer,USART1_receive_array,0);
+			usart_irq_counter = 0;
+		}	
+	}
+}
 
 /*-----------------------------------------------*/
 uint8_t	FLAG_RECEIVE;
@@ -68,7 +141,7 @@ void	OBJ_Upd(OBJ_STRUCT *obj){
 	
 	/*create default message with obj info*/
 	message_pointer->d_struct.id_netw = ID_NETWORK;
-	message_pointer->d_struct.id_modul = MY_ID;
+	message_pointer->d_struct.id_modul = ID_DEVICE;
 	
 	pointer = (uint8_t*)message_pointer;
 	pointer += (sizeof(message.d_struct.id_netw)+sizeof(message.d_struct.id_modul));
@@ -101,34 +174,29 @@ void Upd_All_OBJ(){
 void Rx_OBJ_Data(TX_RX_FRAME *mes){
 	
 	int id;
+	int i;
+	uint16_t _CRC = 0;
+	
 	OBJ_STRUCT *obj;
 	uint8_t *pointer;
 	id = mes->d_struct.index[0];
 	obj = objDefault + id;
-	/*add check crc*/
-	/*if it is a control object*/	
-	if( mes->d_struct.index[1]& (IND_obj_CAS|IND_obj_CWS)){
-			pointer = (uint8_t*)mes;
-			pointer += (sizeof(mes->d_struct.id_netw)+sizeof(mes->d_struct.id_modul));
-			/*if state change */
-//			if((mes->d_struct.data[0]&event_mask)!=(obj->obj_field.default_field.command_byte&event_mask)){	
-//				OBJ_Event(id);
-//			}
-			memcpy(obj,pointer,sizeof(OBJ_STRUCT));
-
-	}
-}
-
-uint8_t Check_CRC(TX_RX_FRAME *Rx_obj_c)
-{
-	uint16_t calc_CRC = 0x0000;
-	uint8_t i = 0;
-
+	
 	for(i = 0; i < (LEN_MSG_OBJ - LEN_CRC); i++)
 	{
-		calc_CRC += Rx_obj_c->byte[i];
+		_CRC += mes->byte[i];
 	}
 	
-	return (Rx_obj_c->d_struct.crc == calc_CRC)? 1 : 0;
+	if(_CRC != mes->d_struct.crc){
+		return;
+	}
+	/*if it is a control object*/	
+	if( mes->d_struct.index[1]&(IND_obj_CAS|IND_obj_CWS)){
+		pointer = (uint8_t*)mes;
+		pointer += (sizeof(mes->d_struct.id_netw)+sizeof(mes->d_struct.id_modul));
+		memcpy(obj,pointer,sizeof(OBJ_STRUCT));
+		OBJ_Upd(this_obj(id));
+		obj_handlers[id](this_obj(id));
+	}	
 }
 
