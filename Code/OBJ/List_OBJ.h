@@ -6,6 +6,6 @@ extern void obj_snap(void);
 
 /*-----------------------------------------------*/
 
-extern void SetPWM_Handler(OBJ_STRUCT *obj);
+extern void IO_ControlHandler(OBJ_STRUCT *obj);
 
 #endif

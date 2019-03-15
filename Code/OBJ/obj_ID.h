@@ -31,26 +31,9 @@ v 0.1
 
 
 /*-----------------------------------------------*/
-#define IND_obj_CTRL            (IND_obj_NULL + 1)
-#define IND_obj_SetPORT_DIO     (IND_obj_NULL + 2)
-#define IND_obj_SetPWM			(IND_obj_NULL + 3)
-#define IND_obj_SetPID2_0		(IND_obj_NULL + 4)
-#define	IND_obj_SetPID2_1       (IND_obj_NULL + 5)
-#define IND_obj_SetPID1_0		(IND_obj_NULL + 6)
-#define	IND_obj_SetPID1_1       (IND_obj_NULL + 7)
-/*-----------------------------------------------*/    
-#define	IND_obj_VOLTAGE			(IND_obj_NULL + 8)
-#define IND_obj_CURRENT			(IND_obj_NULL + 9)
-#define IND_obj_CNT				(IND_obj_NULL +10)
-#define	IND_obj_STATUS			(IND_obj_NULL +11)
-#define	IND_obj_PWM  			(IND_obj_NULL +12)
-#define IND_obj_fb_PORT_DIO 	(IND_obj_NULL +13)
-#define IND_obj_PID1_0          (IND_obj_NULL +14)
-#define	IND_obj_PID1_1          (IND_obj_NULL +15)
-#define IND_obj_PID2_0          (IND_obj_NULL +16)
-#define	IND_obj_PID2_1          (IND_obj_NULL +17)
+#define IND_obj_IO            (IND_obj_NULL + 1)	// входы выходы на плате
 
-#define	num_of_all_obj			17		//! counter
+#define	num_of_all_obj			1		//! counter
 /*-----------------------------------------------*/
 
 #endif

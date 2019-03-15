@@ -32,7 +32,9 @@ void vTask_1000ms(void *pvParameters){
 	for(;;){
 		vTaskDelay(1000);
 		/*test obj upd*/
-		this_obj(IND_obj_SetPWM)->obj_event = 1;
-		OBJ_Upd(this_obj(IND_obj_SetPWM));
+		
+		this_obj(IND_obj_IO)->obj_event = 1;
+		OBJ_Upd(this_obj(IND_obj_IO));
+		
 	}
 }

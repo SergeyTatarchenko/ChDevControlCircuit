@@ -136,43 +136,42 @@ extern uint8_t	USART1_transmit_array[LEN_MSG_OBJ];
 /* data array for usart obj receive */
 extern uint8_t USART1_receive_array[LEN_MSG_OBJ];
 
-/*test*/
-extern int temptemp;
+/*usart data byte counter */
 extern uint8_t usart_irq_counter;
 /*-----------------------------------------------*/
 /*pointer to memory space of objects*/
 extern OBJ_STRUCT *objDefault;
-/*-----------------------------------------------*/
 
 /*mutex  to perform currect usart transmit */
 extern xSemaphoreHandle xMutex_USART_BUSY;
 
 /*queue of messages from usart module*/
 extern xQueueHandle usart_receive_buffer;
-/*-----------------------------------------------*/
+
 /*array of object handlers*/
 extern void ((*obj_handlers[num_of_all_obj +1]))(OBJ_STRUCT*);
 /*-----------------------------------------------*/
 
 /*init obj model*/
-extern void OBJ_Init(void);
+void OBJ_Init(void);
 
 /*create object*/
-extern OBJ_STRUCT* Obj_Create(int obj_id, int obj_type);
+OBJ_STRUCT* Obj_Create(int obj_id, int obj_type);
 
 /*object event*/
-extern void OBJ_Event(int obj_id);
+void OBJ_Event(int obj_id);
 
 /*update this obj */
-extern void OBJ_Upd(OBJ_STRUCT *obj);
+void OBJ_Upd(OBJ_STRUCT *obj);
 
 /*update all obj */
-extern void Upd_All_OBJ(void);
-
-
+void Upd_All_OBJ(void);
 
 /*receive object data from message*/
 void Rx_OBJ_Data(TX_RX_FRAME *mes);
+
+/*sync obj with MCP23017*/
+void OBJ_Sync(int obj_id);
 /*-----------------------------------------------*/
 uint8_t Check_CRC(TX_RX_FRAME *Rx_obj_c);
 
@@ -185,14 +184,12 @@ uint8_t Check_CRC(TX_RX_FRAME *Rx_obj_c);
 
 #define obj_event				obj_field.default_field.control_byte.bit.event
 #define obj_state				obj_field.default_field.control_byte.bit.state
-
-#define event_mask			0x01	
+#define obj_data				obj_field.default_field.data
 
 /*-----------------------------------------------*/
 /*include object handlers*/
 #include "List_OBJ.h"
 /*-----------------------------------------------*/
-
 
 
 #endif

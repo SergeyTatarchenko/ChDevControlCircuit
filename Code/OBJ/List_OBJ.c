@@ -10,13 +10,13 @@ void obj_snap(void){
 	/*           object type assignment                  */
 	/*---------------------------------------------------*/
 	
-	Obj_Create(IND_obj_SetPWM,IND_obj_CWS);
+	Obj_Create(IND_obj_IO,IND_obj_CWS);
 	
 	/*---------------------------------------------------*/
 	/*obj_handlers[object name] = name of object handler;*/
 	/*---------------------------------------------------*/
 	
-	obj_handlers[IND_obj_SetPWM] = SetPWM_Handler;
+	obj_handlers[IND_obj_IO] = IO_ControlHandler;
 	
 }
 
@@ -25,14 +25,13 @@ void obj_snap(void){
 /* 									 OBJ_Handlers									*/
 /************************************************************************************/
 
-void SetPWM_Handler(OBJ_STRUCT *obj){
+void IO_ControlHandler(OBJ_STRUCT *obj){
 	
-	if(temptemp == 0){
-		temptemp = 1;
-		LED_ON;
-	}else{
-		temptemp = 0;
-		LED_OFF;
+	/*event*/
+	if(obj->obj_event == 1){
+		if(obj->obj_data[2]!= IO_Pointer->OUTPUTS){
+			Set_IO_Byte(obj->obj_data[2]);
+		}
 	}
 }
 

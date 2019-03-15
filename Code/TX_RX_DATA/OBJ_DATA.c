@@ -13,8 +13,6 @@ uint8_t USART1_transmit_array[LEN_MSG_OBJ];
 
 uint8_t usart_irq_counter = 0;
 
-int temptemp;
-
 xSemaphoreHandle xMutex_USART_BUSY;
 xQueueHandle usart_receive_buffer;
 
@@ -84,11 +82,7 @@ void USART1_IRQHandler(){
 }
 
 /*-----------------------------------------------*/
-uint8_t	FLAG_RECEIVE;
-//TX_RX_FRAME	Rx_obj;
-volatile uint8_t buff_rx[LEN_MSG_OBJ];
-uint8_t st_rx;
-//static uint8_t n_byte = 0;
+
 /*-----------------------------------------------*/
 
 
@@ -174,6 +168,16 @@ void Upd_All_OBJ(){
 	}
 }
 
+/*		obj sync with MCP23017		*/
+void OBJ_Sync(int obj_id){
+	
+	if(this_obj(obj_id)->obj_data[0] != IO_Pointer->OUTPUTS){
+		this_obj(obj_id)->obj_data[0] = IO_Pointer->OUTPUTS;
+	}
+	if(this_obj(obj_id)->obj_data[1] != IO_Pointer->INPUTS){
+		this_obj(obj_id)->obj_data[1] = IO_Pointer->INPUTS;
+	}
+}
 
 /* Receive Data Obj */
 void Rx_OBJ_Data(TX_RX_FRAME *mes){
