@@ -7,19 +7,7 @@
 #include "user_tasks.h"
 /*************************************************/
 /*************************************************
-1000 ms timer
-*************************************************/	
-
-void vTask_1000ms(void *pvParameters){	
-		
-	for(;;){
-		vTaskDelay(1000);
-		/*test obj upd*/		
-		OBJ_Upd(this_obj(IND_obj_SetPWM));
-	}
-}
-/*************************************************
-
+USART RX handler 
 *************************************************/
 void vTask_Handler_Data(void *pvParameters){
 	TX_RX_FRAME rx_buffer;
@@ -29,6 +17,22 @@ void vTask_Handler_Data(void *pvParameters){
 		Rx_OBJ_Data(&rx_buffer);
 		
 		//uxQueueMessagesWaiting(usart_receive_buffer);	
+		vTaskDelay(1);
+	}
+}
+
+
+
+/*************************************************
+1000 ms timer
+*************************************************/	
+
+void vTask_1000ms(void *pvParameters){	
+		
+	for(;;){
 		vTaskDelay(1000);
+		/*test obj upd*/
+		this_obj(IND_obj_SetPWM)->obj_event = 1;
+		OBJ_Upd(this_obj(IND_obj_SetPWM));
 	}
 }

@@ -111,6 +111,9 @@ void OBJ_Init(){
 	}
 	/* object create and handler mapping*/
 	obj_snap();
+	
+	/*USART receive complete interrupt on NVIC*/
+	NVIC_EnableIRQ (USART1_IRQn);
 }
 
 /*create object, return pointer to obj */
@@ -126,8 +129,11 @@ OBJ_STRUCT* Obj_Create(int obj_id, int obj_type ){
 void OBJ_Event(int obj_id){
 	
 	obj_handlers[obj_id](this_obj(obj_id));
-	OBJ_Upd(this_obj(obj_id));	
-	
+	/*feedback*/
+	if(this_obj(obj_id)->obj_event == 1){
+		this_obj(obj_id)->obj_event = 0;
+		OBJ_Upd(this_obj(obj_id));
+	}	
 }
 
 /*           update this object             */
@@ -166,7 +172,6 @@ void Upd_All_OBJ(){
 		for(int counter = 0; counter < num_of_all_obj; counter ++){
 		OBJ_Upd(this_obj(counter));
 	}
-
 }
 
 
@@ -188,6 +193,7 @@ void Rx_OBJ_Data(TX_RX_FRAME *mes){
 	}
 	
 	if(_CRC != mes->d_struct.crc){
+		/*error crc do not match*/
 		return;
 	}
 	/*if it is a control object*/	
@@ -195,8 +201,14 @@ void Rx_OBJ_Data(TX_RX_FRAME *mes){
 		pointer = (uint8_t*)mes;
 		pointer += (sizeof(mes->d_struct.id_netw)+sizeof(mes->d_struct.id_modul));
 		memcpy(obj,pointer,sizeof(OBJ_STRUCT));
-		OBJ_Upd(this_obj(id));
-		obj_handlers[id](this_obj(id));
+		if(obj->obj_event == 1){
+			/*call obj handler,change event bit on feedback*/
+			OBJ_Event(id);
+		}
+		else{
+			/*feedback*/
+	//		OBJ_Upd(this_obj(id));
+		}
 	}	
 }
 

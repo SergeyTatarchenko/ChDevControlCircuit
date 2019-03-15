@@ -183,6 +183,9 @@ uint8_t Check_CRC(TX_RX_FRAME *Rx_obj_c);
 
 #define this_obj(obj_id)		(objDefault + obj_id)
 
+#define obj_event				obj_field.default_field.control_byte.bit.event
+#define obj_state				obj_field.default_field.control_byte.bit.state
+
 #define event_mask			0x01	
 
 /*-----------------------------------------------*/

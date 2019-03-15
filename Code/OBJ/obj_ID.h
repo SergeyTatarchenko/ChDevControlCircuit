@@ -9,8 +9,8 @@
 #define ID_REMOTE_CNTRL		0x02
 
 /* byte[2] & byte[3]*/
-#define	IND_obj_NULL			0x0000
-#define	IND_obj_END				0x00FF
+#define	IND_obj_NULL			0x00
+#define	IND_obj_END				0xFF
 
 /*control and status*/
 #define IND_obj_CAS				3
