@@ -58,7 +58,7 @@ typedef union{
 
 
 /**/
-#define MES_BUF_SIZE	10
+#define MES_BUF_SIZE	20
 
 
 #define	FLAG_RX_REMOTE_CTRL		0x02
@@ -171,7 +171,8 @@ void Upd_All_OBJ(void);
 void Rx_OBJ_Data(TX_RX_FRAME *mes);
 
 /*sync obj with MCP23017*/
-void OBJ_Sync(int obj_id);
+void OBJ_SyncIO(int obj_id);
+
 /*-----------------------------------------------*/
 uint8_t Check_CRC(TX_RX_FRAME *Rx_obj_c);
 
@@ -186,6 +187,11 @@ uint8_t Check_CRC(TX_RX_FRAME *Rx_obj_c);
 #define obj_state				obj_field.default_field.control_byte.bit.state
 #define obj_data				obj_field.default_field.data
 
+#define OBJ_SET_IO_BYTE(byte)	\
+	xSemaphoreTake(xMutex_BUS_BUSY,portMAX_DELAY);	\
+	Set_IO_Byte(byte);	\
+	xSemaphoreGive(xMutex_BUS_BUSY);	\
+	
 /*-----------------------------------------------*/
 /*include object handlers*/
 #include "List_OBJ.h"

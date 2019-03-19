@@ -20,7 +20,7 @@ void DMA_ADC1_Setup(){
 	memory\peripheral size size 16 bit
 	circular mode					*/
 	DMA1_Channel1->CCR |= DMA_CCR1_MINC|DMA_CCR1_PSIZE_0|
-						  DMA_CCR1_PSIZE_0|DMA_CCR1_CIRC;
+						  DMA_CCR1_MSIZE_0|DMA_CCR1_CIRC;
 	/*peripheral address*/
 	DMA1_Channel1->CPAR |= ADC1_DR_ADDR;
 	/*pointer to memory address*/

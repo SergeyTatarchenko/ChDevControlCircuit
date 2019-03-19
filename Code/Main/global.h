@@ -140,6 +140,7 @@ typedef struct{
 #pragma pack(push,1)
 
 typedef struct{
+	
 	uint16_t CH1_ADC;
 	uint16_t CH2_ADC;
 	uint16_t CH3_ADC;

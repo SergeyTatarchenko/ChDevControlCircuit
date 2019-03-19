@@ -38,9 +38,10 @@ void StartInit(void *pvParameters){
 		xTaskCreate(vGetIOState,"I/O pool ", configMINIMAL_STACK_SIZE, NULL, 5, NULL );
 		/************************************/
 		/*program timers*/
-		xTaskCreate(vTask_1000ms,"1000 ms pool",configMINIMAL_STACK_SIZE, NULL, 3, NULL );	
-				/* Handler */
-		xTaskCreate(vTask_Handler_Data,"Handler",configMINIMAL_STACK_SIZE*2, NULL, 3, NULL );
+		xTaskCreate(vTask_1000ms,"1000 ms pool",configMINIMAL_STACK_SIZE, NULL, 2, NULL );	
+		
+		/* RX Handler */
+		xTaskCreate(vTask_Handler_Data,"Handler",configMINIMAL_STACK_SIZE*2, NULL, 4, NULL );
 		
 		/*start obj model*/
 		OBJ_Init();
@@ -69,7 +70,7 @@ void vGetIOState(void *pvParameters){
 		xSemaphoreGive(xMutex_BUS_BUSY);
 		
 		/*add obj snap to mcp23x17 event !!*/
-		OBJ_Sync(IND_obj_IO);
+		OBJ_SyncIO(IND_obj_IO);
 		
 		
 		SemaphoreCount = uxSemaphoreGetCount(InputEvent);	

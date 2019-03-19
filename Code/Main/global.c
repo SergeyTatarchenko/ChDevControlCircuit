@@ -57,6 +57,8 @@ void Core_Init(){
 	IO_Pointer =&IO_STATE;
 	AIN_Pointer =&AIN_State;
 	
+	/*adc init*/
+	ADC1_On
 	adc_val = &value_ADC;
 
 }
@@ -152,7 +154,5 @@ void adc_calc_value(){
 	adc_val->CH4_ADC = (ADC1_DataArray[3]*(uint16_t)INT_ADC_REF)/(uint16_t)ADC_DEPTH;
 	adc_val->CH5_ADC = (ADC1_DataArray[4]*(uint16_t)INT_ADC_REF)/(uint16_t)ADC_DEPTH;
 	adc_val->CH6_ADC = (ADC1_DataArray[5]*(uint16_t)INT_ADC_REF)/(uint16_t)ADC_DEPTH;
-	
-	ADC1_DataArray[0] = 1;
 	
 }

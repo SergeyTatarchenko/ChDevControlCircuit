@@ -44,7 +44,7 @@ void USART1_IRQHandler(){
 				}
 				break;
 			/**/	
-			case ID_DEVICE:
+			case ID_REMOTE_CNTRL:
 				if(usart_irq_counter == 1){
 					USART1_receive_array[usart_irq_counter] = buff;
 					usart_irq_counter++;
@@ -76,7 +76,7 @@ void USART1_IRQHandler(){
 		
 		if(usart_irq_counter == (LEN_MSG_OBJ -1)){
 			xQueueSendFromISR(usart_receive_buffer,USART1_receive_array,0);
-			usart_irq_counter = 0;
+			usart_irq_counter = 0;	
 		}	
 	}
 }
@@ -157,7 +157,9 @@ void	OBJ_Upd(OBJ_STRUCT *obj){
 	/*mutex return in dma transfer complete interrupt*/
 	xSemaphoreTake(xMutex_USART_BUSY,portMAX_DELAY);
 	send_usart_message((uint8_t*)message_pointer,sizeof(TX_RX_FRAME));	// transfer data to usart
-
+	
+	/*message delay for corrent receive */
+	vTaskDelay(40);
 }
 
 /*             update all obj                */
@@ -169,7 +171,7 @@ void Upd_All_OBJ(){
 }
 
 /*		obj sync with MCP23017		*/
-void OBJ_Sync(int obj_id){
+void OBJ_SyncIO(int obj_id){
 	
 	if(this_obj(obj_id)->obj_data[0] != IO_Pointer->OUTPUTS){
 		this_obj(obj_id)->obj_data[0] = IO_Pointer->OUTPUTS;
@@ -185,7 +187,6 @@ void Rx_OBJ_Data(TX_RX_FRAME *mes){
 	int id;
 	int i;
 	uint16_t _CRC = 0;
-	
 	OBJ_STRUCT *obj;
 	uint8_t *pointer;
 	id = mes->d_struct.index[0];
@@ -196,15 +197,22 @@ void Rx_OBJ_Data(TX_RX_FRAME *mes){
 		_CRC += mes->byte[i];
 	}
 	
-	if(_CRC != mes->d_struct.crc){
-		/*error crc do not match*/
-		return;
-	}
+	
+//	if(_CRC != mes->d_struct.crc){
+//		/*error crc do not match*/
+//		return;
+//	}
 	/*if it is a control object*/	
 	if( mes->d_struct.index[1]&(IND_obj_CAS|IND_obj_CWS)){
 		pointer = (uint8_t*)mes;
 		pointer += (sizeof(mes->d_struct.id_netw)+sizeof(mes->d_struct.id_modul));
 		memcpy(obj,pointer,sizeof(OBJ_STRUCT));
+		
+//		obj->obj_data[0]= _CRC;
+//		obj->obj_data[1]= _CRC>>8;
+//		obj->obj_data[2]= mes->d_struct.crc;
+//		obj->obj_data[3]= mes->d_struct.crc>>8;
+		
 		if(obj->obj_event == 1){
 			/*call obj handler,change event bit on feedback*/
 			OBJ_Event(id);

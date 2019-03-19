@@ -23,7 +23,10 @@ void ADC_Init(){
 	
 	/*ADC1  clock  enable*/
 	RCC->APB2ENR |= RCC_APB2ENR_ADC1EN;
-
+	/*ADC1 calibration*/
+	ADC1->CR2 |= ADC_CR2_CAL;
+	while((ADC1->CR2 & ADC_CR2_CAL) == 1);
+	
 	/*scan mode*/
 	ADC1->CR1 |= ADC_CR1_SCAN;
 	
@@ -48,8 +51,4 @@ void ADC_Init(){
 	
 	/*ADC1 on*/
 	ADC1->CR2 |=ADC_CR2_ADON;
-	
-	/*ADC1 calibration*/
-	ADC1->CR2 |= ADC_CR2_CAL;
-	while((ADC1->CR2 & ADC_CR2_CAL) == 1);
 }

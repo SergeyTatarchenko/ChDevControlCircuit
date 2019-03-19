@@ -28,13 +28,17 @@ void vTask_Handler_Data(void *pvParameters){
 *************************************************/	
 
 void vTask_1000ms(void *pvParameters){	
-		
+	Upd_All_OBJ();
+	
 	for(;;){
-		vTaskDelay(1000);
+		vTaskDelay(10);
 		/*test obj upd*/
+		//OBJ_Upd(this_obj(IND_obj_IO));
+		//adc_calc_value();
+	//	OBJ_Event(IND_obj_ADC1);
+		this_obj(IND_obj_TICK)->obj_event = 1;
+		OBJ_Event(IND_obj_TICK);
 		
-		this_obj(IND_obj_IO)->obj_event = 1;
-		OBJ_Upd(this_obj(IND_obj_IO));
-		
+		OBJ_Upd(this_obj(IND_obj_PWM));
 	}
 }

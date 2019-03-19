@@ -32,8 +32,20 @@ v 0.1
 
 /*-----------------------------------------------*/
 #define IND_obj_IO            (IND_obj_NULL + 1)	// входы выходы на плате
+#define IND_obj_ADC1          (IND_obj_NULL + 2)	// аппаратный ацп 1
+#define IND_obj_ADC2          (IND_obj_NULL + 3)	// аппаратный ацп 2
+#define IND_obj_ADC3          (IND_obj_NULL + 4)	// аппаратный ацп 3
+#define IND_obj_ADC4          (IND_obj_NULL + 5)	// аппаратный ацп 4
+#define IND_obj_ADC5          (IND_obj_NULL + 6)	// аппаратный ацп 5
+#define IND_obj_ADC6          (IND_obj_NULL + 7)	// аппаратный ацп 6
 
-#define	num_of_all_obj			1		//! counter
+#define IND_obj_TICK          (IND_obj_NULL + 8)	// тик тест
+
+#define IND_obj_LED           (IND_obj_NULL + 9)	// светодиод на плате
+
+#define IND_obj_PWM           (IND_obj_NULL + 10)	// ШИМ
+
+#define	num_of_all_obj			11		//! counter  (все объекты + 1)
 /*-----------------------------------------------*/
 
 #endif
