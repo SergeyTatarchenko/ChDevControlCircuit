@@ -33,9 +33,9 @@ void vTask_1000ms(void *pvParameters){
 	for(;;){
 		vTaskDelay(10);
 		/*test obj upd*/
-		//OBJ_Upd(this_obj(IND_obj_IO));
-		//adc_calc_value();
-	//	OBJ_Event(IND_obj_ADC1);
+		OBJ_Upd(this_obj(IND_obj_IO));
+		adc_calc_value();
+		OBJ_Event(IND_obj_ADC1);
 		this_obj(IND_obj_TICK)->obj_event = 1;
 		OBJ_Event(IND_obj_TICK);
 		

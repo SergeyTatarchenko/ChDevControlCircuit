@@ -124,6 +124,7 @@ void OBJ_Event(int obj_id){
 	
 	obj_handlers[obj_id](this_obj(obj_id));
 	/*feedback*/
+	
 	if(this_obj(obj_id)->obj_event == 1){
 		this_obj(obj_id)->obj_event = 0;
 		OBJ_Upd(this_obj(obj_id));
@@ -170,7 +171,7 @@ void Upd_All_OBJ(){
 	}
 }
 
-/*		obj sync with MCP23017		*/
+/*		   obj sync with MCP23017	    	*/
 void OBJ_SyncIO(int obj_id){
 	
 	if(this_obj(obj_id)->obj_data[0] != IO_Pointer->OUTPUTS){

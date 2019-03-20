@@ -44,6 +44,9 @@ void obj_snap(void){
 	obj_handlers[IND_obj_TICK] = TICK_Handler;
 	
 	obj_handlers[IND_obj_LED] = LED_Control_Handler;
+	
+	obj_handlers[IND_obj_PWM] = Dummy_Handler;
+	
 	/*---------------------------------------------------*/
 
 	OBJ_SyncIO(IND_obj_IO);
@@ -104,5 +107,5 @@ void LED_Control_Handler(OBJ_STRUCT *obj){
 
 /*пустой обработчик*/
 void Dummy_Handler(OBJ_STRUCT *obj){
-	
+	LED_ON;
 }
