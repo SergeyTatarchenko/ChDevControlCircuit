@@ -170,9 +170,6 @@ void Upd_All_OBJ(void);
 /*receive object data from message*/
 void Rx_OBJ_Data(TX_RX_FRAME *mes);
 
-/*sync obj with MCP23017*/
-void OBJ_SyncIO(int obj_id);
-
 /*-----------------------------------------------*/
 uint8_t Check_CRC(TX_RX_FRAME *Rx_obj_c);
 

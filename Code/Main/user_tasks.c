@@ -24,21 +24,16 @@ void vTask_Handler_Data(void *pvParameters){
 
 
 /*************************************************
-1000 ms timer
+				main tread
 *************************************************/	
 
-void vTask_1000ms(void *pvParameters){	
-	Upd_All_OBJ();
-	
+void vTask_1000ms(void *pvParameters){		
 	for(;;){
 		vTaskDelay(10);
 		/*test obj upd*/
-		OBJ_Upd(this_obj(IND_obj_IO));
 		adc_calc_value();
-		OBJ_Event(IND_obj_ADC1);
-		this_obj(IND_obj_TICK)->obj_event = 1;
+		Upd_All_OBJ();
 		OBJ_Event(IND_obj_TICK);
-		
-		OBJ_Upd(this_obj(IND_obj_PWM));
+		OBJ_Event(IND_obj_ADC1);
 	}
 }

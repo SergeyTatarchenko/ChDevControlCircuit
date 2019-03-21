@@ -34,7 +34,7 @@ void USART1_IRQHandler(){
 					if((usart_irq_counter < LEN_MSG_OBJ) && (usart_irq_counter > (LEN_HEAD_SIZE -1))){
 						/**/
 						USART1_receive_array[usart_irq_counter] = buff;
-						if(usart_irq_counter == (LEN_MSG_OBJ -1)){
+						if(usart_irq_counter == (LEN_MSG_OBJ)){
 							break;
 						}
 						usart_irq_counter++;
@@ -51,7 +51,7 @@ void USART1_IRQHandler(){
 				}else{
 					if((usart_irq_counter < LEN_MSG_OBJ) && (usart_irq_counter > (LEN_HEAD_SIZE -1))){
 						USART1_receive_array[usart_irq_counter] = buff;
-						if(usart_irq_counter == (LEN_MSG_OBJ -1)){
+						if(usart_irq_counter == (LEN_MSG_OBJ)){
 							break;
 						}
 						usart_irq_counter++;
@@ -64,7 +64,7 @@ void USART1_IRQHandler(){
 			default:
 				if((usart_irq_counter < LEN_MSG_OBJ) && (usart_irq_counter > (LEN_HEAD_SIZE -1))){
 					USART1_receive_array[usart_irq_counter] = buff;
-					if(usart_irq_counter == (LEN_MSG_OBJ -1)){
+					if(usart_irq_counter == (LEN_MSG_OBJ)){
 							break;
 						}
 						usart_irq_counter++;
@@ -74,7 +74,7 @@ void USART1_IRQHandler(){
 				break;
 		}
 		
-		if(usart_irq_counter == (LEN_MSG_OBJ -1)){
+		if(usart_irq_counter == (LEN_MSG_OBJ)){
 			xQueueSendFromISR(usart_receive_buffer,USART1_receive_array,0);
 			usart_irq_counter = 0;	
 		}	
@@ -119,12 +119,20 @@ OBJ_STRUCT* Obj_Create(int obj_id, int obj_type ){
 	return obj;
 }
 
-/* object event, call object handler and call update function */
+void Obj_MCP23017_snap(){
+	/*inputs*/
+	uint8_t port_state;
+	
+	IO_Pointer->INPUTS;
+	
+}
+
+/* object event, call object handler and call update function, if event = 1 */
 void OBJ_Event(int obj_id){
 	
 	obj_handlers[obj_id](this_obj(obj_id));
-	/*feedback*/
 	
+	/*feedback*/
 	if(this_obj(obj_id)->obj_event == 1){
 		this_obj(obj_id)->obj_event = 0;
 		OBJ_Upd(this_obj(obj_id));
@@ -165,20 +173,10 @@ void	OBJ_Upd(OBJ_STRUCT *obj){
 
 /*             update all obj                */
 void Upd_All_OBJ(){
-
-		for(int counter = 0; counter < num_of_all_obj; counter ++){
-		OBJ_Upd(this_obj(counter));
-	}
-}
-
-/*		   obj sync with MCP23017	    	*/
-void OBJ_SyncIO(int obj_id){
-	
-	if(this_obj(obj_id)->obj_data[0] != IO_Pointer->OUTPUTS){
-		this_obj(obj_id)->obj_data[0] = IO_Pointer->OUTPUTS;
-	}
-	if(this_obj(obj_id)->obj_data[1] != IO_Pointer->INPUTS){
-		this_obj(obj_id)->obj_data[1] = IO_Pointer->INPUTS;
+	for(int counter = 0; counter < num_of_all_obj; counter ++){
+		if(this_obj(counter)->id[1]!=0){
+			OBJ_Upd(this_obj(counter));
+		}
 	}
 }
 
@@ -187,10 +185,13 @@ void Rx_OBJ_Data(TX_RX_FRAME *mes){
 	
 	int id;
 	int i;
+	uint8_t type;
 	uint16_t _CRC = 0;
 	OBJ_STRUCT *obj;
 	uint8_t *pointer;
+	
 	id = mes->d_struct.index[0];
+	type = mes->d_struct.index[1];
 	obj = objDefault + id;
 	
 	for(i = 0; i < (LEN_MSG_OBJ - LEN_CRC); i++)
@@ -198,21 +199,15 @@ void Rx_OBJ_Data(TX_RX_FRAME *mes){
 		_CRC += mes->byte[i];
 	}
 	
-	
-//	if(_CRC != mes->d_struct.crc){
-//		/*error crc do not match*/
-//		return;
-//	}
+	if(_CRC != mes->d_struct.crc){
+		/*error crc do not match*/
+		return;
+	}
 	/*if it is a control object*/	
-	if( mes->d_struct.index[1]&(IND_obj_CAS|IND_obj_CWS)){
+	if(type == obj->id[1]){
 		pointer = (uint8_t*)mes;
 		pointer += (sizeof(mes->d_struct.id_netw)+sizeof(mes->d_struct.id_modul));
 		memcpy(obj,pointer,sizeof(OBJ_STRUCT));
-		
-//		obj->obj_data[0]= _CRC;
-//		obj->obj_data[1]= _CRC>>8;
-//		obj->obj_data[2]= mes->d_struct.crc;
-//		obj->obj_data[3]= mes->d_struct.crc>>8;
 		
 		if(obj->obj_event == 1){
 			/*call obj handler,change event bit on feedback*/

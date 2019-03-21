@@ -70,7 +70,7 @@ void vGetIOState(void *pvParameters){
 		xSemaphoreGive(xMutex_BUS_BUSY);
 		
 		/*add obj snap to mcp23x17 event !!*/
-		OBJ_SyncIO(IND_obj_IO);
+		
 		
 		
 		SemaphoreCount = uxSemaphoreGetCount(InputEvent);	
@@ -78,7 +78,6 @@ void vGetIOState(void *pvParameters){
 			//error overclocking IO port(add handler)
 		}
 	}
-//	vTaskDelete(NULL);
 }
 
 /*************************************************
