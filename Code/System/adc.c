@@ -35,12 +35,17 @@ void ADC_Init(){
 	ADC1->CR2 |= (ADC_CR2_CONT|ADC_CR2_EXTSEL|ADC_CR2_EXTTRIG);
 		
 	/*DMA mode enable*/
-	ADC1->CR2 |=ADC_CR2_DMA;	
-
-	/*lenght of channel sequence
-	L[3:0] = 101 - 6 conversions*/
-	ADC1->SQR1 |= (ADC_SQR1_L_0 | ADC_SQR1_L_2);
+	ADC1->CR2 |=ADC_CR2_DMA;
 	
+	/*Temperature Sensor and VREFINT Enable*/
+	ADC1->CR2 |=ADC_CR2_TSVREFE;
+	ADC1->SMPR1 |= ADC_SMPR1_SMP16_1;
+	
+	
+	/*lenght of channel sequence
+	L[3:0] = 110 - 7 conversions*/
+	ADC1->SQR1 |= (ADC_SQR1_L_1 | ADC_SQR1_L_2);
+		
 	/*channel poll sequence*/
 	ADC1->SQR3 |=(ADC_SQR3_SQ1_0| //PA1 -1
 				  ADC_SQR3_SQ2_1| //PA2 -2
@@ -48,6 +53,8 @@ void ADC_Init(){
 				  ADC_SQR3_SQ4_2| //PA4 -4
 				  ADC_SQR3_SQ5_2|ADC_SQR3_SQ5_0| //PA5 -5
 		          ADC_SQR3_SQ6_2|ADC_SQR3_SQ6_1); //PA6 -6
+	
+	ADC1->SQR2 |= ADC_SQR2_SQ7_4;				//Temperature Sensor - 7			  
 	
 	/*ADC1 on*/
 	ADC1->CR2 |=ADC_CR2_ADON;

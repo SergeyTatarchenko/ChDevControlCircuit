@@ -6,6 +6,8 @@ extern void obj_snap(void);
 
 /*-----------------------------------------------*/
 
+void board_START(OBJ_STRUCT *obj);
+
 void ADC_Handler(OBJ_STRUCT *obj);
 
 void TICK_Handler(OBJ_STRUCT *obj);

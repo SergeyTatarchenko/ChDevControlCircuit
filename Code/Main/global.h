@@ -147,7 +147,9 @@ typedef struct{
 	uint16_t CH4_ADC;
 	uint16_t CH5_ADC;
 	uint16_t CH6_ADC;
-
+	
+	uint16_t TEMP_SENSOR;
+	
 }value_ADC_REGISTR;
 
 #pragma pack(pop)

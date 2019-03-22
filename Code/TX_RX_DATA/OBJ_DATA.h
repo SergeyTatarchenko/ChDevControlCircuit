@@ -9,27 +9,6 @@
 #include "usart.h"
 #include "obj_ID.h"
 
-/* byte[0]*/
-#define	ID_NETWORK			0x01
-
-/* byte[1]*/
-#define	ID_DEVICE			0x72
-#define ID_REMOTE_CNTRL		0x02
-
-/* byte[2] & byte[3]*/
-#define	IND_obj_NULL			0x00
-#define	IND_obj_END				0xFF
-
-
-/*data command*/
-#define IND_obj_COM				4
-/*control and status*/
-#define IND_obj_CAS				3
-/*control without status*/
-#define IND_obj_CWS				2
-/*status without control*/
-#define IND_obj_SWC				1
-
 #define	obj_ram_addr(obj_)		&obj_	
 #define	objU8_byte(obj_v)		obj_v.Byte_
 #define	objU_byte(obj_v, b)	    obj_v.Byte[b].Byte_
@@ -146,6 +125,8 @@ typedef	struct{
 #define obj_hardware			obj_field.default_field.control_byte.bit.hardware
 #define obj_data				obj_field.default_field.data
 
+
+#define status_field 			obj_field.default_field.control_byte.byte
 /*-----------------------------------------------*/
 /*           struct for usart frame              */
 /*-----------------------------------------------*/
@@ -215,6 +196,21 @@ void Rx_OBJ_Data(TX_RX_FRAME *mes);
 uint8_t Check_CRC(TX_RX_FRAME *Rx_obj_c);
 
 
+/*data command*/
+#define IND_obj_COM				4
+/*control and status*/
+#define IND_obj_CAS				3
+/*control without status*/
+#define IND_obj_CWS				2
+/*status without control*/
+#define IND_obj_SWC				1
+
+/* byte[0]*/
+#define	ID_NETWORK			0x01
+
+/* byte[1]*/
+#define	ID_DEVICE			0x72
+#define ID_REMOTE_CNTRL		0x02
 
 /*-----------------------------------------------*/
 /*include object handlers*/

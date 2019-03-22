@@ -1,6 +1,9 @@
 #ifndef OBJ_ID_H_
 #define	OBJ_ID_H_
 
+#define	IND_obj_NULL			0x00
+#define	IND_obj_END				0xFF
+
 /*
 v 0.1
 1) create object name  example   " #define obj_name	(IND_obj_NULL + x)"
@@ -12,6 +15,10 @@ v 0.1
 
 
 /*-----------------------------------------------*/
+
+#define obj_STATUS			IND_obj_NULL + 1	
+
+
 #define IND_obj_IN			(IND_obj_NULL + 0x10)	// inputs
 #define IND_obj_OUT			(IND_obj_NULL + 0x20)	// outputs
 #define IND_obj_ADC			(IND_obj_NULL + 0x30)	// ADC inputs
@@ -45,7 +52,7 @@ v 0.1
 /*-----------------------------------------------*/
 
 /*-----------------------------------------------*/
-#define IND_obj_TICK          (IND_obj_ALL    )	// тик тест
+#define IND_obj_TICK          (IND_obj_ALL + 0)	// тик тест
 #define IND_obj_LED           (IND_obj_ALL + 1)	// светодиод на плате
 #define IND_obj_PWM           (IND_obj_ALL + 2)	// ШИМ
 

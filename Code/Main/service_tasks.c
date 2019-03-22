@@ -37,9 +37,10 @@ void StartInit(void *pvParameters){
 		/*run with higher priority (use I2C)*/
 		xTaskCreate(vGetIOState,"I/O pool ", configMINIMAL_STACK_SIZE, NULL, 5, NULL );
 		/************************************/
-		/*program timers*/
-		xTaskCreate(vTask_1000ms,"1000 ms pool",configMINIMAL_STACK_SIZE, NULL, 2, NULL );	
 		
+		
+		/*program timers*/
+		xTaskCreate(vTask_main,"main thread",configMINIMAL_STACK_SIZE, NULL, 2, NULL );	
 		/* RX Handler */
 		xTaskCreate(vTask_Handler_Data,"Handler",configMINIMAL_STACK_SIZE*2, NULL, 4, NULL );
 		
@@ -96,3 +97,36 @@ void vBlinker (void *pvParameters){
 		vTaskDelay(*BlinkFreq);			
 	}
 }
+
+volatile uint8_t power_on;
+
+/*************************************************
+USART RX handler 
+*************************************************/
+void vTask_Handler_Data(void *pvParameters){
+	TX_RX_FRAME rx_buffer;
+	
+	/*USART receive complete interrupt on NVIC*/
+	NVIC_EnableIRQ (USART1_IRQn);
+	for(;;){
+		xQueueReceive(usart_receive_buffer,&rx_buffer,portMAX_DELAY);
+		Rx_OBJ_Data(&rx_buffer);
+		
+		//uxQueueMessagesWaiting(usart_receive_buffer);	
+		vTaskDelay(1);
+	}
+}
+/*************************************************
+				main tread
+*************************************************/	
+
+void vTask_main(void *pvParameters){		
+	
+	for(;;){
+		vTaskDelay(1);		
+		if(power_on){
+			board_task();		
+		}
+	}
+}
+

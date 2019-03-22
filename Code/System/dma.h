@@ -14,7 +14,7 @@
 /*-----------local define-----------------------*/
 /**/
 #define ADC1_DR_ADDR	((uint32_t)(ADC1_BASE + 0x4C))
-#define ADC1_BUF_SIZE	6
+#define ADC1_BUF_SIZE	7
 
 #define USART1_DEFAULT_BUF_SIZE LEN_MSG_OBJ
 

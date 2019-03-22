@@ -103,6 +103,10 @@ void OBJ_Init(){
 		obj = objDefault + counter;
 		obj->id[0] = counter;	
 	}
+	
+	for(int counter = 0;counter <= num_of_all_obj;counter++){
+		obj_handlers[counter]= Dummy_Handler;
+	}
 	/* object create and handler mapping*/
 	obj_snap();
 	Obj_MCP23017_snap();
@@ -135,7 +139,7 @@ void Obj_MCP23017_upd(){
 	/*inputs*/
 	port_state = IO_Pointer->INPUTS;
 	while(counter < sizeof(IO_Pointer->INPUTS)*8){
-		if((this_obj(IND_obj_IN0 + counter)->id[1]!=0) && (this_obj(IND_obj_IN0 + counter)->obj_hardware ==1)){
+		if((this_obj(IND_obj_IN0 + counter)->id[1]!=0) && (this_obj(IND_obj_IN0 + counter)->obj_hardware == 1)){
 			if(this_obj(IND_obj_IN0 + counter)->obj_state != (port_state&1) ){
 				this_obj(IND_obj_IN0 + counter)->obj_state = port_state&1;
 				OBJ_Event(IND_obj_IN0 + counter);
@@ -149,14 +153,15 @@ void Obj_MCP23017_upd(){
 /*set state with update*/
 void OBJ_SetState(int obj,int state){
 	/*change hardware state*/
+	
 	if(this_obj(obj)->obj_hardware == 1){
 		xSemaphoreTake(xMutex_BUS_BUSY,portMAX_DELAY);	
 		/*add mcp23017 set state function */
-		
 		xSemaphoreGive(xMutex_BUS_BUSY);		
 	}
 	
 	if(this_obj(obj)->obj_state != state){
+		this_obj(obj)->obj_state = state;
 		obj_handlers[obj](this_obj(obj));
 		OBJ_Upd(this_obj(obj));		
 	}
@@ -165,6 +170,8 @@ void OBJ_SetState(int obj,int state){
 
 /* object event, call object handler and call update function, if event = 1 */
 void OBJ_Event(int obj_id){
+	
+	obj_handlers[obj_id](this_obj(obj_id));
 	
 	/*feedback*/
 	if(this_obj(obj_id)->obj_event == 1){
@@ -202,7 +209,7 @@ void	OBJ_Upd(OBJ_STRUCT *obj){
 	send_usart_message((uint8_t*)message_pointer,sizeof(TX_RX_FRAME));	// transfer data to usart
 	
 	/*message delay for corrent receive */
-	vTaskDelay(40);
+	vTaskDelay(25);
 }
 
 /*             update all obj                */
@@ -237,8 +244,14 @@ void Rx_OBJ_Data(TX_RX_FRAME *mes){
 		/*error crc do not match*/
 		return;
 	}
+	/*board control object*/
+	if(id == obj_STATUS){
+		this_obj(obj_STATUS)->status_field = mes->d_struct.data[0];
+		OBJ_Event(obj_STATUS);
+		return;
+	}
 	/*if it is a control object*/	
-	if(type == obj->id[1]){
+	if((type == obj->id[1])&& power_on){
 		pointer = (uint8_t*)mes;
 		pointer += (sizeof(mes->d_struct.id_netw)+sizeof(mes->d_struct.id_modul));
 		memcpy(obj,pointer,sizeof(OBJ_STRUCT));
@@ -246,6 +259,10 @@ void Rx_OBJ_Data(TX_RX_FRAME *mes){
 		if(obj->obj_event == 1){
 			/*call obj handler,change event bit on feedback*/
 			OBJ_Event(id);
+			
+			if(obj->obj_hardware == 1){
+				/*hardware event*/
+			}
 		}
 		else{
 			/*feedback*/

@@ -155,4 +155,7 @@ void adc_calc_value(){
 	adc_val->CH5_ADC = (ADC1_DataArray[4]*(uint16_t)INT_ADC_REF)/(uint16_t)ADC_DEPTH;
 	adc_val->CH6_ADC = (ADC1_DataArray[5]*(uint16_t)INT_ADC_REF)/(uint16_t)ADC_DEPTH;
 	
+	adc_val->TEMP_SENSOR = (ADC1_DataArray[6]*(uint16_t)INT_ADC_REF)/(uint16_t)ADC_DEPTH;
+	adc_val->TEMP_SENSOR = (uint16_t)((float)(1430 - adc_val->TEMP_SENSOR)/(float)(4.3) +25);
+	
 }
