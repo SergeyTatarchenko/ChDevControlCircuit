@@ -9,6 +9,36 @@
 #include "usart.h"
 #include "obj_ID.h"
 
+/* byte[0]*/
+#define	ID_NETWORK			0x01
+
+/* byte[1]*/
+#define	ID_DEVICE			0x72
+#define ID_REMOTE_CNTRL		0x02
+
+/* byte[2] & byte[3]*/
+#define	IND_obj_NULL			0x00
+#define	IND_obj_END				0xFF
+
+
+/*data command*/
+#define IND_obj_COM				4
+/*control and status*/
+#define IND_obj_CAS				3
+/*control without status*/
+#define IND_obj_CWS				2
+/*status without control*/
+#define IND_obj_SWC				1
+
+#define	obj_ram_addr(obj_)		&obj_	
+#define	objU8_byte(obj_v)		obj_v.Byte_
+#define	objU_byte(obj_v, b)	    obj_v.Byte[b].Byte_
+#define	objU_word(obj_v, b)		obj_v.Word[b].Word
+
+#define this_obj(obj_id)		(objDefault + obj_id)
+
+
+
 /*-----------------------------------------------*/
 typedef union {
 	uint8_t Byte_;
@@ -98,12 +128,11 @@ typedef	struct{
 					uint8_t rez4  : 1;
 					uint8_t rez5  : 1;
 					uint8_t rez6  : 1;
-					uint8_t rez7  : 1;
+					uint8_t hardware  : 1;
 				}bit;
 			}control_byte;
 			
-			uint8_t command_byte;
-			uint8_t data[6];
+			uint8_t data[7];
 		}default_field;
 		
 	
@@ -111,6 +140,12 @@ typedef	struct{
 	
 }OBJ_STRUCT;
 #pragma pack(pop)
+
+#define obj_event				obj_field.default_field.control_byte.bit.event
+#define obj_state				obj_field.default_field.control_byte.bit.state
+#define obj_hardware			obj_field.default_field.control_byte.bit.hardware
+#define obj_data				obj_field.default_field.data
+
 /*-----------------------------------------------*/
 /*           struct for usart frame              */
 /*-----------------------------------------------*/
@@ -158,6 +193,12 @@ void OBJ_Init(void);
 /*create object*/
 OBJ_STRUCT* Obj_Create(int obj_id, int obj_type);
 
+/*snap obj with MCP23017*/
+void Obj_MCP23017_snap(void);
+
+/*upd mcp23017 obj, run in vGetIOState*/
+void Obj_MCP23017_upd(void);
+
 /*object event*/
 void OBJ_Event(int obj_id);
 
@@ -173,22 +214,8 @@ void Rx_OBJ_Data(TX_RX_FRAME *mes);
 /*-----------------------------------------------*/
 uint8_t Check_CRC(TX_RX_FRAME *Rx_obj_c);
 
-#define	obj_ram_addr(obj_)		&obj_	
-#define	objU8_byte(obj_v)		obj_v.Byte_
-#define	objU_byte(obj_v, b)	    obj_v.Byte[b].Byte_
-#define	objU_word(obj_v, b)		obj_v.Word[b].Word
 
-#define this_obj(obj_id)		(objDefault + obj_id)
 
-#define obj_event				obj_field.default_field.control_byte.bit.event
-#define obj_state				obj_field.default_field.control_byte.bit.state
-#define obj_data				obj_field.default_field.data
-
-#define OBJ_SET_IO_BYTE(byte)	\
-	xSemaphoreTake(xMutex_BUS_BUSY,portMAX_DELAY);	\
-	Set_IO_Byte(byte);	\
-	xSemaphoreGive(xMutex_BUS_BUSY);	\
-	
 /*-----------------------------------------------*/
 /*include object handlers*/
 #include "List_OBJ.h"

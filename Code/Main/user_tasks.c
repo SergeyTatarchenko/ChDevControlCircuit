@@ -12,6 +12,8 @@ USART RX handler
 void vTask_Handler_Data(void *pvParameters){
 	TX_RX_FRAME rx_buffer;
 	
+	/*USART receive complete interrupt on NVIC*/
+	NVIC_EnableIRQ (USART1_IRQn);
 	for(;;){
 		xQueueReceive(usart_receive_buffer,&rx_buffer,portMAX_DELAY);
 		Rx_OBJ_Data(&rx_buffer);

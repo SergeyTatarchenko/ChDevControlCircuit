@@ -17,10 +17,10 @@ void obj_snap(void){
 	Obj_Create(IND_obj_IN1,IND_obj_CAS);
 	Obj_Create(IND_obj_IN2,IND_obj_CAS);
 	Obj_Create(IND_obj_IN3,IND_obj_CAS);
-//	Obj_Create(IND_obj_IN4,IND_obj_CAS);
-//	Obj_Create(IND_obj_IN5,IND_obj_CAS);
-//	Obj_Create(IND_obj_IN6,IND_obj_CAS);
-//	Obj_Create(IND_obj_IN7,IND_obj_CAS);
+	Obj_Create(IND_obj_IN4,IND_obj_CAS);
+	Obj_Create(IND_obj_IN5,IND_obj_CAS);
+	Obj_Create(IND_obj_IN6,IND_obj_CAS);
+	Obj_Create(IND_obj_IN7,IND_obj_CAS);
 	/*---------------------------------------------------*/
 	Obj_Create(IND_obj_OUT0,IND_obj_CAS);
 	Obj_Create(IND_obj_OUT1,IND_obj_CAS);
@@ -39,8 +39,11 @@ void obj_snap(void){
 	Obj_Create(IND_obj_ADC6,IND_obj_SWC);
 	/*---------------------------------------------------*/
 	Obj_Create(IND_obj_TICK,IND_obj_SWC);
-	Obj_Create(IND_obj_LED,IND_obj_CWS);
-	Obj_Create(IND_obj_PWM,IND_obj_CWS);
+	Obj_Create(IND_obj_LED, IND_obj_CWS);
+	Obj_Create(IND_obj_PWM, IND_obj_CWS);
+	Obj_Create(IND_obj_TEST,IND_obj_SWC);
+	
+	
 	/*---------------------------------------------------*/
 	/*obj_handlers[object name] = name of object handler;*/
 	/*---------------------------------------------------*/	
@@ -53,7 +56,9 @@ void obj_snap(void){
 	/*---------------------------------------------------*/
 	obj_handlers[IND_obj_TICK] = TICK_Handler;
 	obj_handlers[IND_obj_LED] = LED_Control_Handler;
+	
 	obj_handlers[IND_obj_PWM] = Dummy_Handler;
+	obj_handlers[IND_obj_TEST] = Dummy_Handler;
 	/*---------------------------------------------------*/	
 }
 
@@ -91,5 +96,5 @@ void LED_Control_Handler(OBJ_STRUCT *obj){
 
 /*пустой обработчик*/
 void Dummy_Handler(OBJ_STRUCT *obj){
-	LED_ON;
+	
 }

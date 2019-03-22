@@ -105,9 +105,7 @@ void OBJ_Init(){
 	}
 	/* object create and handler mapping*/
 	obj_snap();
-	
-	/*USART receive complete interrupt on NVIC*/
-	NVIC_EnableIRQ (USART1_IRQn);
+	Obj_MCP23017_snap();
 }
 
 /*create object, return pointer to obj */
@@ -118,19 +116,55 @@ OBJ_STRUCT* Obj_Create(int obj_id, int obj_type ){
 	obj->id[1] = obj_type;
 	return obj;
 }
-
+/*create hardware obj*/
 void Obj_MCP23017_snap(){
+	int counter = 0;
 	/*inputs*/
-	uint8_t port_state;
-	
-	IO_Pointer->INPUTS;
-	
+	/*create obj for all inputs*/
+	while(counter < sizeof(IO_Pointer->INPUTS)*8){
+		if(this_obj(IND_obj_IN0 + counter)->id[1]!=0){
+			this_obj(IND_obj_IN0 + counter)->obj_hardware =1;
+		}
+		counter++;
+	}
 }
+/*update data from mcp2017 snap with obj, call handler if state change */
+void Obj_MCP23017_upd(){
+	uint8_t port_state;
+	int counter = 0;
+	/*inputs*/
+	port_state = IO_Pointer->INPUTS;
+	while(counter < sizeof(IO_Pointer->INPUTS)*8){
+		if((this_obj(IND_obj_IN0 + counter)->id[1]!=0) && (this_obj(IND_obj_IN0 + counter)->obj_hardware ==1)){
+			if(this_obj(IND_obj_IN0 + counter)->obj_state != (port_state&1) ){
+				this_obj(IND_obj_IN0 + counter)->obj_state = port_state&1;
+				OBJ_Event(IND_obj_IN0 + counter);
+			}
+		}
+		port_state = port_state>>1;
+		counter++;
+	}
+}
+
+/*set state with update*/
+void OBJ_SetState(int obj,int state){
+	/*change hardware state*/
+	if(this_obj(obj)->obj_hardware == 1){
+		xSemaphoreTake(xMutex_BUS_BUSY,portMAX_DELAY);	
+		/*add mcp23017 set state function */
+		
+		xSemaphoreGive(xMutex_BUS_BUSY);		
+	}
+	
+	if(this_obj(obj)->obj_state != state){
+		obj_handlers[obj](this_obj(obj));
+		OBJ_Upd(this_obj(obj));		
+	}
+}
+
 
 /* object event, call object handler and call update function, if event = 1 */
 void OBJ_Event(int obj_id){
-	
-	obj_handlers[obj_id](this_obj(obj_id));
 	
 	/*feedback*/
 	if(this_obj(obj_id)->obj_event == 1){

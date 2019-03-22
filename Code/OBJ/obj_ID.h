@@ -1,25 +1,6 @@
 #ifndef OBJ_ID_H_
 #define	OBJ_ID_H_
 
-/* byte[0]*/
-#define	ID_NETWORK			0x01
-
-/* byte[1]*/
-#define	ID_DEVICE			0x72
-#define ID_REMOTE_CNTRL		0x02
-
-/* byte[2] & byte[3]*/
-#define	IND_obj_NULL			0x00
-#define	IND_obj_END				0xFF
-
-/*control and status*/
-#define IND_obj_CAS				3
-/*control without status*/
-#define IND_obj_CWS				2
-/*status without control*/
-#define IND_obj_SWC				1
-
-
 /*
 v 0.1
 1) create object name  example   " #define obj_name	(IND_obj_NULL + x)"
@@ -31,15 +12,10 @@ v 0.1
 
 
 /*-----------------------------------------------*/
-//#define IND_obj_IN			(IND_obj_NULL + 0x10)	// inputs
-//#define IND_obj_OUT			(IND_obj_NULL + 0x20)	// outputs
-//#define IND_obj_ADC			(IND_obj_NULL + 0x30)	// ADC inputs
-//#define IND_obj_ALL			(IND_obj_NULL + 0x40)	// user obj
-
-#define IND_obj_IN			(IND_obj_NULL + 16)	// inputs
-#define IND_obj_OUT			(IND_obj_NULL + 32)	// outputs
-#define IND_obj_ADC			(IND_obj_NULL + 48)	// ADC inputs
-#define IND_obj_ALL			(IND_obj_NULL + 64)	// user obj
+#define IND_obj_IN			(IND_obj_NULL + 0x10)	// inputs
+#define IND_obj_OUT			(IND_obj_NULL + 0x20)	// outputs
+#define IND_obj_ADC			(IND_obj_NULL + 0x30)	// ADC inputs
+#define IND_obj_ALL			(IND_obj_NULL + 0x40)	// user obj
 
 /*-----------------------------------------------*/
 #define IND_obj_IN0            (IND_obj_IN + 1)		// вход 1
@@ -73,7 +49,9 @@ v 0.1
 #define IND_obj_LED           (IND_obj_ALL + 1)	// светодиод на плате
 #define IND_obj_PWM           (IND_obj_ALL + 2)	// ШИМ
 
-#define	num_of_all_obj		  (IND_obj_ALL + 3)		//! counter  (все объекты + 1)
+#define IND_obj_TEST           (IND_obj_ALL + 3)	// тест
+
+#define	num_of_all_obj		  (IND_obj_ALL + 4)		//! counter  (все объекты + 1)
 /*-----------------------------------------------*/
 
 #endif

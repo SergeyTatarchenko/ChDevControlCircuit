@@ -70,8 +70,7 @@ void vGetIOState(void *pvParameters){
 		xSemaphoreGive(xMutex_BUS_BUSY);
 		
 		/*add obj snap to mcp23x17 event !!*/
-		
-		
+		Obj_MCP23017_upd();
 		
 		SemaphoreCount = uxSemaphoreGetCount(InputEvent);	
 		if(SemaphoreCount > 1){
