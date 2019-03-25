@@ -48,7 +48,7 @@ v 0.1
 #define IND_obj_ADC3          (IND_obj_ADC + 3)		// аппаратный ацп 3
 #define IND_obj_ADC4          (IND_obj_ADC + 4)		// аппаратный ацп 4
 #define IND_obj_ADC5          (IND_obj_ADC + 5)		// аппаратный ацп 5
-#define IND_obj_ADC6          (IND_obj_ADC + 6)		// аппаратный ацп 6
+#define IND_obj_ADC6		  (IND_obj_ADC + 6)		// аппаратный ацп 6
 /*-----------------------------------------------*/
 
 /*-----------------------------------------------*/
@@ -56,9 +56,16 @@ v 0.1
 #define IND_obj_LED           (IND_obj_ALL + 1)	// светодиод на плате
 #define IND_obj_PWM           (IND_obj_ALL + 2)	// ШИМ
 
-#define IND_obj_TEST           (IND_obj_ALL + 3)	// тест
+#define IND_obj_TEST	      (IND_obj_ALL + 3)	// тест
 
-#define	num_of_all_obj		  (IND_obj_ALL + 4)		//! counter  (все объекты + 1)
+#define IND_obj_PID_KP		  (IND_obj_ALL + 4)
+#define IND_obj_PID_KI		  (IND_obj_ALL + 5)
+#define IND_obj_PID_KD		  (IND_obj_ALL + 6)
+#define IND_obj_PID_SET_VAl	  (IND_obj_ALL + 7)
+#define IND_obj_PID_FDB		  (IND_obj_ALL + 8)
+
+
+#define	num_of_all_obj		  (IND_obj_ALL + 9)		//! counter  (все объекты + 1)
 /*-----------------------------------------------*/
 
 #endif

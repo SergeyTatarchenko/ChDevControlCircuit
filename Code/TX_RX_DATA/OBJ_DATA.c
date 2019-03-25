@@ -227,12 +227,18 @@ void Rx_OBJ_Data(TX_RX_FRAME *mes){
 	int id;
 	int i;
 	uint8_t type;
+	uint8_t status;
 	uint16_t _CRC = 0;
 	OBJ_STRUCT *obj;
 	uint8_t *pointer;
 	
+	/*id of rec object*/
 	id = mes->d_struct.index[0];
+	/*type of rec object*/
 	type = mes->d_struct.index[1];
+	/*object status*/
+	status = mes->d_struct.data[0];
+	
 	obj = objDefault + id;
 	
 	for(i = 0; i < (LEN_MSG_OBJ - LEN_CRC); i++)
@@ -244,30 +250,40 @@ void Rx_OBJ_Data(TX_RX_FRAME *mes){
 		/*error crc do not match*/
 		return;
 	}
+	
 	/*board control object*/
 	if(id == obj_STATUS){
 		this_obj(obj_STATUS)->status_field = mes->d_struct.data[0];
 		OBJ_Event(obj_STATUS);
 		return;
 	}
-	/*if it is a control object*/	
-	if((type == obj->id[1])&& power_on){
+	/*receive data (obj type 4) */
+	if((type == IND_obj_COM) && power_on){
+		/*take new object image*/
 		pointer = (uint8_t*)mes;
 		pointer += (sizeof(mes->d_struct.id_netw)+sizeof(mes->d_struct.id_modul));
 		memcpy(obj,pointer,sizeof(OBJ_STRUCT));
-		
-		if(obj->obj_event == 1){
+		OBJ_Event(id);
+		return;		
+	}
+	/*object event*/
+	if(status & event_mask){
+		/*if it is a control object*/	
+		if((type == obj->id[1])&&((type&IND_obj_CWS)||(type&IND_obj_CAS)||(type&IND_obj_COM))&& power_on){
+		/*take new object image*/
+		pointer = (uint8_t*)mes;
+		pointer += (sizeof(mes->d_struct.id_netw)+sizeof(mes->d_struct.id_modul));
+		memcpy(obj,pointer,sizeof(OBJ_STRUCT));
+		/*event bit call object handler*/
 			/*call obj handler,change event bit on feedback*/
 			OBJ_Event(id);
 			
+			/*hardware event*/
 			if(obj->obj_hardware == 1){
-				/*hardware event*/
+			
 			}
-		}
-		else{
-			/*feedback*/
-	//		OBJ_Upd(this_obj(id));
-		}
-	}	
+		}	
+	return;
+	}
 }
 

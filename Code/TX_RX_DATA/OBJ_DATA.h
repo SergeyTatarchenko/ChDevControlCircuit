@@ -96,6 +96,7 @@ typedef	struct{
 		
 		uint64_t	d64b;
 		
+		/*default obj field*/
 		struct{
 			union{
 				uint8_t byte;
@@ -114,17 +115,22 @@ typedef	struct{
 			uint8_t data[7];
 		}default_field;
 		
+		/* extended data field for data transmit*/
+		struct{
+			uint8_t data[8];
+		}data_field;
 	
 	}obj_field;
 	
 }OBJ_STRUCT;
 #pragma pack(pop)
 
+#define event_mask				0x02
+
 #define obj_event				obj_field.default_field.control_byte.bit.event
 #define obj_state				obj_field.default_field.control_byte.bit.state
 #define obj_hardware			obj_field.default_field.control_byte.bit.hardware
 #define obj_data				obj_field.default_field.data
-
 
 #define status_field 			obj_field.default_field.control_byte.byte
 /*-----------------------------------------------*/

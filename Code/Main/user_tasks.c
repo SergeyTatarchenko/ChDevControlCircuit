@@ -16,5 +16,4 @@ void board_task(){
 	OBJ_Event(IND_obj_TICK);
 	adc_calc_value();
 	OBJ_Event(IND_obj_ADC1);
-
 }

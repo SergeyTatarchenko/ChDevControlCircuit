@@ -5,7 +5,6 @@
 /* 									 object snapping		 						*/
 /************************************************************************************/
 void obj_snap(void){
-	
 	/*---------------------------------------------------*/
 	/*           object type assignment                  */
 	/*---------------------------------------------------*/
@@ -45,6 +44,11 @@ void obj_snap(void){
 	Obj_Create(IND_obj_PWM, IND_obj_CWS);
 	Obj_Create(IND_obj_TEST,IND_obj_SWC);
 	
+	Obj_Create(IND_obj_PID_KP,IND_obj_COM);
+	Obj_Create(IND_obj_PID_KI,IND_obj_COM);
+	Obj_Create(IND_obj_PID_KD,IND_obj_COM);
+	Obj_Create(IND_obj_PID_SET_VAl,IND_obj_COM);
+	Obj_Create(IND_obj_PID_FDB,IND_obj_COM);
 	
 	/*---------------------------------------------------*/
 	/*obj_handlers[object name] = name of object handler;*/
@@ -62,6 +66,7 @@ void obj_snap(void){
 	obj_handlers[IND_obj_TICK] = TICK_Handler;
 	obj_handlers[IND_obj_LED] = LED_Control_Handler;
 	/*---------------------------------------------------*/	
+	
 }
 
 

@@ -26,24 +26,20 @@ void StartInit(void *pvParameters){
 	InputEvent = xSemaphoreCreateCounting(3,0);
 	xMutex_BUS_BUSY = xSemaphoreCreateMutex();
 	//
-	
+
+	/*start other tasks*/	
 	//state = Get_IO_State();
-	/*start other tasks*/
-	
 	state =1;
+	
 	/*high level tasks*/
 	if(state){
 		LED_OFF;
 		/*run with higher priority (use I2C)*/
 		xTaskCreate(vGetIOState,"I/O pool ", configMINIMAL_STACK_SIZE, NULL, 5, NULL );
-		/************************************/
-		
-		
-		/*program timers*/
+		/*main thread*/
 		xTaskCreate(vTask_main,"main thread",configMINIMAL_STACK_SIZE, NULL, 2, NULL );	
 		/* RX Handler */
 		xTaskCreate(vTask_Handler_Data,"Handler",configMINIMAL_STACK_SIZE*2, NULL, 4, NULL );
-		
 		/*start obj model*/
 		OBJ_Init();
 	}else{
