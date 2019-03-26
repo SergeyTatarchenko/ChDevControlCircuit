@@ -126,6 +126,7 @@ typedef	struct{
 #pragma pack(pop)
 
 #define event_mask				0x02
+#define state_mask				0x01
 
 #define obj_event				obj_field.default_field.control_byte.bit.event
 #define obj_state				obj_field.default_field.control_byte.bit.state

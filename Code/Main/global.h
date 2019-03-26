@@ -28,7 +28,10 @@
 	
 	#define	OUTPUTS 	PortA_Byte_All.PortA_Byte 
 	#define INPUTS		PortB_Byte_All.PortB_Byte 
-
+	
+	#define NUM_OF_INPUTS	8
+	#define NUM_OF_OUTPUTS	8
+	
 	#define OUT0	PortA_Byte_All.bit.B0
 	#define OUT1	PortA_Byte_All.bit.B1
 	#define OUT2	PortA_Byte_All.bit.B2
@@ -203,9 +206,14 @@ extern value_ADC_REGISTR *adc_val;
 extern AnalogState_REGISTR AIN_State;
 extern AnalogState_REGISTR *AIN_Pointer;
 
+#define MESSAGE_BUF_SIZE	16
+
+
+#define pU16(val) *((uint16_t*)&val)
+
 #endif
 
-#define MESSAGE_BUF_SIZE	16
+
 
 
 

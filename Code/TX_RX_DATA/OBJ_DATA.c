@@ -125,20 +125,20 @@ void Obj_MCP23017_snap(){
 	int counter = 0;
 	/*inputs*/
 	/*create obj for all inputs*/
-	while(counter < sizeof(IO_Pointer->INPUTS)*8){
+	while(counter < sizeof(IO_Pointer->INPUTS)*NUM_OF_INPUTS){
 		if(this_obj(IND_obj_IN0 + counter)->id[1]!=0){
 			this_obj(IND_obj_IN0 + counter)->obj_hardware =1;
 		}
 		counter++;
 	}
 }
-/*update data from mcp2017 snap with obj, call handler if state change */
+/*update data from mcp23017 snap with obj, call handler if state change */
 void Obj_MCP23017_upd(){
 	uint8_t port_state;
 	int counter = 0;
 	/*inputs*/
 	port_state = IO_Pointer->INPUTS;
-	while(counter < sizeof(IO_Pointer->INPUTS)*8){
+	while(counter < sizeof(IO_Pointer->INPUTS)*NUM_OF_INPUTS){
 		if((this_obj(IND_obj_IN0 + counter)->id[1]!=0) && (this_obj(IND_obj_IN0 + counter)->obj_hardware == 1)){
 			if(this_obj(IND_obj_IN0 + counter)->obj_state != (port_state&1) ){
 				this_obj(IND_obj_IN0 + counter)->obj_state = port_state&1;
@@ -151,20 +151,31 @@ void Obj_MCP23017_upd(){
 }
 
 /*set state with update*/
-void OBJ_SetState(int obj,int state){
-	/*change hardware state*/
+void OBJ_SetState(int obj_id,int state){
 	
-	if(this_obj(obj)->obj_hardware == 1){
-		xSemaphoreTake(xMutex_BUS_BUSY,portMAX_DELAY);	
-		/*add mcp23017 set state function */
-		xSemaphoreGive(xMutex_BUS_BUSY);		
+	if(state>1){
+		return;
 	}
 	
-	if(this_obj(obj)->obj_state != state){
-		this_obj(obj)->obj_state = state;
-		obj_handlers[obj](this_obj(obj));
-		OBJ_Upd(this_obj(obj));		
+	if(this_obj(obj_id)->obj_state != state){
+		this_obj(obj_id)->obj_state = state;
 	}
+		/*change hardware state*/
+	if(this_obj(obj_id)->obj_hardware == 1){
+		/*inputs*/
+		if((obj_id > IND_obj_IN) &&(obj_id < IND_obj_OUT)){
+				
+		}
+		/*outputs*/
+		if((obj_id > IND_obj_OUT) &&(obj_id < IND_obj_ADC)){
+			xSemaphoreTake(xMutex_BUS_BUSY,portMAX_DELAY);	
+				/*use i2c*/
+			Set_IO_State(obj_id,state);	
+			xSemaphoreGive(xMutex_BUS_BUSY);	
+		}		
+	}
+	obj_handlers[obj_id](this_obj(obj_id));
+	OBJ_Upd(this_obj(obj_id));		
 }
 
 
@@ -236,10 +247,11 @@ void Rx_OBJ_Data(TX_RX_FRAME *mes){
 	id = mes->d_struct.index[0];
 	/*type of rec object*/
 	type = mes->d_struct.index[1];
-	/*object status*/
-	status = mes->d_struct.data[0];
 	
 	obj = objDefault + id;
+	
+	/*previous object status*/
+	status = obj->obj_data[0];	
 	
 	for(i = 0; i < (LEN_MSG_OBJ - LEN_CRC); i++)
 	{
@@ -267,23 +279,23 @@ void Rx_OBJ_Data(TX_RX_FRAME *mes){
 		return;		
 	}
 	/*object event*/
-	if(status & event_mask){
+	if(mes->d_struct.data[0] & event_mask){
 		/*if it is a control object*/	
-		if((type == obj->id[1])&&((type&IND_obj_CWS)||(type&IND_obj_CAS)||(type&IND_obj_COM))&& power_on){
+		if((type == obj->id[1])&&(type&IND_obj_CAS)&& power_on){
 		/*take new object image*/
 		pointer = (uint8_t*)mes;
 		pointer += (sizeof(mes->d_struct.id_netw)+sizeof(mes->d_struct.id_modul));
 		memcpy(obj,pointer,sizeof(OBJ_STRUCT));
 		/*event bit call object handler*/
-			/*call obj handler,change event bit on feedback*/
-			OBJ_Event(id);
 			
-			/*hardware event*/
-			if(obj->obj_hardware == 1){
-			
-			}
+		/*hardware event*/
+		if((obj->obj_hardware == 1)&&((status & state_mask)!=(obj->obj_state & state_mask))){
+			OBJ_SetState(id,(status & state_mask));
+			return;	
+		}
+		/*call obj handler,change event bit on feedback*/
+		OBJ_Event(id);
 		}	
-	return;
 	}
 }
 

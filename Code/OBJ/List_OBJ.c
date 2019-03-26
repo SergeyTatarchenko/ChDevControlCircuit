@@ -40,8 +40,8 @@ void obj_snap(void){
 	Obj_Create(IND_obj_ADC6,IND_obj_SWC);
 	/*---------------------------------------------------*/
 	Obj_Create(IND_obj_TICK,IND_obj_SWC);
-	Obj_Create(IND_obj_LED, IND_obj_CWS);
-	Obj_Create(IND_obj_PWM, IND_obj_CWS);
+	Obj_Create(IND_obj_LED, IND_obj_CAS);
+	Obj_Create(IND_obj_PWM, IND_obj_CAS);
 	Obj_Create(IND_obj_TEST,IND_obj_SWC);
 	
 	Obj_Create(IND_obj_PID_KP,IND_obj_COM);
@@ -87,12 +87,12 @@ void board_START(OBJ_STRUCT *obj){
 /*показания ацп*/
 void ADC_Handler(OBJ_STRUCT *obj){
 	
-	this_obj(IND_obj_ADC1)->obj_data[0] = adc_val->CH1_ADC;
-	this_obj(IND_obj_ADC2)->obj_data[0] = adc_val->CH2_ADC;
-	this_obj(IND_obj_ADC3)->obj_data[0] = adc_val->CH3_ADC;
-	this_obj(IND_obj_ADC4)->obj_data[0] = adc_val->CH4_ADC;
-	this_obj(IND_obj_ADC5)->obj_data[0] = adc_val->CH5_ADC;
-	this_obj(IND_obj_ADC6)->obj_data[0] = adc_val->CH6_ADC;
+	pU16(this_obj(IND_obj_ADC1)->obj_data[0]) = adc_val->CH1_ADC;
+	pU16(this_obj(IND_obj_ADC2)->obj_data[0]) = adc_val->CH2_ADC;
+	pU16(this_obj(IND_obj_ADC3)->obj_data[0]) = adc_val->CH3_ADC;
+	pU16(this_obj(IND_obj_ADC4)->obj_data[0]) = adc_val->CH4_ADC;
+	pU16(this_obj(IND_obj_ADC5)->obj_data[0]) = adc_val->CH5_ADC;
+	pU16(this_obj(IND_obj_ADC6)->obj_data[0]) = adc_val->CH6_ADC;
 	
 	this_obj(obj_STATUS)->obj_data[1] = adc_val->TEMP_SENSOR;
 }
