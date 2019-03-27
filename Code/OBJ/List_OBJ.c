@@ -8,11 +8,12 @@ void obj_snap(void){
 	/*---------------------------------------------------*/
 	/*           object type assignment                  */
 	/*---------------------------------------------------*/
-	
+	Obj_Create(obj_STATUS,IND_obj_CAS);	
+	obj_handlers[obj_STATUS] = board_START;
 	/*---------------------------------------------------*/
 	/*       Obj_Create(obj id,obj type);                */
 	/*---------------------------------------------------*/
-	Obj_Create(obj_STATUS,IND_obj_CAS);
+
 	
 	Obj_Create(IND_obj_IN0,IND_obj_CAS);
 	Obj_Create(IND_obj_IN1,IND_obj_CAS);
@@ -53,8 +54,7 @@ void obj_snap(void){
 	/*---------------------------------------------------*/
 	/*obj_handlers[object name] = name of object handler;*/
 	/*---------------------------------------------------*/	
-	
-	obj_handlers[obj_STATUS] = board_START;
+
 	
 	obj_handlers[IND_obj_ADC1] = ADC_Handler;
 	obj_handlers[IND_obj_ADC2] = ADC_Handler;

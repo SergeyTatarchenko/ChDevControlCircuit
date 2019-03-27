@@ -33,7 +33,16 @@ extern void vTask_Handler_Data(void *pvParameters);
 
 extern volatile uint8_t power_on;
 void board_task(void);
-
+/*----------------------------------------------*/
+#define system_prior	(configMAX_PRIORITIES-1)
+#define usart_prior		(configMAX_PRIORITIES-2)
+#define board_prior		(configMAX_PRIORITIES-3)
+/*----------------------------------------------*/
+#define user_stack		(unsigned short) 256
+#define usart_stack		(unsigned short) 256
+#define led_stack		(unsigned short) 32
+#define system_stack	(unsigned short) 128
+/*----------------------------------------------*/
 #endif
 
 

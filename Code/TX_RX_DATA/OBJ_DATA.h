@@ -1,3 +1,9 @@
+/*************************************************
+* File Name          : OBJ_DATA.h
+* Author             : Tatarchenko S.
+* Version            : v 1.0
+* Description        : header for OBJ_DATA.c 
+*************************************************/
 #ifndef OBJ_DATA_H_
 #define	OBJ_DATA_H_
 

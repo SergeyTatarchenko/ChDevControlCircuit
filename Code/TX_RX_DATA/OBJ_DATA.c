@@ -1,3 +1,9 @@
+/*************************************************
+* File Name          : OBJ_DATA.c
+* Author             : Tatarchenko S.
+* Version            : v 1.0
+* Description        : simple obj model BKM
+*************************************************/
 #include "OBJ_DATA.h"
 
 /*----------- global variables-------------------*/

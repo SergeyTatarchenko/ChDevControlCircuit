@@ -35,11 +35,11 @@ void StartInit(void *pvParameters){
 	if(state){
 		LED_OFF;
 		/*run with higher priority (use I2C)*/
-		xTaskCreate(vGetIOState,"I/O pool ", configMINIMAL_STACK_SIZE, NULL, 5, NULL );
+		xTaskCreate(vGetIOState,"I/O pool ", system_stack, NULL,system_prior, NULL );
 		/*main thread*/
-		xTaskCreate(vTask_main,"main thread",configMINIMAL_STACK_SIZE, NULL, 2, NULL );	
+		xTaskCreate(vTask_main,"main thread",user_stack, NULL, board_prior, NULL );	
 		/* RX Handler */
-		xTaskCreate(vTask_Handler_Data,"Handler",configMINIMAL_STACK_SIZE*2, NULL, 4, NULL );
+		xTaskCreate(vTask_Handler_Data,"Handler",usart_stack, NULL,usart_prior, NULL );
 		/*start obj model*/
 		OBJ_Init();
 	}else{

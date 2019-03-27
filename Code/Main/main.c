@@ -4,10 +4,6 @@
 * Version            : v 1.0
 * Description        : main file
 *************************************************/
-#define HSE_10MHz
-//#define HSE_8MHz
-//#define HSE_12MHz
-
 /*----------------------------------------------*/
 #include "FreeRTOS.h"
 #include "task.h"
