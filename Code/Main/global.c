@@ -21,7 +21,19 @@ value_ADC_REGISTR *adc_val;
 /* declared global extern struct for analog port state */
 AnalogState_REGISTR AIN_State;
 AnalogState_REGISTR *AIN_Pointer;
-  
+ 
+/*data array for adc*/
+uint16_t ADC1_DataArray[ADC1_BUF_SIZE];
+/* data array for usart obj transfer */
+uint8_t	usart_data_transmit_array[USART1_DEFAULT_BUF_SIZE];
+/* data array for usart obj receive */
+uint8_t usart_data_receive_array[USART1_DEFAULT_BUF_SIZE];
+/*mutex  to perform currect usart transmit */
+xSemaphoreHandle xMutex_USART_BUSY;
+/*queue of messages from usart module*/
+xQueueHandle usart_receive_buffer;
+/*usart data byte counter */
+uint8_t usart_irq_counter;
 /*************************************************
 init all system core drivers
 *************************************************/
@@ -38,6 +50,12 @@ void Core_Init(){
 	I2CInit();
 	/*usart init*/
 	usart_init();
+	
+	
+	//test
+	//usart_speed(9600);
+	
+	
 	/*external interrupt init (for MCP23017)*/
 	EXTI_Init();
 	/*NVIC config */
@@ -140,7 +158,7 @@ send USART message, use DMA , medium priority
 *************************************************/
 void send_usart_message(uint8_t *message,uint32_t buf_size){
 	
-	memcpy(USART1_transmit_array,message,buf_size);
+	memcpy(usart_data_transmit_array,message,buf_size);
 	DMA_Ch4_Reload(buf_size);
 }                                                                     
 /*************************************************

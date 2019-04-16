@@ -14,6 +14,8 @@
 #include "task.h"
 #include "queue.h"
 #include "semphr.h"
+/*----------------------------------------------*/
+#include "OBJ_MODEL.h"
 /*-----------local define-----------------------*/
 
 /*-----------local function prototypes----------*/

@@ -1,5 +1,4 @@
-
-#include "global.h"
+#include "obj_ID.h"
 
 /************************************************************************************/
 /* 									 object snapping		 						*/
@@ -14,31 +13,7 @@ void obj_snap(void){
 	/*       Obj_Create(obj id,obj type);                */
 	/*---------------------------------------------------*/
 
-	
-	Obj_Create(IND_obj_IN0,IND_obj_CAS);
-	Obj_Create(IND_obj_IN1,IND_obj_CAS);
-	Obj_Create(IND_obj_IN2,IND_obj_CAS);
-	Obj_Create(IND_obj_IN3,IND_obj_CAS);
-	Obj_Create(IND_obj_IN4,IND_obj_CAS);
-	Obj_Create(IND_obj_IN5,IND_obj_CAS);
-	Obj_Create(IND_obj_IN6,IND_obj_CAS);
-	Obj_Create(IND_obj_IN7,IND_obj_CAS);
-	/*---------------------------------------------------*/
-	Obj_Create(IND_obj_OUT0,IND_obj_CAS);
-	Obj_Create(IND_obj_OUT1,IND_obj_CAS);
-	Obj_Create(IND_obj_OUT2,IND_obj_CAS);
-	Obj_Create(IND_obj_OUT3,IND_obj_CAS);
-	Obj_Create(IND_obj_OUT4,IND_obj_CAS);
-	Obj_Create(IND_obj_OUT5,IND_obj_CAS);
-	Obj_Create(IND_obj_OUT6,IND_obj_CAS);
-	Obj_Create(IND_obj_OUT7,IND_obj_CAS);
-	/*---------------------------------------------------*/
 	Obj_Create(IND_obj_ADC1,IND_obj_SWC);
-	Obj_Create(IND_obj_ADC2,IND_obj_SWC);
-	Obj_Create(IND_obj_ADC3,IND_obj_SWC);
-	Obj_Create(IND_obj_ADC4,IND_obj_SWC);
-	Obj_Create(IND_obj_ADC5,IND_obj_SWC);
-	Obj_Create(IND_obj_ADC6,IND_obj_SWC);
 	/*---------------------------------------------------*/
 	Obj_Create(IND_obj_TICK,IND_obj_SWC);
 	Obj_Create(IND_obj_LED, IND_obj_CAS);
@@ -50,23 +25,15 @@ void obj_snap(void){
 	Obj_Create(IND_obj_PID_KD,IND_obj_COM);
 	Obj_Create(IND_obj_PID_SET_VAl,IND_obj_COM);
 	Obj_Create(IND_obj_PID_FDB,IND_obj_COM);
-	
 	/*---------------------------------------------------*/
 	/*obj_handlers[object name] = name of object handler;*/
 	/*---------------------------------------------------*/	
-
-	
 	obj_handlers[IND_obj_ADC1] = ADC_Handler;
-	obj_handlers[IND_obj_ADC2] = ADC_Handler;
-	obj_handlers[IND_obj_ADC3] = ADC_Handler;
-	obj_handlers[IND_obj_ADC4] = ADC_Handler;
-	obj_handlers[IND_obj_ADC5] = ADC_Handler;
-	obj_handlers[IND_obj_ADC6] = ADC_Handler;
 	/*---------------------------------------------------*/
 	obj_handlers[IND_obj_TICK] = TICK_Handler;
 	obj_handlers[IND_obj_LED] = LED_Control_Handler;
 	/*---------------------------------------------------*/	
-	
+	HW_OBJ[adc_1]= this_obj(IND_obj_ADC1);
 }
 
 
@@ -78,9 +45,9 @@ void obj_snap(void){
 void board_START(OBJ_STRUCT *obj){
 	/*board start*/
 	if(obj->obj_state == 1){
-		power_on = 1;
+		board_state.bit.power = 1;
 	}else{
-		power_on =0;
+		board_state.bit.power =0;
 	}
 }
 
@@ -88,12 +55,6 @@ void board_START(OBJ_STRUCT *obj){
 void ADC_Handler(OBJ_STRUCT *obj){
 	
 	pU16(this_obj(IND_obj_ADC1)->obj_data[0]) = adc_val->CH1_ADC;
-	pU16(this_obj(IND_obj_ADC2)->obj_data[0]) = adc_val->CH2_ADC;
-	pU16(this_obj(IND_obj_ADC3)->obj_data[0]) = adc_val->CH3_ADC;
-	pU16(this_obj(IND_obj_ADC4)->obj_data[0]) = adc_val->CH4_ADC;
-	pU16(this_obj(IND_obj_ADC5)->obj_data[0]) = adc_val->CH5_ADC;
-	pU16(this_obj(IND_obj_ADC6)->obj_data[0]) = adc_val->CH6_ADC;
-	
 	this_obj(obj_STATUS)->obj_data[1] = adc_val->TEMP_SENSOR;
 }
 /*тик с каждым ивентом*/

@@ -149,7 +149,7 @@
             <RestoreSysVw>1</RestoreSysVw>
           </Target>
           <RunDebugAfterBuild>0</RunDebugAfterBuild>
-          <TargetSelection>3</TargetSelection>
+          <TargetSelection>5</TargetSelection>
           <SimDlls>
             <CpuDll></CpuDll>
             <CpuDllArguments></CpuDllArguments>
@@ -163,7 +163,7 @@
             <PeripheralDll></PeripheralDll>
             <PeripheralDllArguments></PeripheralDllArguments>
             <InitializationFile></InitializationFile>
-            <Driver>Segger\JL2CM3.dll</Driver>
+            <Driver>STLink\ST-LINKIII-KEIL_SWO.dll</Driver>
           </TargetDlls>
         </DebugOption>
         <Utilities>
@@ -375,7 +375,7 @@
               <MiscControls></MiscControls>
               <Define></Define>
               <Undefine></Undefine>
-              <IncludePath>\Code\System;.\Code\FreeRTOS;.\Code\FreeRTOS\include;.\Code\Main;.\Code\System;.\Code\Drivers;.\Code\TX_RX_DATA;.\Code\Utility_Func;.\Code\OBJ</IncludePath>
+              <IncludePath>\Code\System;.\Code\FreeRTOS;.\Code\FreeRTOS\include;.\Code\Main;.\Code\System;.\Code\Drivers;.\Code\Utility_Func;.\Code\OBJ;.\Code\OBJ_MODEL</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -499,20 +499,25 @@
               <FileType>1</FileType>
               <FilePath>.\Code\Main\user_tasks.c</FilePath>
             </File>
+            <File>
+              <FileName>obj_model_config.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\Code\Main\obj_model_config.h</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
-          <GroupName>TX_RX_DATA</GroupName>
+          <GroupName>OBJ_MODEL</GroupName>
           <Files>
             <File>
-              <FileName>OBJ_DATA.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\Code\TX_RX_DATA\OBJ_DATA.c</FilePath>
+              <FileName>OBJ_MODEL.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\Code\OBJ_MODEL\OBJ_MODEL.h</FilePath>
             </File>
             <File>
-              <FileName>OBJ_DATA.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>.\Code\TX_RX_DATA\OBJ_DATA.h</FilePath>
+              <FileName>OBJ_MODEL.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\Code\OBJ_MODEL\OBJ_MODEL.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -520,19 +525,14 @@
           <GroupName>OBJ</GroupName>
           <Files>
             <File>
-              <FileName>List_OBJ.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\Code\OBJ\List_OBJ.c</FilePath>
-            </File>
-            <File>
-              <FileName>List_OBJ.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>.\Code\OBJ\List_OBJ.h</FilePath>
-            </File>
-            <File>
               <FileName>obj_ID.h</FileName>
               <FileType>5</FileType>
               <FilePath>.\Code\OBJ\obj_ID.h</FilePath>
+            </File>
+            <File>
+              <FileName>List_OBJ.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\Code\OBJ\List_OBJ.c</FilePath>
             </File>
           </Files>
         </Group>

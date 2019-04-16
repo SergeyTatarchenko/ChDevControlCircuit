@@ -40,8 +40,12 @@ void StartInit(void *pvParameters){
 		xTaskCreate(vTask_main,"main thread",user_stack, NULL, board_prior, NULL );	
 		/* RX Handler */
 		xTaskCreate(vTask_Handler_Data,"Handler",usart_stack, NULL,usart_prior, NULL );
+		
+		
 		/*start obj model*/
 		OBJ_Init();
+	
+	
 	}else{
 		LED_ON;
 		/*internal error, loading aborted*/		
@@ -65,10 +69,7 @@ void vGetIOState(void *pvParameters){
 			// internal circuit error (add handler)
 		}
 		xSemaphoreGive(xMutex_BUS_BUSY);
-		
-		/*add obj snap to mcp23x17 event !!*/
-		Obj_MCP23017_upd();
-		
+			
 		SemaphoreCount = uxSemaphoreGetCount(InputEvent);	
 		if(SemaphoreCount > 1){
 			//error overclocking IO port(add handler)
@@ -100,7 +101,7 @@ volatile uint8_t power_on;
 USART RX handler 
 *************************************************/
 void vTask_Handler_Data(void *pvParameters){
-	TX_RX_FRAME rx_buffer;
+	USART_FRAME rx_buffer;
 	
 	/*USART receive complete interrupt on NVIC*/
 	NVIC_EnableIRQ (USART1_IRQn);
@@ -116,11 +117,15 @@ void vTask_Handler_Data(void *pvParameters){
 				main tread
 *************************************************/	
 
-void vTask_main(void *pvParameters){		
+void vTask_main(void *pvParameters){
+	
+	board_state.bit.mode = USART_MODE;
+	board_state.bit.hwobj = TRUE;
+	board_state.bit.debug = TRUE;
 	
 	for(;;){
 		vTaskDelay(1);		
-		if(power_on){
+		if(board_state.bit.power == 1){
 			board_task();		
 		}
 	}

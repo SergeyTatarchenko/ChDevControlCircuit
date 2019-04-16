@@ -7,6 +7,11 @@
 #ifndef GLOBAL_H
 #define GLOBAL_H
 
+#include "FreeRTOS.h"
+#include "task.h"
+#include "queue.h"
+#include "semphr.h"
+/*-----------------------------------------------*/
 #include "stm32f10x.h"
 #include "string.h"
 #include "i2c.h"
@@ -19,8 +24,6 @@
 #include "adg72x.h"
 #include "mcp3221.h"
 /*-----------------------------------------------*/
-#include "OBJ_DATA.h"
-
 /*----------- global define----------------------*/
 
 /**/
@@ -195,6 +198,31 @@ typedef struct{
 #pragma pack(pop)
 
 /*----------- global variables-------------------*/
+#define ADC1_BUF_SIZE	7
+#define USART1_DEFAULT_BUF_SIZE 10
+	
+
+
+#ifdef	LEN_USART_MSG_OBJ
+	#undef USART1_DEFAULT_BUF_SIZE
+	#define USART1_DEFAULT_BUF_SIZE LEN_USART_MSG_OBJ
+#endif
+
+extern uint16_t ADC1_DataArray[ADC1_BUF_SIZE];
+/* data array for usart obj transfer */
+extern uint8_t	usart_data_transmit_array[USART1_DEFAULT_BUF_SIZE];
+/* data array for usart obj receive */
+extern uint8_t usart_data_receive_array[USART1_DEFAULT_BUF_SIZE];
+/*mutex  to perform currect usart transmit */
+
+
+
+
+extern xSemaphoreHandle xMutex_USART_BUSY;
+/*queue of messages from usart module*/
+extern xQueueHandle usart_receive_buffer;
+/*usart data byte counter */
+extern uint8_t usart_irq_counter;
 
 extern PortState_REGISTR IO_STATE;
 extern PortState_REGISTR *IO_Pointer;

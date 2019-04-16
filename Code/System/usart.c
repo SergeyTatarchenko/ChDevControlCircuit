@@ -26,6 +26,7 @@ void usart_init(void)
 	GPIOA->CRH |= GPIO_CRH_CNF10_1;	//PA10
 	
 	/* config div USART for clock 9600 kbit/s */
+	/* USARTDIV = 9600 */
 	/* 
 	* baud = f_ck / (16*USARTDIV)
 	*
@@ -88,6 +89,25 @@ void usart_init(void)
 //				| (USART_GTPR_PSC & 0x0000)	// bit_7 - bit_0	Prescaler value
 	;
 
+}
+
+void usart_speed(uint32_t usartdiv)
+{
+	float baud = 0.0;
+	uint32_t div_fraction = 0;
+	uint32_t div_mantissa = 0;
+	uint32_t brr = 0;
+	
+	baud = (float)PLL_FREQ / (16.0 * (float)usartdiv);	
+	
+	div_fraction = baud * 100.0; 		
+	div_fraction = div_fraction % 100;	
+	
+	div_mantissa = baud;				
+	
+	brr = div_mantissa*16 + div_fraction;
+	
+	USART1->BRR = brr;
 }
 
 uint8_t	usart_rx(uint8_t *st)

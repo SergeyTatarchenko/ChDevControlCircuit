@@ -8,8 +8,6 @@
 
 /*----------- global variables-------------------*/
 
-/*data array for adc*/
-uint16_t ADC1_DataArray[ADC1_BUF_SIZE];
 /*************************************************
 Init DMA Channel for ADC1  
 *************************************************/
@@ -49,7 +47,7 @@ void DMA_USART1_Setup(){
 	/*peripheral address*/
 	DMA1_Channel4->CPAR |= (uint32_t)&(USART1->DR);
 	/*pointer to memory address*/
-	DMA1_Channel4->CMAR |= (uint32_t)&USART1_transmit_array[0];
+	DMA1_Channel4->CMAR |= (uint32_t)&usart_data_transmit_array[0];
 	/*number of data to transfer*/
 	DMA1_Channel4->CNDTR = (uint32_t)USART1_DEFAULT_BUF_SIZE;
 	/*Transfer complete interrupt enable */
@@ -67,7 +65,7 @@ void DMA_USART1_Setup(){
 	/*peripheral address*/
 	DMA1_Channel5->CPAR |= (uint32_t)&(USART1->DR);
 	/*pointer to memory address*/
-	DMA1_Channel5->CMAR |= (uint32_t)&USART1_receive_array[0];
+	DMA1_Channel5->CMAR |= (uint32_t)&usart_data_receive_array[0];
 	/*number of data to transfer*/
 	DMA1_Channel5->CNDTR = (uint32_t)USART1_DEFAULT_BUF_SIZE;
 	/*medium priority level */
@@ -103,7 +101,7 @@ void DMA1_Channel5_IRQHandler(){
 		DMA1->IFCR |= DMA_IFCR_CTCIF5;
 	}
 	
-	xQueueSendFromISR(usart_receive_buffer,USART1_receive_array,0);
+	xQueueSendFromISR(usart_receive_buffer,usart_data_receive_array,0);
 }
 /*************************************************
 Reload DMA Channel 4 

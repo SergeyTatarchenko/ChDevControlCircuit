@@ -1,71 +1,51 @@
 #ifndef OBJ_ID_H_
 #define	OBJ_ID_H_
 
+#include "OBJ_MODEL.h"
+
 #define	IND_obj_NULL			0x00
 #define	IND_obj_END				0xFF
 
+/**/
+enum obj_adc{adc_1 = 1,adc_2 = 2,adc_3 = 3,adc_4 = 4,adc_5 = 5,adc_6 = 6};
+enum obj_in {in_0 = 7,in_1 = 8,in_2 = 9,in_3 = 10};
+enum obj_out{out_0 = 11,out_1 = 12,out_2 = 12,out_3 = 13,out_4 = 14,out_5 = 15,out_6 = 16,out_7 = 17};
+
 /*
-v 0.1
+v 0.2
 1) create object name  example   " #define obj_name	(IND_obj_NULL + x)"
-2) create object type in List_OBJ.c
-3) create prototype of object handler in List-OBJ.h
+2) create prototype of object handler
+3) create object type in List_OBJ.c
 4) create object handler in List_OBJ.c
 5) span object with handler in List_OBJ.c
 */
 
 
 /*-----------------------------------------------*/
+#define obj_STATUS			  (IND_obj_NULL + 1)	
+/*-----------------SOFTOBJ-----------------------*/
+#define IND_obj_TICK          (IND_obj_NULL + 2)	// тик тест
+#define IND_obj_LED           (IND_obj_NULL + 3)	// светодиод на плате
+#define IND_obj_PWM           (IND_obj_NULL + 4)	// ШИМ
 
-#define obj_STATUS			IND_obj_NULL + 1	
+#define IND_obj_TEST	      (IND_obj_NULL + 5)	// тест
 
-
-#define IND_obj_IN			(IND_obj_NULL + 0x10)	// inputs
-#define IND_obj_OUT			(IND_obj_NULL + 0x20)	// outputs
-#define IND_obj_ADC			(IND_obj_NULL + 0x30)	// ADC inputs
-#define IND_obj_ALL			(IND_obj_NULL + 0x40)	// user obj
-
-/*-----------------------------------------------*/
-#define IND_obj_IN0            (IND_obj_IN + 1)		// вход 1
-#define IND_obj_IN1            (IND_obj_IN + 2)		// вход 2
-#define IND_obj_IN2            (IND_obj_IN + 3)		// вход 3
-#define IND_obj_IN3            (IND_obj_IN + 4)		// вход 4
-#define IND_obj_IN4            (IND_obj_IN + 5)		// вход 5
-#define IND_obj_IN5            (IND_obj_IN + 6)		// вход 6
-#define IND_obj_IN6            (IND_obj_IN + 7)		// вход 7
-#define IND_obj_IN7            (IND_obj_IN + 8)		// вход 8
-/*-----------------------------------------------*/
-#define IND_obj_OUT0           (IND_obj_OUT + 1)	// выход 1
-#define IND_obj_OUT1           (IND_obj_OUT + 2)	// выход 2
-#define IND_obj_OUT2           (IND_obj_OUT + 3)	// выход 3
-#define IND_obj_OUT3           (IND_obj_OUT + 4)	// выход 4
-#define IND_obj_OUT4           (IND_obj_OUT + 5)	// выход 5
-#define IND_obj_OUT5           (IND_obj_OUT + 6)	// выход 6
-#define IND_obj_OUT6           (IND_obj_OUT + 7)	// выход 7
-#define IND_obj_OUT7           (IND_obj_OUT + 8)	// выход 8
-/*-----------------------------------------------*/
-#define IND_obj_ADC1          (IND_obj_ADC + 1)		// аппаратный ацп 1
-#define IND_obj_ADC2          (IND_obj_ADC + 2)		// аппаратный ацп 2
-#define IND_obj_ADC3          (IND_obj_ADC + 3)		// аппаратный ацп 3
-#define IND_obj_ADC4          (IND_obj_ADC + 4)		// аппаратный ацп 4
-#define IND_obj_ADC5          (IND_obj_ADC + 5)		// аппаратный ацп 5
-#define IND_obj_ADC6		  (IND_obj_ADC + 6)		// аппаратный ацп 6
+#define IND_obj_PID_KP		  (IND_obj_NULL + 6)
+#define IND_obj_PID_KI		  (IND_obj_NULL + 7)
+#define IND_obj_PID_KD		  (IND_obj_NULL + 8)
+#define IND_obj_PID_SET_VAl	  (IND_obj_NULL + 9)
+#define IND_obj_PID_FDB		  (IND_obj_NULL + 10)
+/*---------------------HWOBJ---------------------*/
+#define IND_obj_ADC1          (IND_obj_NULL + 11)		// аппаратный ацп 1
 /*-----------------------------------------------*/
 
+
 /*-----------------------------------------------*/
-#define IND_obj_TICK          (IND_obj_ALL + 0)	// тик тест
-#define IND_obj_LED           (IND_obj_ALL + 1)	// светодиод на плате
-#define IND_obj_PWM           (IND_obj_ALL + 2)	// ШИМ
-
-#define IND_obj_TEST	      (IND_obj_ALL + 3)	// тест
-
-#define IND_obj_PID_KP		  (IND_obj_ALL + 4)
-#define IND_obj_PID_KI		  (IND_obj_ALL + 5)
-#define IND_obj_PID_KD		  (IND_obj_ALL + 6)
-#define IND_obj_PID_SET_VAl	  (IND_obj_ALL + 7)
-#define IND_obj_PID_FDB		  (IND_obj_ALL + 8)
-
-
-#define	num_of_all_obj		  (IND_obj_ALL + 9)		//! counter  (все объекты + 1)
-/*-----------------------------------------------*/
+/*obj handlers*/
+void board_START(OBJ_STRUCT *obj);
+void ADC_Handler(OBJ_STRUCT *obj);
+void TICK_Handler(OBJ_STRUCT *obj);
+void LED_Control_Handler(OBJ_STRUCT *obj);
+void Dummy_Handler(OBJ_STRUCT *obj);
 
 #endif

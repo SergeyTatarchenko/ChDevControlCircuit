@@ -16,6 +16,7 @@
 #define	USART_FLAG_RXNE	0x0020
 
 extern void usart_init(void);
+extern void usart_speed(uint32_t usartdiv);
 extern uint8_t	usart_rx(uint8_t *st);
 extern void usart_tx(uint8_t *bytes, uint8_t length);
 
