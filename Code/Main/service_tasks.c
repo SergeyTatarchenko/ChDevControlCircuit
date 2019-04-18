@@ -28,12 +28,14 @@ void StartInit(void *pvParameters){
 	//
 
 	/*start other tasks*/	
-	//state = Get_IO_State();
-	state =1;
+	state = Get_IO_State();
+	//state =1;
 	
 	/*high level tasks*/
 	if(state){
 		LED_OFF;
+		Set_IO_Byte(0x00);
+		
 		/*run with higher priority (use I2C)*/
 		xTaskCreate(vGetIOState,"I/O pool ", system_stack, NULL,system_prior, NULL );
 		/*main thread*/

@@ -100,12 +100,13 @@ void usart_speed(uint32_t usartdiv)
 	
 	baud = (float)PLL_FREQ / (16.0 * (float)usartdiv);	
 	
-	div_fraction = baud * 100.0; 		
+	div_fraction = (int)(baud * 100); 		
 	div_fraction = div_fraction % 100;	
+	div_fraction = (float)(div_fraction/100.0)*16.0;
 	
-	div_mantissa = baud;				
+	div_mantissa = baud * 16;				
 	
-	brr = div_mantissa*16 + div_fraction;
+	brr = div_mantissa | div_fraction;
 	
 	USART1->BRR = brr;
 }

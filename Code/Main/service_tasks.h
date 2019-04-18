@@ -6,6 +6,7 @@
 *************************************************/
 #ifndef SERVICE_TASKS_H
 #define SERVICE_TASKS_H
+#include "stm32f10x.h"
 
 #include "global.h"
 #include "user_tasks.h"

@@ -7,11 +7,13 @@
 #include "OBJ_MODEL.h"
 /*----------- global variables-------------------*/
 
-uint8_t obj_mem_area[sizeof(OBJ_STRUCT)*num_of_all_obj];
+static uint8_t obj_mem_area[sizeof(OBJ_STRUCT)*num_of_all_obj];
 OBJ_STRUCT *objDefault;
 BOARD_STATE	board_state;
 void ((*obj_handlers[num_of_all_obj+1]))(OBJ_STRUCT*);
+
 OBJ_STRUCT *HW_OBJ[NUM_OF_HWOBJ];
+int HW_OBJ_snap[NUM_OF_HWOBJ];
 /*-----------------------------------------------*/
 void USART1_IRQHandler(){
 	uint8_t buff;
@@ -99,6 +101,11 @@ void OBJ_Init(){
 	for(int counter = 0;counter <= num_of_all_obj;counter++){
 		obj_handlers[counter]= Dummy_Handler;
 	}
+	#ifdef HARDWARE_OBLECT
+		for(int counter = 0;counter <= NUM_OF_HWOBJ;counter++){
+		HW_OBJ[counter] = objDefault;
+	}
+	#endif
 	/* object create and handler mapping*/
 	obj_snap();
 }
@@ -119,11 +126,20 @@ void OBJ_SetState(int obj_id,int state){
 	}
 	if(this_obj(obj_id)->obj_state != state){
 		this_obj(obj_id)->obj_state = state;
+		obj_handlers[obj_id](this_obj(obj_id));
+		OBJ_Upd_USART(this_obj(obj_id));
 	}
-	obj_handlers[obj_id](this_obj(obj_id));
-	OBJ_Upd_USART(this_obj(obj_id));		
 }
-
+void HWOBJ_event(OBJ_STRUCT* obj,int obj_id){
+	
+	/*output event*/
+	if((obj->hardware_adress == out_0)||(obj->hardware_adress == out_1)||(obj->hardware_adress == out_2)||
+	   (obj->hardware_adress == out_3)||(obj->hardware_adress == out_4)||(obj->hardware_adress == out_5)||
+		(obj->hardware_adress == out_6)){
+			Set_IO_State((int)(obj->hardware_adress - out_offset),(int)obj->obj_state);
+	}
+	OBJ_Event(obj_id);	
+}
 
 /* object event, call object handler and call update function, if event = 1 */
 void OBJ_Event(int obj_id){
@@ -184,7 +200,6 @@ void Rx_OBJ_Data(USART_FRAME *mes){
 	int id;
 	int i;
 	uint8_t type;
-
 	uint16_t _CRC = 0;
 	OBJ_STRUCT *obj;
 	uint8_t *pointer;
@@ -195,8 +210,6 @@ void Rx_OBJ_Data(USART_FRAME *mes){
 	type = mes->d_struct.index[1];
 	
 	obj = objDefault + id;
-	
-
 	
 	for(i = 0; i < (LEN_USART_MSG_OBJ - LEN_CRC); i++)
 	{
@@ -232,8 +245,14 @@ void Rx_OBJ_Data(USART_FRAME *mes){
 		pointer += (sizeof(mes->d_struct.id_netw)+sizeof(mes->d_struct.id_modul));
 		memcpy(obj,pointer,sizeof(OBJ_STRUCT));
 		/*event bit call object handler*/
+		
+		if(obj->obj_hardware == 1){
+			HWOBJ_event(this_obj(id),id);
+		}else{
+			OBJ_Event(id);
+		}
 		/*call obj handler,change event bit on feedback*/
-		OBJ_Event(id);
+		
 		}	
 	}
 }

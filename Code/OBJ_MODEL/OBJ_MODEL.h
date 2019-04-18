@@ -47,7 +47,9 @@ typedef	struct{
 					uint8_t hardware  : 1;
 				}bit;
 			}control_byte;
-			uint8_t data[7];
+			uint16_t HW_adress;
+			uint16_t value;
+			uint8_t rezerv[3];
 		}default_field;
 		/* extended data field for data transmit*/
 		struct{
@@ -83,10 +85,14 @@ typedef union{
 /*---------------------------------------------*/
 #define event_mask				0x02
 #define state_mask				0x01
+#define hardware_mask			0x80
 
+#define typeof_obj				id[1]
 #define status_field 			obj_field.default_field.control_byte.byte
 #define obj_event				obj_field.default_field.control_byte.bit.event
 #define obj_state				obj_field.default_field.control_byte.bit.state
+#define obj_value				obj_field.default_field.value
+#define hardware_adress			obj_field.default_field.HW_adress
 #define obj_hardware			obj_field.default_field.control_byte.bit.hardware
 #define obj_data				obj_field.default_field.data
 /*-----------------------------------------------*/
@@ -127,6 +133,7 @@ extern BOARD_STATE	board_state;
 
 #ifdef	HARDWARE_OBLECT
 	extern OBJ_STRUCT *HW_OBJ[NUM_OF_HWOBJ];
+	
 #endif	
 
 /*-----------------------------------------------*/
@@ -139,10 +146,11 @@ void OBJ_Init(void);
 /*create object*/
 OBJ_STRUCT* Obj_Create(int obj_id, int obj_type);
 /*object event*/
-void OBJ_Event(int obj_id);
+extern void OBJ_Event(int obj_id);
 /*set obj state*/
-void OBJ_SetState(int obj_id,int state);
-
+extern void OBJ_SetState(int obj_id,int state);
+/*hardware event handler, board special*/
+extern void HWOBJ_event(OBJ_STRUCT* obj,int obj_id);
 /*update this obj */
 extern void OBJ_Upd_USART(OBJ_STRUCT *obj);
 /*update all obj */

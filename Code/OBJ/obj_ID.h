@@ -7,10 +7,11 @@
 #define	IND_obj_END				0xFF
 
 /**/
-enum obj_adc{adc_1 = 1,adc_2 = 2,adc_3 = 3,adc_4 = 4,adc_5 = 5,adc_6 = 6};
-enum obj_in {in_0 = 7,in_1 = 8,in_2 = 9,in_3 = 10};
-enum obj_out{out_0 = 11,out_1 = 12,out_2 = 12,out_3 = 13,out_4 = 14,out_5 = 15,out_6 = 16,out_7 = 17};
-
+enum obj_adc{adc_0 = 0,adc_1 = 1,adc_2 = 2,adc_3 = 3,adc_4 = 4,adc_5 = 5};
+enum obj_in {in_0 = 6,in_1 = 7,in_2 = 8,in_3 = 9};
+enum obj_out{out_0 = 10,out_1 = 11,out_2 = 12,out_3 = 13,out_4 = 14,out_5 = 15,out_6 = 16,out_7 = 17};
+#define out_offset out_0
+/**/
 /*
 v 0.2
 1) create object name  example   " #define obj_name	(IND_obj_NULL + x)"
@@ -37,6 +38,10 @@ v 0.2
 #define IND_obj_PID_FDB		  (IND_obj_NULL + 10)
 /*---------------------HWOBJ---------------------*/
 #define IND_obj_ADC1          (IND_obj_NULL + 11)		// аппаратный ацп 1
+/*-----------------------------------------------*/
+#define IND_obj_OUT0          (IND_obj_NULL + 12)		// аппаратный выход 24В
+/*-----------------------------------------------*/
+#define IND_obj_IN0           (IND_obj_NULL + 13)		// аппаратный вход (порог Uпит/2)
 /*-----------------------------------------------*/
 
 
