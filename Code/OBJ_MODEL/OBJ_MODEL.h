@@ -103,8 +103,7 @@ typedef union{
 	struct{
         uint8_t id_netw;
         uint8_t id_modul;
-        uint8_t index[2];
-        uint8_t data[LEN_DATA];
+        OBJ_STRUCT object;
         uint16_t crc;
     }d_struct;
     uint8_t byte[LEN_USART_MSG_OBJ];
@@ -150,7 +149,7 @@ extern void OBJ_Event(int obj_id);
 /*set obj state*/
 extern void OBJ_SetState(int obj_id,int state);
 /*hardware event handler, board special*/
-extern void HWOBJ_event(OBJ_STRUCT* obj,int obj_id);
+extern void HWOBJ_Event(int obj_id);
 /*update this obj */
 extern void OBJ_Upd_USART(OBJ_STRUCT *obj);
 /*update all obj */

@@ -38,6 +38,9 @@ void obj_snap(void){
 	this_obj(IND_obj_OUT0)->hardware_adress = out_0;
 	this_obj(IND_obj_OUT0)->obj_hardware = TRUE;
 	
+	Obj_Create(IND_obj_OUT7,IND_obj_CAS);
+	this_obj(IND_obj_OUT7)->hardware_adress = out_7;
+	this_obj(IND_obj_OUT7)->obj_hardware = TRUE;
 }
 
 
@@ -79,10 +82,8 @@ void LED_Control_Handler(OBJ_STRUCT *obj){
 	
 		if(GPIOC->ODR&=GPIO_ODR_ODR13){
 				LED_ON;
-				Set_IO_State(7,1);
 			}else{
 				LED_OFF;
-				Set_IO_State(7,0);
 			}
 }
 

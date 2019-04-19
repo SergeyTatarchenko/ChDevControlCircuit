@@ -130,15 +130,18 @@ void OBJ_SetState(int obj_id,int state){
 		OBJ_Upd_USART(this_obj(obj_id));
 	}
 }
-void HWOBJ_event(OBJ_STRUCT* obj,int obj_id){
-	
+void HWOBJ_Event(int obj_id){
+	OBJ_STRUCT* obj;
+	obj = objDefault + obj_id;
+
 	/*output event*/
 	if((obj->hardware_adress == out_0)||(obj->hardware_adress == out_1)||(obj->hardware_adress == out_2)||
 	   (obj->hardware_adress == out_3)||(obj->hardware_adress == out_4)||(obj->hardware_adress == out_5)||
-		(obj->hardware_adress == out_6)){
+	   (obj->hardware_adress == out_6)||(obj->hardware_adress == out_7)){
+		   
 			Set_IO_State((int)(obj->hardware_adress - out_offset),(int)obj->obj_state);
 	}
-	OBJ_Event(obj_id);	
+	OBJ_Event(obj_id);
 }
 
 /* object event, call object handler and call update function, if event = 1 */
@@ -205,9 +208,9 @@ void Rx_OBJ_Data(USART_FRAME *mes){
 	uint8_t *pointer;
 	
 	/*id of rec object*/
-	id = mes->d_struct.index[0];
+	id = mes->d_struct.object.id[0];
 	/*type of rec object*/
-	type = mes->d_struct.index[1];
+	type = mes->d_struct.object.id[1];
 	
 	obj = objDefault + id;
 	
@@ -223,7 +226,7 @@ void Rx_OBJ_Data(USART_FRAME *mes){
 	
 	/*board control object*/
 	if(id == obj_STATUS){
-		this_obj(obj_STATUS)->status_field = mes->d_struct.data[0];
+		this_obj(obj_STATUS)->status_field = mes->d_struct.object.obj_field.default_field.control_byte.byte;
 		OBJ_Event(obj_STATUS);
 		return;
 	}
@@ -237,17 +240,19 @@ void Rx_OBJ_Data(USART_FRAME *mes){
 		return;		
 	}
 	/*object event*/
-	if(mes->d_struct.data[0] & event_mask){
+	if(mes->d_struct.object.obj_field.default_field.control_byte.byte & event_mask){
 		/*if it is a control object*/	
 		if((type == obj->id[1])&&(type&IND_obj_CAS)&& (board_state.bit.power == 1)){
 		/*take new object image*/
 		pointer = (uint8_t*)mes;
-		pointer += (sizeof(mes->d_struct.id_netw)+sizeof(mes->d_struct.id_modul));
-		memcpy(obj,pointer,sizeof(OBJ_STRUCT));
+		
+		obj->status_field = mes->d_struct.object.obj_field.default_field.control_byte.byte;	
+		//pointer += (sizeof(mes->d_struct.id_netw)+sizeof(mes->d_struct.id_modul));
+		//memcpy(obj,pointer,sizeof(OBJ_STRUCT));
 		/*event bit call object handler*/
 		
 		if(obj->obj_hardware == 1){
-			HWOBJ_event(this_obj(id),id);
+			HWOBJ_Event(id);
 		}else{
 			OBJ_Event(id);
 		}
