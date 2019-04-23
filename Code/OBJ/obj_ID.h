@@ -7,10 +7,13 @@
 #define	IND_obj_END				0xFF
 
 /**/
-enum obj_adc{adc_0 = 0,adc_1 = 1,adc_2 = 2,adc_3 = 3,adc_4 = 4,adc_5 = 5};
-enum obj_in {in_0 = 6,in_1 = 7,in_2 = 8,in_3 = 9};
-enum obj_out{out_0 = 10,out_1 = 11,out_2 = 12,out_3 = 13,out_4 = 14,out_5 = 15,out_6 = 16,out_7 = 17};
+enum obj_hw{adc_0 = 0,adc_1 = 1,adc_2 = 2,adc_3 = 3,adc_4 = 4,adc_5 = 5,in_0 = 6,in_1 = 7,in_2 = 8,in_3 = 9,
+			out_0 = 10,out_1 = 11,out_2 = 12,out_3 = 13,out_4 = 14,out_5 = 15,out_6 = 16,out_7 = 17,
+			pwm_0=18,pwm_1=19};
+
+
 #define out_offset out_0
+
 /**/
 /*
 v 0.2
@@ -44,7 +47,9 @@ v 0.2
 /*-----------------------------------------------*/
 #define IND_obj_IN0           (IND_obj_NULL + 14)		// аппаратный вход (порог Uпит/2)
 /*-----------------------------------------------*/
-
+#define IND_obj_PWM0          (IND_obj_NULL + 15)		// аппаратный ШИМ 1
+#define IND_obj_PWM1          (IND_obj_NULL + 16)		// аппаратный ШИМ 2
+/*-----------------------------------------------*/
 
 /*-----------------------------------------------*/
 /*obj handlers*/
@@ -52,6 +57,7 @@ void board_START(OBJ_STRUCT *obj);
 void ADC_Handler(OBJ_STRUCT *obj);
 void TICK_Handler(OBJ_STRUCT *obj);
 void LED_Control_Handler(OBJ_STRUCT *obj);
+void PWM_Handler(OBJ_STRUCT *obj);
 void Dummy_Handler(OBJ_STRUCT *obj);
 
 #endif

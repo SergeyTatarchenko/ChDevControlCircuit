@@ -144,6 +144,8 @@ extern BOARD_STATE	board_state;
 void OBJ_Init(void);
 /*create object*/
 OBJ_STRUCT* Obj_Create(int obj_id, int obj_type);
+/*create hardware object, return pointer to obj */
+OBJ_STRUCT* HWObj_Create(int obj_id, int obj_type,int hwobj);
 /*object event*/
 extern void OBJ_Event(int obj_id);
 /*set obj state*/

@@ -23,24 +23,20 @@ void obj_snap(void){
 	Obj_Create(IND_obj_PID_SET_VAl,IND_obj_COM);
 	Obj_Create(IND_obj_PID_FDB,IND_obj_COM);
 	/*---------------------------------------------------*/
+	HWObj_Create(IND_obj_ADC1,IND_obj_CAS,adc_0);
+	HWObj_Create(IND_obj_OUT0,IND_obj_CAS,out_0);
+	HWObj_Create(IND_obj_OUT7,IND_obj_CAS,out_7);
+	
+	HWObj_Create(IND_obj_PWM0,IND_obj_CAS,pwm_0);
+	HWObj_Create(IND_obj_PWM1,IND_obj_CAS,pwm_1);
+	/*---------------------------------------------------*/
 	/*obj_handlers[object name] = name of object handler;*/
 	/*---------------------------------------------------*/	
-	/*---------------------------------------------------*/
 	obj_handlers[IND_obj_TICK] = TICK_Handler;
 	obj_handlers[IND_obj_LED] = LED_Control_Handler;
 	obj_handlers[IND_obj_ADC1] = ADC_Handler;
+	obj_handlers[IND_obj_PWM0] = PWM_Handler;
 	/*---------------------------------------------------*/	
-	Obj_Create(IND_obj_ADC1,IND_obj_CAS);
-	this_obj(IND_obj_ADC1)->hardware_adress =adc_0;
-	this_obj(IND_obj_ADC1)->obj_hardware = TRUE;
-
-	Obj_Create(IND_obj_OUT0,IND_obj_CAS);
-	this_obj(IND_obj_OUT0)->hardware_adress = out_0;
-	this_obj(IND_obj_OUT0)->obj_hardware = TRUE;
-	
-	Obj_Create(IND_obj_OUT7,IND_obj_CAS);
-	this_obj(IND_obj_OUT7)->hardware_adress = out_7;
-	this_obj(IND_obj_OUT7)->obj_hardware = TRUE;
 }
 
 
@@ -53,14 +49,12 @@ void board_START(OBJ_STRUCT *obj){
 	if(obj->obj_state == 1){
 		board_state.bit.power = 1;
 	}else{
-		board_state.bit.power =0;
+		board_state.bit.power = 0;
 	}
 }
 
 /*показания ацп*/
 void ADC_Handler(OBJ_STRUCT *obj){
-	uint16_t *pointer;
-	pointer = (uint16_t*)adc_val;
 	
 	this_obj(obj_STATUS)->obj_value = adc_val->TEMP_SENSOR;
 //	for(int counter = adc_0;counter <= adc_5;counter++){
@@ -86,6 +80,17 @@ void LED_Control_Handler(OBJ_STRUCT *obj){
 				LED_OFF;
 			}
 }
+void PWM_Handler(OBJ_STRUCT *obj){
+	
+	if(obj->obj_state == 1){
+		PWM_ON
+		PWMSetValue(obj->obj_value);
+	
+	}else{
+		PWM_OFF
+		PWMSetValue(0);
+	}
+} 
 
 /*пустой обработчик*/
 void Dummy_Handler(OBJ_STRUCT *obj){

@@ -119,6 +119,15 @@ OBJ_STRUCT* Obj_Create(int obj_id, int obj_type ){
 	return obj;
 }
 
+/*create hardware object, return pointer to obj */
+OBJ_STRUCT* HWObj_Create(int obj_id, int obj_type,int hwobj ){
+	
+	OBJ_STRUCT* obj = Obj_Create(obj_id,obj_type);
+	obj->hardware_adress =hwobj;
+	obj->obj_hardware = TRUE;
+	return obj; 
+}
+
 /*set state with update*/
 void OBJ_SetState(int obj_id,int state){
 	if(state>1){
@@ -131,6 +140,7 @@ void OBJ_SetState(int obj_id,int state){
 	}
 }
 void HWOBJ_Event(int obj_id){
+	
 	OBJ_STRUCT* obj;
 	obj = objDefault + obj_id;
 
@@ -141,6 +151,7 @@ void HWOBJ_Event(int obj_id){
 		   
 			Set_IO_State((int)(obj->hardware_adress - out_offset),(int)obj->obj_state);
 	}
+	   
 	OBJ_Event(obj_id);
 }
 
