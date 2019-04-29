@@ -48,8 +48,8 @@ typedef	struct{
 				}bit;
 			}control_byte;
 			uint16_t HW_adress;
-			uint16_t value;
 			uint8_t rezerv[3];
+			uint16_t value;
 		}default_field;
 		/* extended data field for data transmit*/
 		struct{
