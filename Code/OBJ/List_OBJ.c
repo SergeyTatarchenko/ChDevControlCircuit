@@ -15,8 +15,6 @@ void obj_snap(void){
 	/*---------------------------------------------------*/
 	Obj_Create(IND_obj_TICK,IND_obj_SWC);
 	Obj_Create(IND_obj_LED, IND_obj_CAS);
-	Obj_Create(IND_obj_PWM, IND_obj_CAS);
-	Obj_Create(IND_obj_TEST,IND_obj_SWC);
 	Obj_Create(IND_obj_PID_KP,IND_obj_COM);
 	Obj_Create(IND_obj_PID_KI,IND_obj_COM);
 	Obj_Create(IND_obj_PID_KD,IND_obj_COM);
@@ -56,13 +54,15 @@ void board_START(OBJ_STRUCT *obj){
 /*показания ацп*/
 void ADC_Handler(OBJ_STRUCT *obj){
 	
+	uint16_t *pointer = (uint16_t*)adc_val;
+	
 	this_obj(obj_STATUS)->obj_value = adc_val->TEMP_SENSOR;
-//	for(int counter = adc_0;counter <= adc_5;counter++){
-//		if(HW_OBJ[counter]->obj_hardware != 0){
-//			pU16(HW_OBJ[counter]->obj_value) = *pointer;
-//		}
-//		pointer++;
-//	}
+	for(int counter = adc_0;counter <= adc_5;counter++){
+		if(HW_OBJ[counter]->obj_hardware != 0){
+			pU16(HW_OBJ[counter]->obj_value) = *pointer;
+		}
+		pointer++;
+	}
 }
 
 /*тик с каждым ивентом*/

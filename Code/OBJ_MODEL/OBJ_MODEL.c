@@ -13,7 +13,6 @@ BOARD_STATE	board_state;
 void ((*obj_handlers[num_of_all_obj+1]))(OBJ_STRUCT*);
 
 OBJ_STRUCT *HW_OBJ[NUM_OF_HWOBJ];
-int HW_OBJ_snap[NUM_OF_HWOBJ];
 /*-----------------------------------------------*/
 void USART1_IRQHandler(){
 	uint8_t buff;
@@ -123,7 +122,8 @@ OBJ_STRUCT* Obj_Create(int obj_id, int obj_type ){
 OBJ_STRUCT* HWObj_Create(int obj_id, int obj_type,int hwobj ){
 	
 	OBJ_STRUCT* obj = Obj_Create(obj_id,obj_type);
-	obj->hardware_adress =hwobj;
+	HW_OBJ[hwobj]= this_obj(obj_id); 
+	obj->hardware_adress = hwobj;
 	obj->obj_hardware = TRUE;
 	return obj; 
 }
@@ -237,7 +237,7 @@ void Rx_OBJ_Data(USART_FRAME *mes){
 	
 	/*board control object*/
 	if(id == obj_STATUS){
-		this_obj(obj_STATUS)->status_field = mes->d_struct.object.obj_field.default_field.control_byte.byte;
+		this_obj(obj_STATUS)->status_field = mes->d_struct.object.status_field;
 		OBJ_Event(obj_STATUS);
 		return;
 	}
@@ -257,11 +257,10 @@ void Rx_OBJ_Data(USART_FRAME *mes){
 		/*take new object image*/
 		pointer = (uint8_t*)mes;
 		
-		obj->status_field = mes->d_struct.object.obj_field.default_field.control_byte.byte;	
-		//pointer += (sizeof(mes->d_struct.id_netw)+sizeof(mes->d_struct.id_modul));
-		//memcpy(obj,pointer,sizeof(OBJ_STRUCT));
-		/*event bit call object handler*/
+		obj->status_field = mes->d_struct.object.status_field;	
+		obj->obj_value = mes->d_struct.object.obj_value;
 		
+		/*event bit call object handler*/
 		if(obj->obj_hardware == 1){
 			HWOBJ_Event(id);
 		}else{

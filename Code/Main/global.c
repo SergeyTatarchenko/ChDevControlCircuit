@@ -50,10 +50,8 @@ void Core_Init(){
 	I2CInit();
 	/*usart init*/
 	usart_init();
-	
-	
 	//test
-	//usart_speed(9600);
+	usart_speed(56000);
 	
 	
 	/*external interrupt init (for MCP23017)*/

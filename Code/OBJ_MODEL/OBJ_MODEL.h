@@ -63,14 +63,14 @@ typedef	struct{
 typedef union{
 	uint8_t status;
 	struct{
-		uint8_t power:1;
-		uint8_t mode:1;
-		uint8_t	hwobj:1;
-		uint8_t	debug:1;
-		uint8_t	rez4:1;
-		uint8_t	rez5:1;
-		uint8_t	rez6:1;
-		uint8_t	rez7:1;
+		unsigned power:1;
+		unsigned mode:1;
+		unsigned hwobj:1;
+		unsigned debug:1;
+		unsigned rez4:1;
+		unsigned rez5:1;
+		unsigned rez6:1;
+		unsigned rez7:1;
 	}bit;
 }BOARD_STATE;
 #pragma pack(pop)

@@ -43,7 +43,7 @@ Set PWM value for TIM1 CH3/CH4
 *************************************************/
 void PWMSetValue(uint16_t value){
 	
-	if((value<PWM_MAX_VALUE) && (value>0)){
+	if((value<=PWM_MAX_VALUE) && (value>0)){
 		
 		TIM3->CCR3 = (uint16_t)value;
 		/*выделить в отдельную функцию по необходимости*/
