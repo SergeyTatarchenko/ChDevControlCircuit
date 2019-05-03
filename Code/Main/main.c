@@ -14,7 +14,7 @@
 Main program 
 *************************************************/
 int main(void){
-	
+	CAN_init();
 	xTaskCreate(StartInit, "Program start", configMINIMAL_STACK_SIZE, NULL, 5, NULL );
 	
 	

@@ -20,6 +20,7 @@
 #include "pwm.h"
 #include "ext.h"
 #include "usart.h"
+#include "can.h"
 #include "mcp23x17.h"
 #include "adg72x.h"
 #include "mcp3221.h"
