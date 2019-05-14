@@ -66,7 +66,10 @@ void Core_Init(){
 	/*disable reset pin on MCP23017*/
 	MCP23017_START;
 	
-		/*not used */
+	/*test*/
+	CAN_init();
+/*not used */
+	
 	/*external multiplexor init*/
 	//ADG72X_Init();
 	/*get adress, start IO model*/

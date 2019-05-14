@@ -12,11 +12,11 @@
 #include "string.h"
 
 
-
-
 /*-----------local define-----------------------*/
 /*define can clock in MHz*/
 #define CAN_CLOCK	36
+
+#define CAN1_REMAP	0
 /*----------------------------------------------*/
 typedef struct {
 	
@@ -47,6 +47,14 @@ typedef struct{
 #define	can_mode_silent				2
 #define	can_mode_silent_loopback	3
 
+#define CAN_Id_Standard             0  
+#define CAN_Id_Extended             4  
+
+#define CAN_RTR_Data                0 
+#define CAN_RTR_Remote              2
+
+#define CAN_FIFO0                 	0
+#define CAN_FIFO1                 	1
 /*
 	values of BRR, TS1 and TS2 calc in	
 	http://www.bittiming.can-wiki.info/ 
@@ -70,9 +78,15 @@ typedef struct{
 
 /*-----------global function prototypes---------*/
 extern void CAN_init(void);
+extern uint8_t CAN_Send(CanTxMsg *TX_message);
+extern uint8_t CAN_Receive(CanRxMsg *RX_message);
+/*----------------------------------------------*/
 /*-----------local function prototypes----------*/
 
-
+static uint8_t CAN_ReceiveMailBox(CanRxMsg *RX_message,int mailbox);
+static uint8_t CAN_fillMailBox(CanTxMsg *TX_message,int mailbox);
 static void can_id_filter_config(void);
 static void can_set_mode(int mode);
+
+
 #endif

@@ -120,6 +120,7 @@ void vTask_Handler_Data(void *pvParameters){
 *************************************************/	
 
 void vTask_main(void *pvParameters){
+	volatile int tick = 0,overload = 3600000UL;
 	
 	board_state.bit.mode = USART_MODE;
 	board_state.bit.hwobj = TRUE;
@@ -127,8 +128,15 @@ void vTask_main(void *pvParameters){
 	
 	for(;;){
 		vTaskDelay(1);		
+		/*while bit power on (bit state on in obj_STATUS))*/
 		if(board_state.bit.power == 1){
-			board_task();		
+			board_task(tick);
+			if(tick<=overload ){
+				tick++;
+			}
+			else{
+				tick = 0;
+			}
 		}
 	}
 }

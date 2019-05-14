@@ -35,7 +35,6 @@ extern void vTask_main(void *pvParameters);
 extern void vTask_Handler_Data(void *pvParameters);
 
 extern volatile uint8_t power_on;
-void board_task(void);
 /*----------------------------------------------*/
 #define system_prior	(configMAX_PRIORITIES-1)
 #define usart_prior		(configMAX_PRIORITIES-2)

@@ -18,7 +18,6 @@ void SystemInit(void) {
 	RCC->CR   &= (uint32_t)0xFFFBFFFF;
 	RCC->CFGR &= (uint32_t)0xFF80FFFF;
 	RCC->CIR   = (uint32_t)0x009F0000;
-	RCC->CFGR2 = 0x00000000;
 	
 	/*Enable HSE*/
 	RCC->CR |=(uint32_t)RCC_CR_HSEON; 

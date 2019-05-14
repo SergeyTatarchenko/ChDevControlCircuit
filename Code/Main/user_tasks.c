@@ -7,12 +7,14 @@
 #include "user_tasks.h"
 /*************************************************/
 
-void board_task(){
+void board_task(int task_tick){
 	
-	/*test obj upd*/
+	/*heavy function !!!*/
 	Upd_All_OBJ_USART();
 	
-	OBJ_Event(IND_obj_TICK);
-	adc_calc_value();
-	OBJ_Event(IND_obj_ADC1);
+	if(task_tick%1 == 0){
+		OBJ_Event(IND_obj_TICK);
+		adc_calc_value();
+		OBJ_Event(IND_obj_ADC1);
+	}
 }   

@@ -20,6 +20,6 @@
 /*-----------local function prototypes----------*/
 /*-----------global variables-------------------*/
 /*-----------global function prototypes---------*/
-
+void board_task(int task_tick);
 
 #endif
