@@ -26,6 +26,7 @@ AnalogState_REGISTR *AIN_Pointer;
 uint16_t ADC1_DataArray[ADC1_BUF_SIZE];
 /* data array for usart obj transfer */
 uint8_t	usart_data_transmit_array[USART1_DEFAULT_BUF_SIZE];
+uint8_t	usart_data_stream[USART_STREAM_SIZE];
 /* data array for usart obj receive */
 uint8_t usart_data_receive_array[USART1_DEFAULT_BUF_SIZE];
 /*mutex  to perform currect usart transmit */
@@ -159,8 +160,13 @@ send USART message, use DMA , medium priority
 *************************************************/
 void send_usart_message(uint8_t *message,uint32_t buf_size){
 	
-	memcpy(usart_data_transmit_array,message,buf_size);
-	DMA_Ch4_Reload(buf_size);
+	if(buf_size <= USART1_DEFAULT_BUF_SIZE){
+		memcpy(usart_data_transmit_array,message,buf_size);
+		DMA_Ch4_Reload(USART_DATA_TYPE1,buf_size);
+	}
+	else {
+		memcpy(usart_data_stream,message,buf_size);
+		DMA_Ch4_Reload(USART_DATA_TYPE2,buf_size);}
 }                                                                     
 /*************************************************
 calc adc value, fill struct with mv 

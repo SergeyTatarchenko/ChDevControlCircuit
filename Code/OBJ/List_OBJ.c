@@ -20,11 +20,16 @@ void obj_snap(void){
 	Obj_Create(IND_obj_PID_KD,IND_obj_COM);
 	Obj_Create(IND_obj_PID_SET_VAl,IND_obj_COM);
 	Obj_Create(IND_obj_PID_FDB,IND_obj_COM);
+	
+	Obj_Create(IND_obj_CHAR1,IND_obj_COM);
+	Obj_Create(IND_obj_CHAR2,IND_obj_COM);
+	Obj_Create(IND_obj_CHAR3,IND_obj_COM);
+	Obj_Create(IND_obj_CHAR4,IND_obj_COM);
 	/*---------------------------------------------------*/
 	HWObj_Create(IND_obj_ADC1,IND_obj_CAS,adc_0);
 	HWObj_Create(IND_obj_OUT0,IND_obj_CAS,out_0);
 	HWObj_Create(IND_obj_OUT7,IND_obj_CAS,out_7);
-	
+	//HWObj_Create(IND_obj_IN0,IND_obj_CAS,in_0);
 	HWObj_Create(IND_obj_PWM0,IND_obj_CAS,pwm_0);
 	HWObj_Create(IND_obj_PWM1,IND_obj_CAS,pwm_1);
 	/*---------------------------------------------------*/

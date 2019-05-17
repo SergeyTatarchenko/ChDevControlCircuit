@@ -10,7 +10,10 @@
 void board_task(int task_tick){
 	
 	/*heavy function !!!*/
-	Upd_All_OBJ_USART();
+	//Upd_All_OBJ_USART();
+	
+	FAST_Upd_All_OBJ_USART();
+	vTaskDelay(2);
 	
 	if(task_tick%1 == 0){
 		OBJ_Event(IND_obj_TICK);

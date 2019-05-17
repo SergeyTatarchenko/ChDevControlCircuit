@@ -7,7 +7,9 @@
 #define USART_MODE  0
 #define CAN_MODE    1
 
-#define HARDWARE_OBLECT TRUE
+#define HARDWARE_OBJECT TRUE
+#define USART_DATA_FAST	TRUE
+
 #define	num_of_all_obj		  255
 
 /*-------------------------------------------------
@@ -31,7 +33,7 @@
 #define MES_BUF_SIZE		20
 
 
-#ifdef HARDWARE_OBLECT
+#ifdef HARDWARE_OBJECT
     #define NUM_OF_HWOBJ    20
 #endif
 

@@ -47,7 +47,7 @@ void DMA_USART1_Setup(){
 	/*peripheral address*/
 	DMA1_Channel4->CPAR |= (uint32_t)&(USART1->DR);
 	/*pointer to memory address*/
-	DMA1_Channel4->CMAR |= (uint32_t)&usart_data_transmit_array[0];
+	DMA1_Channel4->CMAR |= (uint32_t)usart_data_transmit_array;
 	/*number of data to transfer*/
 	DMA1_Channel4->CNDTR = (uint32_t)USART1_DEFAULT_BUF_SIZE;
 	/*Transfer complete interrupt enable */
@@ -106,9 +106,22 @@ void DMA1_Channel5_IRQHandler(){
 /*************************************************
 Reload DMA Channel 4 
 *************************************************/
-void DMA_Ch4_Reload(int new_buf_size){
+void DMA_Ch4_Reload(int type,int new_buf_size){
 	
 	DMA1_Channel4->CCR &= ~DMA_CCR1_EN;
+	DMA1_Channel4->CMAR &= ~(uint32_t)0xffffffff;
+	
+	switch(type){
+		case USART_DATA_TYPE1:
+			DMA1_Channel4->CMAR |= (uint32_t)usart_data_transmit_array;
+			break;
+		case USART_DATA_TYPE2:
+			DMA1_Channel4->CMAR |= (uint32_t)usart_data_stream;
+			break;
+		default:
+			DMA1_Channel4->CMAR |= (uint32_t)usart_data_transmit_array;
+			break;
+	}
 	DMA1_Channel4->CNDTR = new_buf_size;
 	DMA1_Channel4->CCR |= DMA_CCR1_EN;
 }

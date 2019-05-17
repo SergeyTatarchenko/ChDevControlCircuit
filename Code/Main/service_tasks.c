@@ -126,6 +126,20 @@ void vTask_main(void *pvParameters){
 	board_state.bit.hwobj = TRUE;
 	board_state.bit.debug = TRUE;
 	
+	/*test*/
+	for(uint8_t c = 0; c < 8; c++)
+		this_obj(IND_obj_CHAR1)->obj_data[c] = 'A' + c;
+	
+	for(uint8_t c = 0; c < 8; c++)
+		this_obj(IND_obj_CHAR2)->obj_data[c] = 'I' + c;
+	
+	for(uint8_t c = 0; c < 8; c++)
+		this_obj(IND_obj_CHAR3)->obj_data[c] = 'Q' + c;
+	
+	for(uint8_t c = 0; c < 8; c++)
+		this_obj(IND_obj_CHAR4)->obj_data[c] = 'Y' + c;
+
+	
 	for(;;){
 		vTaskDelay(1);		
 		/*while bit power on (bit state on in obj_STATUS))*/

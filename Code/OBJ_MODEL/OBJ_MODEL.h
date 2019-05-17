@@ -94,7 +94,7 @@ typedef union{
 #define obj_value				obj_field.default_field.value
 #define hardware_adress			obj_field.default_field.HW_adress
 #define obj_hardware			obj_field.default_field.control_byte.bit.hardware
-#define obj_data				obj_field.default_field.data
+#define obj_data				obj_field.data_field.data
 /*-----------------------------------------------*/
 /*-----------struct for USART frame--------------*/
 /*-----------------------------------------------*/
@@ -130,10 +130,18 @@ extern void ((*obj_handlers[num_of_all_obj +1]))(OBJ_STRUCT*);
 
 extern BOARD_STATE	board_state;
 
-#ifdef	HARDWARE_OBLECT
+extern uint32_t num_of_obj;
+#ifndef HARDWARE_OBJECT
+	#error "HARDWARE_OBJECT is undefined"
+#endif
+
+#if	HARDWARE_OBJECT == TRUE
 	extern OBJ_STRUCT *HW_OBJ[NUM_OF_HWOBJ];
-	
 #endif	
+
+#if USART_DATA_FAST == TRUE
+	extern uint8_t USART_DATA[sizeof(USART_FRAME)*num_of_all_obj];	
+#endif
 
 /*-----------------------------------------------*/
 /*-----------------------------------------------*/
@@ -156,6 +164,8 @@ extern void HWOBJ_Event(int obj_id);
 extern void OBJ_Upd_USART(OBJ_STRUCT *obj);
 /*update all obj */
 extern void Upd_All_OBJ_USART(void);
+/* FAST!!! update all obj */
+extern void FAST_Upd_All_OBJ_USART(void);
 /*receive object data from message*/
 extern void Rx_OBJ_Data(USART_FRAME *mes);
 /*check control sum of receive data*/

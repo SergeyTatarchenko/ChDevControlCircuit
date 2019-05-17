@@ -11,8 +11,9 @@ static uint8_t obj_mem_area[sizeof(OBJ_STRUCT)*num_of_all_obj];
 OBJ_STRUCT *objDefault;
 BOARD_STATE	board_state;
 void ((*obj_handlers[num_of_all_obj+1]))(OBJ_STRUCT*);
-
+uint32_t num_of_obj;
 OBJ_STRUCT *HW_OBJ[NUM_OF_HWOBJ];
+uint8_t USART_DATA[sizeof(USART_FRAME)*num_of_all_obj];	
 /*-----------------------------------------------*/
 void USART1_IRQHandler(){
 	uint8_t buff;
@@ -100,13 +101,20 @@ void OBJ_Init(){
 	for(int counter = 0;counter <= num_of_all_obj;counter++){
 		obj_handlers[counter]= Dummy_Handler;
 	}
-	#ifdef HARDWARE_OBLECT
+	#ifdef HARDWARE_OBJECT
 		for(int counter = 0;counter <= NUM_OF_HWOBJ;counter++){
 		HW_OBJ[counter] = objDefault;
 	}
 	#endif
 	/* object create and handler mapping*/
 	obj_snap();
+	num_of_obj = 0;
+	
+	for(int i = 0;i<=num_of_all_obj;i++){
+		if(this_obj(i)->id[1]!=0){
+			num_of_obj++;
+		}
+	}
 }
 
 /*create object, return pointer to obj */
@@ -195,7 +203,7 @@ void	OBJ_Upd_USART(OBJ_STRUCT *obj){
 		send_usart_message((uint8_t*)message_pointer,sizeof(USART_FRAME));	// transfer data to usart
 
 	/*message delay for corrent receive */
-	vTaskDelay(25);
+	vTaskDelay(5);
 }
 
 /*             update all obj                */
@@ -207,6 +215,55 @@ void Upd_All_OBJ_USART(){
 		}
 	}
 }
+
+/*         fast update all obj with DMA      */
+#ifdef	USART_DATA_FAST
+void FAST_Upd_All_OBJ_USART(void){
+	
+	USART_FRAME object_frame;
+	USART_FRAME *usart_memory_pointer;
+	uint8_t *pointer;
+	uint16_t _CRC_ = 0;
+	int obj_counter = 0;
+	
+	/*pointer to memory space of USART frame*/
+	usart_memory_pointer =(USART_FRAME*)USART_DATA;
+	
+	/*clean memory*/
+//	memset(USART_DATA,0,sizeof(USART_FRAME)*num_of_all_obj);
+		/*fill ID and NETWORK*/
+		object_frame.d_struct.id_netw = ID_NETWORK;
+		object_frame.d_struct.id_modul = ID_DEVICE;
+		/*fill object field*/
+		pointer = (uint8_t*)&object_frame;
+		pointer += (sizeof(object_frame.d_struct.id_netw)+sizeof(object_frame.d_struct.id_modul));
+	/*fill array of USART obj*/
+	for(int counter = 1; counter < num_of_all_obj; counter ++ ){
+		_CRC_ = 0;
+		
+		if(this_obj(counter)->id[1]==0){
+			if(obj_counter > num_of_obj){
+				break;
+			}else{
+				continue;
+			}
+		}
+		memcpy(pointer,this_obj(counter),sizeof(OBJ_STRUCT));
+		/*fill CRC field*/
+		for(int i = 0; i < LEN_USART_MSG_OBJ - LEN_CRC; i++){
+			_CRC_ += object_frame.byte[i];
+		}
+		object_frame.d_struct.crc = _CRC_;
+		/*copy object frame to memory*/
+		memcpy(usart_memory_pointer,&object_frame,sizeof(USART_FRAME));
+		usart_memory_pointer++;
+		obj_counter++;
+	}
+	/*mutex return in dma transfer complete interrupt*/
+	xSemaphoreTake(xMutex_USART_BUSY,portMAX_DELAY);
+	send_usart_message(USART_DATA,sizeof(USART_FRAME)*obj_counter);	// transfer data to usart
+}
+#endif
 
 /* Receive Data Obj */
 void Rx_OBJ_Data(USART_FRAME *mes){

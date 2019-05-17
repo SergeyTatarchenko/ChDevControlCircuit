@@ -200,25 +200,25 @@ typedef struct{
 
 /*----------- global variables-------------------*/
 #define ADC1_BUF_SIZE	7
-#define USART1_DEFAULT_BUF_SIZE 10
+#define USART1_DEFAULT_BUF_SIZE 14
 	
-
-
 #ifdef	LEN_USART_MSG_OBJ
 	#undef USART1_DEFAULT_BUF_SIZE
 	#define USART1_DEFAULT_BUF_SIZE LEN_USART_MSG_OBJ
 #endif
 
+#define USART_STREAM_SIZE	(USART1_DEFAULT_BUF_SIZE*256)
+
+#define USART_DATA_TYPE1	1
+#define USART_DATA_TYPE2	2
+
 extern uint16_t ADC1_DataArray[ADC1_BUF_SIZE];
 /* data array for usart obj transfer */
 extern uint8_t	usart_data_transmit_array[USART1_DEFAULT_BUF_SIZE];
+extern uint8_t	usart_data_stream[USART_STREAM_SIZE];
 /* data array for usart obj receive */
 extern uint8_t usart_data_receive_array[USART1_DEFAULT_BUF_SIZE];
 /*mutex  to perform currect usart transmit */
-
-
-
-
 extern xSemaphoreHandle xMutex_USART_BUSY;
 /*queue of messages from usart module*/
 extern xQueueHandle usart_receive_buffer;
