@@ -417,137 +417,107 @@
       </TargetOption>
       <Groups>
         <Group>
-          <GroupName>Main</GroupName>
+          <GroupName>System</GroupName>
           <Files>
             <File>
-              <FileName>FreeRTOSConfig.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>.\Code\Main\FreeRTOSConfig.h</FilePath>
+              <FileName>startup_stm32f10x_md.s</FileName>
+              <FileType>2</FileType>
+              <FilePath>.\Code\System\startup_stm32f10x_md.s</FilePath>
             </File>
             <File>
-              <FileName>main.c</FileName>
+              <FileName>system_stm32f10x.c</FileName>
               <FileType>1</FileType>
-              <FilePath>.\Code\Main\main.c</FilePath>
-              <FileOption>
-                <CommonProperty>
-                  <UseCPPCompiler>2</UseCPPCompiler>
-                  <RVCTCodeConst>0</RVCTCodeConst>
-                  <RVCTZI>0</RVCTZI>
-                  <RVCTOtherData>0</RVCTOtherData>
-                  <ModuleSelection>0</ModuleSelection>
-                  <IncludeInBuild>2</IncludeInBuild>
-                  <AlwaysBuild>2</AlwaysBuild>
-                  <GenerateAssemblyFile>2</GenerateAssemblyFile>
-                  <AssembleAssemblyFile>2</AssembleAssemblyFile>
-                  <PublicsOnly>2</PublicsOnly>
-                  <StopOnExitCode>11</StopOnExitCode>
-                  <CustomArgument></CustomArgument>
-                  <IncludeLibraryModules></IncludeLibraryModules>
-                  <ComprImg>1</ComprImg>
-                </CommonProperty>
-                <FileArmAds>
-                  <Cads>
-                    <interw>2</interw>
-                    <Optim>0</Optim>
-                    <oTime>2</oTime>
-                    <SplitLS>2</SplitLS>
-                    <OneElfS>2</OneElfS>
-                    <Strict>2</Strict>
-                    <EnumInt>2</EnumInt>
-                    <PlainCh>2</PlainCh>
-                    <Ropi>2</Ropi>
-                    <Rwpi>2</Rwpi>
-                    <wLevel>0</wLevel>
-                    <uThumb>2</uThumb>
-                    <uSurpInc>2</uSurpInc>
-                    <uC99>2</uC99>
-                    <useXO>2</useXO>
-                    <v6Lang>0</v6Lang>
-                    <v6LangP>0</v6LangP>
-                    <vShortEn>2</vShortEn>
-                    <vShortWch>2</vShortWch>
-                    <v6Lto>2</v6Lto>
-                    <v6WtE>2</v6WtE>
-                    <v6Rtti>2</v6Rtti>
-                    <VariousControls>
-                      <MiscControls></MiscControls>
-                      <Define></Define>
-                      <Undefine></Undefine>
-                      <IncludePath>.\Code\System;.\Code\Drivers</IncludePath>
-                    </VariousControls>
-                  </Cads>
-                </FileArmAds>
-              </FileOption>
+              <FilePath>.\Code\System\system_stm32f10x.c</FilePath>
             </File>
             <File>
-              <FileName>service_tasks.c</FileName>
+              <FileName>i2c.c</FileName>
               <FileType>1</FileType>
-              <FilePath>.\Code\Main\service_tasks.c</FilePath>
+              <FilePath>.\Code\System\i2c.c</FilePath>
             </File>
             <File>
-              <FileName>global.c</FileName>
+              <FileName>adc.c</FileName>
               <FileType>1</FileType>
-              <FilePath>.\Code\Main\global.c</FilePath>
+              <FilePath>.\Code\System\adc.c</FilePath>
             </File>
             <File>
-              <FileName>global.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>.\Code\Main\global.h</FilePath>
-            </File>
-            <File>
-              <FileName>user_tasks.c</FileName>
+              <FileName>dma.c</FileName>
               <FileType>1</FileType>
-              <FilePath>.\Code\Main\user_tasks.c</FilePath>
+              <FilePath>.\Code\System\dma.c</FilePath>
             </File>
             <File>
-              <FileName>obj_model_config.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>.\Code\Main\obj_model_config.h</FilePath>
+              <FileName>pwm.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\Code\System\pwm.c</FilePath>
+            </File>
+            <File>
+              <FileName>Util.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\Code\System\Util.c</FilePath>
+            </File>
+            <File>
+              <FileName>usart.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\Code\System\usart.c</FilePath>
+            </File>
+            <File>
+              <FileName>ext.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\Code\System\ext.c</FilePath>
+            </File>
+            <File>
+              <FileName>can.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\Code\System\can.c</FilePath>
             </File>
           </Files>
         </Group>
         <Group>
-          <GroupName>OBJ_MODEL</GroupName>
+          <GroupName>FreeRTOS</GroupName>
           <Files>
             <File>
-              <FileName>OBJ_MODEL.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>.\Code\OBJ_MODEL\OBJ_MODEL.h</FilePath>
-            </File>
-            <File>
-              <FileName>OBJ_MODEL.c</FileName>
+              <FileName>croutine.c</FileName>
               <FileType>1</FileType>
-              <FilePath>.\Code\OBJ_MODEL\OBJ_MODEL.c</FilePath>
-            </File>
-          </Files>
-        </Group>
-        <Group>
-          <GroupName>OBJ</GroupName>
-          <Files>
-            <File>
-              <FileName>obj_ID.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>.\Code\OBJ\obj_ID.h</FilePath>
+              <FilePath>.\Code\FreeRTOS\croutine.c</FilePath>
             </File>
             <File>
-              <FileName>List_OBJ.c</FileName>
+              <FileName>event_groups.c</FileName>
               <FileType>1</FileType>
-              <FilePath>.\Code\OBJ\List_OBJ.c</FilePath>
-            </File>
-          </Files>
-        </Group>
-        <Group>
-          <GroupName>Utility_Func</GroupName>
-          <Files>
-            <File>
-              <FileName>PID.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>.\Code\Utility_Func\PID.h</FilePath>
+              <FilePath>.\Code\FreeRTOS\event_groups.c</FilePath>
             </File>
             <File>
-              <FileName>PID.c</FileName>
+              <FileName>list.c</FileName>
               <FileType>1</FileType>
-              <FilePath>.\Code\Utility_Func\PID.c</FilePath>
+              <FilePath>.\Code\FreeRTOS\list.c</FilePath>
+            </File>
+            <File>
+              <FileName>port.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\Code\FreeRTOS\port.c</FilePath>
+            </File>
+            <File>
+              <FileName>queue.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\Code\FreeRTOS\queue.c</FilePath>
+            </File>
+            <File>
+              <FileName>stream_buffer.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\Code\FreeRTOS\stream_buffer.c</FilePath>
+            </File>
+            <File>
+              <FileName>tasks.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\Code\FreeRTOS\tasks.c</FilePath>
+            </File>
+            <File>
+              <FileName>timers.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\Code\FreeRTOS\timers.c</FilePath>
+            </File>
+            <File>
+              <FileName>heap_2.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\Code\FreeRTOS\heap_2.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -722,107 +692,137 @@
           </Files>
         </Group>
         <Group>
-          <GroupName>System</GroupName>
+          <GroupName>Main</GroupName>
           <Files>
             <File>
-              <FileName>startup_stm32f10x_md.s</FileName>
-              <FileType>2</FileType>
-              <FilePath>.\Code\System\startup_stm32f10x_md.s</FilePath>
+              <FileName>FreeRTOSConfig.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\Code\Main\FreeRTOSConfig.h</FilePath>
             </File>
             <File>
-              <FileName>system_stm32f10x.c</FileName>
+              <FileName>main.c</FileName>
               <FileType>1</FileType>
-              <FilePath>.\Code\System\system_stm32f10x.c</FilePath>
+              <FilePath>.\Code\Main\main.c</FilePath>
+              <FileOption>
+                <CommonProperty>
+                  <UseCPPCompiler>2</UseCPPCompiler>
+                  <RVCTCodeConst>0</RVCTCodeConst>
+                  <RVCTZI>0</RVCTZI>
+                  <RVCTOtherData>0</RVCTOtherData>
+                  <ModuleSelection>0</ModuleSelection>
+                  <IncludeInBuild>2</IncludeInBuild>
+                  <AlwaysBuild>2</AlwaysBuild>
+                  <GenerateAssemblyFile>2</GenerateAssemblyFile>
+                  <AssembleAssemblyFile>2</AssembleAssemblyFile>
+                  <PublicsOnly>2</PublicsOnly>
+                  <StopOnExitCode>11</StopOnExitCode>
+                  <CustomArgument></CustomArgument>
+                  <IncludeLibraryModules></IncludeLibraryModules>
+                  <ComprImg>1</ComprImg>
+                </CommonProperty>
+                <FileArmAds>
+                  <Cads>
+                    <interw>2</interw>
+                    <Optim>0</Optim>
+                    <oTime>2</oTime>
+                    <SplitLS>2</SplitLS>
+                    <OneElfS>2</OneElfS>
+                    <Strict>2</Strict>
+                    <EnumInt>2</EnumInt>
+                    <PlainCh>2</PlainCh>
+                    <Ropi>2</Ropi>
+                    <Rwpi>2</Rwpi>
+                    <wLevel>0</wLevel>
+                    <uThumb>2</uThumb>
+                    <uSurpInc>2</uSurpInc>
+                    <uC99>2</uC99>
+                    <useXO>2</useXO>
+                    <v6Lang>0</v6Lang>
+                    <v6LangP>0</v6LangP>
+                    <vShortEn>2</vShortEn>
+                    <vShortWch>2</vShortWch>
+                    <v6Lto>2</v6Lto>
+                    <v6WtE>2</v6WtE>
+                    <v6Rtti>2</v6Rtti>
+                    <VariousControls>
+                      <MiscControls></MiscControls>
+                      <Define></Define>
+                      <Undefine></Undefine>
+                      <IncludePath>.\Code\System;.\Code\Drivers</IncludePath>
+                    </VariousControls>
+                  </Cads>
+                </FileArmAds>
+              </FileOption>
             </File>
             <File>
-              <FileName>i2c.c</FileName>
+              <FileName>service_tasks.c</FileName>
               <FileType>1</FileType>
-              <FilePath>.\Code\System\i2c.c</FilePath>
+              <FilePath>.\Code\Main\service_tasks.c</FilePath>
             </File>
             <File>
-              <FileName>adc.c</FileName>
+              <FileName>global.c</FileName>
               <FileType>1</FileType>
-              <FilePath>.\Code\System\adc.c</FilePath>
+              <FilePath>.\Code\Main\global.c</FilePath>
             </File>
             <File>
-              <FileName>dma.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\Code\System\dma.c</FilePath>
+              <FileName>global.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\Code\Main\global.h</FilePath>
             </File>
             <File>
-              <FileName>pwm.c</FileName>
+              <FileName>user_tasks.c</FileName>
               <FileType>1</FileType>
-              <FilePath>.\Code\System\pwm.c</FilePath>
+              <FilePath>.\Code\Main\user_tasks.c</FilePath>
             </File>
             <File>
-              <FileName>Util.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\Code\System\Util.c</FilePath>
-            </File>
-            <File>
-              <FileName>usart.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\Code\System\usart.c</FilePath>
-            </File>
-            <File>
-              <FileName>ext.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\Code\System\ext.c</FilePath>
-            </File>
-            <File>
-              <FileName>can.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\Code\System\can.c</FilePath>
+              <FileName>obj_model_config.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\Code\Main\obj_model_config.h</FilePath>
             </File>
           </Files>
         </Group>
         <Group>
-          <GroupName>FreeRTOS</GroupName>
+          <GroupName>Utility_Func</GroupName>
           <Files>
             <File>
-              <FileName>croutine.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\Code\FreeRTOS\croutine.c</FilePath>
+              <FileName>PID.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\Code\Utility_Func\PID.h</FilePath>
             </File>
             <File>
-              <FileName>event_groups.c</FileName>
+              <FileName>PID.c</FileName>
               <FileType>1</FileType>
-              <FilePath>.\Code\FreeRTOS\event_groups.c</FilePath>
+              <FilePath>.\Code\Utility_Func\PID.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>OBJ_MODEL</GroupName>
+          <Files>
+            <File>
+              <FileName>OBJ_MODEL.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\Code\OBJ_MODEL\OBJ_MODEL.h</FilePath>
             </File>
             <File>
-              <FileName>list.c</FileName>
+              <FileName>OBJ_MODEL.c</FileName>
               <FileType>1</FileType>
-              <FilePath>.\Code\FreeRTOS\list.c</FilePath>
+              <FilePath>.\Code\OBJ_MODEL\OBJ_MODEL.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>OBJ</GroupName>
+          <Files>
+            <File>
+              <FileName>obj_ID.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\Code\OBJ\obj_ID.h</FilePath>
             </File>
             <File>
-              <FileName>port.c</FileName>
+              <FileName>List_OBJ.c</FileName>
               <FileType>1</FileType>
-              <FilePath>.\Code\FreeRTOS\port.c</FilePath>
-            </File>
-            <File>
-              <FileName>queue.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\Code\FreeRTOS\queue.c</FilePath>
-            </File>
-            <File>
-              <FileName>stream_buffer.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\Code\FreeRTOS\stream_buffer.c</FilePath>
-            </File>
-            <File>
-              <FileName>tasks.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\Code\FreeRTOS\tasks.c</FilePath>
-            </File>
-            <File>
-              <FileName>timers.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\Code\FreeRTOS\timers.c</FilePath>
-            </File>
-            <File>
-              <FileName>heap_2.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\Code\FreeRTOS\heap_2.c</FilePath>
+              <FilePath>.\Code\OBJ\List_OBJ.c</FilePath>
             </File>
           </Files>
         </Group>

@@ -7,6 +7,8 @@
 #define USART_MODE  0
 #define CAN_MODE    1
 
+#define DEBUG_MODE	TRUE
+
 #define HARDWARE_OBJECT TRUE
 #define USART_DATA_FAST	TRUE
 
@@ -20,7 +22,7 @@
 #include "queue.h"
 #include "semphr.h" 
 /*-------------------------------------------------
-
+                !board special!
 -------------------------------------------------*/
 #include "global.h"
 /*     network and board description             */

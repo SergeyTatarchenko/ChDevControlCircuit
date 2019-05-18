@@ -1,7 +1,7 @@
 /*************************************************
-* File Name          : OBJ_DATA.c
+* File Name          : OBJ_MODEL.c
 * Author             : Tatarchenko S.
-* Version            : v 1.1
+* Version            : v 1.2
 * Description        : simple obj model BKM
 *************************************************/
 #include "OBJ_MODEL.h"
@@ -13,7 +13,8 @@ BOARD_STATE	board_state;
 void ((*obj_handlers[num_of_all_obj+1]))(OBJ_STRUCT*);
 uint32_t num_of_obj;
 OBJ_STRUCT *HW_OBJ[NUM_OF_HWOBJ];
-uint8_t USART_DATA[sizeof(USART_FRAME)*num_of_all_obj];	
+uint8_t USART_DATA[sizeof(USART_FRAME)*num_of_all_obj];
+
 /*-----------------------------------------------*/
 void USART1_IRQHandler(){
 	uint8_t buff;
@@ -84,7 +85,8 @@ void USART1_IRQHandler(){
 void OBJ_Init(){
 	
 	OBJ_STRUCT *obj;
-
+    obj_init_struct _model_init_[] ={_obj_cofig_};
+	
 	/*create mutex for correct usart transmit*/
 	xMutex_USART_BUSY = xSemaphoreCreateMutex();
 	usart_receive_buffer = xQueueCreate(MES_BUF_SIZE,sizeof(USART_FRAME));
@@ -101,18 +103,36 @@ void OBJ_Init(){
 	for(int counter = 0;counter <= num_of_all_obj;counter++){
 		obj_handlers[counter]= Dummy_Handler;
 	}
-	#ifdef HARDWARE_OBJECT
+#if HARDWARE_OBJECT == TRUE
 		for(int counter = 0;counter <= NUM_OF_HWOBJ;counter++){
 		HW_OBJ[counter] = objDefault;
 	}
-	#endif
+#endif
+#if USART_DATA_FAST == TRUE
+		memset(USART_DATA,0,sizeof(USART_FRAME)*num_of_all_obj);
+#endif	
 	/* object create and handler mapping*/
-	obj_snap();
+	obj_snap(_model_init_,sizeof(_model_init_));
+	/*get current number of objects in memory area */
 	num_of_obj = 0;
-	
 	for(int i = 0;i<=num_of_all_obj;i++){
 		if(this_obj(i)->id[1]!=0){
 			num_of_obj++;
+		}
+	}
+}
+
+/*object creating and snap*/
+void obj_snap(obj_init_struct* _model_init_,int _model_size_){
+	
+	for(int i;i<(_model_size_/sizeof(obj_init_struct));i++){
+		if(_model_init_[i].obj_type == obj_hard){
+			HWObj_Create(_model_init_[i].id,_model_init_->obj_class,_model_init_[i].HW_adress);
+		}else if(_model_init_[i].obj_type == obj_soft){
+			Obj_Create(_model_init_[i].id,_model_init_[i].obj_class);
+		}
+		if(_model_init_[i].handler_pointer!= NULL){
+			obj_handlers[_model_init_[i].id] = _model_init_[i].handler_pointer;
 		}
 	}
 }
@@ -227,10 +247,7 @@ void FAST_Upd_All_OBJ_USART(void){
 	int obj_counter = 0;
 	
 	/*pointer to memory space of USART frame*/
-	usart_memory_pointer =(USART_FRAME*)USART_DATA;
-	
-	/*clean memory*/
-//	memset(USART_DATA,0,sizeof(USART_FRAME)*num_of_all_obj);
+	usart_memory_pointer =(USART_FRAME*)USART_DATA;		
 		/*fill ID and NETWORK*/
 		object_frame.d_struct.id_netw = ID_NETWORK;
 		object_frame.d_struct.id_modul = ID_DEVICE;

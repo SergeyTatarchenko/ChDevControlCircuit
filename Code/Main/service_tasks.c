@@ -123,8 +123,8 @@ void vTask_main(void *pvParameters){
 	volatile int tick = 0,overload = 3600000UL;
 	
 	board_state.bit.mode = USART_MODE;
-	board_state.bit.hwobj = TRUE;
-	board_state.bit.debug = TRUE;
+	board_state.bit.hwobj = HARDWARE_OBJECT;
+	board_state.bit.debug = DEBUG_MODE;
 	
 	/*test*/
 	for(uint8_t c = 0; c < 8; c++)

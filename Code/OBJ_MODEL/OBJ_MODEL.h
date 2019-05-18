@@ -1,7 +1,7 @@
 /*************************************************
 * File Name          : OBJ_MODEL.h
 * Author             : Tatarchenko S.
-* Version            : v 1.1
+* Version            : v 1.2
 * Description        : header for OBJ_MODEL.c 
 *************************************************/
 #ifndef OBJ_DATA_H_
@@ -59,6 +59,17 @@ typedef	struct{
 }OBJ_STRUCT;
 #pragma pack(pop)
 
+/*incompressible struct*/
+typedef struct {
+	uint8_t id;
+	uint8_t obj_class;
+	uint8_t obj_type;
+	uint16_t HW_adress;
+	void (*handler_pointer)(OBJ_STRUCT*);
+	/*add initial state and ...*/
+}obj_init_struct;
+
+
 #pragma pack(push,1)
 typedef union{
 	uint8_t status;
@@ -95,6 +106,9 @@ typedef union{
 #define hardware_adress			obj_field.default_field.HW_adress
 #define obj_hardware			obj_field.default_field.control_byte.bit.hardware
 #define obj_data				obj_field.data_field.data
+
+#define obj_soft	0
+#define obj_hard	1
 /*-----------------------------------------------*/
 /*-----------struct for USART frame--------------*/
 /*-----------------------------------------------*/
@@ -131,8 +145,13 @@ extern void ((*obj_handlers[num_of_all_obj +1]))(OBJ_STRUCT*);
 extern BOARD_STATE	board_state;
 
 extern uint32_t num_of_obj;
+
 #ifndef HARDWARE_OBJECT
 	#error "HARDWARE_OBJECT is undefined"
+#endif
+
+#ifndef USART_DATA_FAST
+	#error "USART_DATA_FAST is undefined"
 #endif
 
 #if	HARDWARE_OBJECT == TRUE
@@ -172,7 +191,7 @@ extern void Rx_OBJ_Data(USART_FRAME *mes);
 extern uint8_t Check_CRC(USART_FRAME *Rx_obj_c);
 
 /*-----------------------------------------------*/
-extern void obj_snap(void);
+extern void obj_snap(obj_init_struct* _model_init_,int _model_size_);
 #include "obj_ID.h"
 /*-----------------------------------------------*/
 
