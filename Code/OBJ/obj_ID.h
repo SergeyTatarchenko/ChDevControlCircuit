@@ -38,18 +38,19 @@ v 0.3
 #define IND_obj_PWM0          (IND_obj_NULL + 6)		// аппаратный ШИМ 1
 #define IND_obj_PWM1          (IND_obj_NULL + 7)		// аппаратный ШИМ 2
 			/*-----------------SOFTOBJ-----------------------*/
-#define IND_obj_TICK          (IND_obj_NULL + 8)	// тик тест
-#define IND_obj_LED           (IND_obj_NULL + 9)	// светодиод на плате
-#define IND_obj_PID_KP		  (IND_obj_NULL + 10)
-#define IND_obj_PID_KI		  (IND_obj_NULL + 11)
-#define IND_obj_PID_KD		  (IND_obj_NULL + 12)
-#define IND_obj_PID_SET_VAl	  (IND_obj_NULL + 13)
-#define IND_obj_PID_FDB		  (IND_obj_NULL + 14)
+#define IND_obj_TICK_1S       (IND_obj_NULL + 8)	// тик тест 1c
+#define IND_obj_TICK_100_ms   (IND_obj_NULL + 9)	// тик тест 100 мс
+#define IND_obj_LED           (IND_obj_NULL + 10)	// светодиод на плате
+#define IND_obj_PID_KP		  (IND_obj_NULL + 11)
+#define IND_obj_PID_KI		  (IND_obj_NULL + 12)
+#define IND_obj_PID_KD		  (IND_obj_NULL + 13)
+#define IND_obj_PID_SET_VAl	  (IND_obj_NULL + 14)
+#define IND_obj_PID_FDB		  (IND_obj_NULL + 15)
 
-#define IND_obj_CHAR1         (IND_obj_NULL + 15)		//  
-#define IND_obj_CHAR2         (IND_obj_NULL + 16)		//  
-#define IND_obj_CHAR3         (IND_obj_NULL + 17)		//  
-#define IND_obj_CHAR4         (IND_obj_NULL + 18)		//  
+#define IND_obj_CHAR1         (IND_obj_NULL + 16)		//  
+#define IND_obj_CHAR2         (IND_obj_NULL + 17)		//  
+#define IND_obj_CHAR3         (IND_obj_NULL + 18)		//  
+#define IND_obj_CHAR4         (IND_obj_NULL + 19)		//  
 
 /*----------------------------------------------------------------------------------------------------\
            name           |      index          |   class     | type     | hw_snap  |   Handler       | 
@@ -57,7 +58,8 @@ v 0.3
 
 #define _obj_STATUS_init       obj_STATUS           ,IND_obj_CAS  ,obj_soft  ,   NULL   ,board_START
 #define _obj_LED_init	       IND_obj_LED          ,IND_obj_CAS  ,obj_soft  ,   NULL   ,LED_Control_Handler
-#define _obj_TICK_init	       IND_obj_TICK         ,IND_obj_SWC  ,obj_soft  ,   NULL   ,TICK_Handler
+#define _obj_TICK_1S_init      IND_obj_TICK_1S      ,IND_obj_SWC  ,obj_soft  ,   NULL   ,TICK_Handler
+#define _obj_TICK_100_ms_init  IND_obj_TICK_100_ms  ,IND_obj_SWC  ,obj_soft  ,   NULL   ,TICK_Handler
 
 #define _obj_PID_KP_init       IND_obj_PID_KP        ,IND_obj_COM  ,obj_soft  ,   NULL   ,NULL
 #define _obj_PID_KI_init       IND_obj_PID_KI        ,IND_obj_COM  ,obj_soft  ,   NULL   ,NULL
@@ -74,7 +76,7 @@ v 0.3
 #define _obj_OUT7_init	   IND_obj_OUT7         ,IND_obj_CAS  ,obj_hard  ,   out_7   ,NULL
 /*---------------------------------------------------------------------------------------------------*/
 
-#define _obj_cofig_	{_obj_STATUS_init},{_obj_LED_init},{_obj_TICK_init}, \
+#define _obj_cofig_	{_obj_STATUS_init},{_obj_LED_init},{_obj_TICK_1S_init},{_obj_TICK_100_ms_init}, \
 					{_obj_OUT0_init},{_obj_OUT7_init},{_obj_ADC1_init},{_obj_PWM0_init},	\
 					{_obj_PID_KP_init},{_obj_PID_KI_init},{_obj_PID_KD_init},{_obj_PID_KP_init}, \
 					{_obj_PID_SET_VAl_init},{_obj_PID_FDB_init}

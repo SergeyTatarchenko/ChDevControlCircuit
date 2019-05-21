@@ -37,14 +37,14 @@ typedef	struct{
 			union{
 				uint8_t byte;
 				struct{
-					uint8_t state : 1;
-					uint8_t event : 1;
-					uint8_t rez2  : 1;
-					uint8_t rez3  : 1;
-					uint8_t rez4  : 1;
-					uint8_t rez5  : 1;
-					uint8_t rez6  : 1;
-					uint8_t hardware  : 1;
+					unsigned state : 1;
+					unsigned event : 1;
+					unsigned rez2  : 1;
+					unsigned rez3  : 1;
+					unsigned rez4  : 1;
+					unsigned rez5  : 1;
+					unsigned visible  : 1;
+					unsigned hardware  : 1;
 				}bit;
 			}control_byte;
 			uint16_t HW_adress;
@@ -90,25 +90,28 @@ typedef union{
 #define IND_obj_COM				4	/*data command*/
 #define IND_obj_CAS				3	/*control and status*/
 #define IND_obj_CWS				2	/*control without status*/
-#define IND_obj_SWC				1	/*status without control*/
-/*-----------------------------------------------*/
-#define this_obj(obj_id)		(objDefault + obj_id)
+#define IND_obj_SWC				1	/*status without control*/	
 /*---------------------------------------------*/
 #define event_mask				0x02
 #define state_mask				0x01
 #define hardware_mask			0x80
-
+/*---------------------------------------------*/
 #define typeof_obj				id[1]
 #define status_field 			obj_field.default_field.control_byte.byte
 #define obj_event				obj_field.default_field.control_byte.bit.event
 #define obj_state				obj_field.default_field.control_byte.bit.state
 #define obj_value				obj_field.default_field.value
 #define hardware_adress			obj_field.default_field.HW_adress
+#define obj_visible				obj_field.default_field.control_byte.bit.visible
 #define obj_hardware			obj_field.default_field.control_byte.bit.hardware
 #define obj_data				obj_field.data_field.data
-
+/*---------------------------------------------*/
 #define obj_soft	0
 #define obj_hard	1
+/*---------------------------------------------*/
+#define this_obj(obj_id)				(objDefault + obj_id)
+#define obj_set_visible(obj_id,state)	this_obj(obj_id)->obj_visible = state
+
 /*-----------------------------------------------*/
 /*-----------struct for USART frame--------------*/
 /*-----------------------------------------------*/

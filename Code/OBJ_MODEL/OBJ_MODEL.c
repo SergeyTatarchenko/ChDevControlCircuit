@@ -7,12 +7,19 @@
 #include "OBJ_MODEL.h"
 /*----------- global variables-------------------*/
 
+/*global memory array of objects*/
 static uint8_t obj_mem_area[sizeof(OBJ_STRUCT)*num_of_all_obj];
+/*pointer to the beginning of the model*/
 OBJ_STRUCT *objDefault;
+/*structure with current board mode*/
 BOARD_STATE	board_state;
+/*array of pointers to object handler functions*/
 void ((*obj_handlers[num_of_all_obj+1]))(OBJ_STRUCT*);
+/*number of objects created*/
 uint32_t num_of_obj;
+/*array of pointers to hardware objects*/
 OBJ_STRUCT *HW_OBJ[NUM_OF_HWOBJ];
+/*pointer to an array of frames in the message for USART*/
 uint8_t USART_DATA[sizeof(USART_FRAME)*num_of_all_obj];
 
 /*-----------------------------------------------*/
@@ -143,6 +150,7 @@ OBJ_STRUCT* Obj_Create(int obj_id, int obj_type ){
 	OBJ_STRUCT* obj;
 	obj = objDefault + obj_id;
 	obj->id[1] = obj_type;
+	obj->obj_visible = TRUE;
 	return obj;
 }
 
@@ -167,6 +175,7 @@ void OBJ_SetState(int obj_id,int state){
 		OBJ_Upd_USART(this_obj(obj_id));
 	}
 }
+
 void HWOBJ_Event(int obj_id){
 	
 	OBJ_STRUCT* obj;
@@ -258,7 +267,7 @@ void FAST_Upd_All_OBJ_USART(void){
 	for(int counter = 1; counter < num_of_all_obj; counter ++ ){
 		_CRC_ = 0;
 		
-		if(this_obj(counter)->id[1]==0){
+		if((this_obj(counter)->id[1]==0)||(this_obj(counter)->obj_visible == FALSE)){
 			if(obj_counter > num_of_obj){
 				break;
 			}else{

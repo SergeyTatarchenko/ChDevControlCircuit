@@ -41,8 +41,9 @@ void StartInit(void *pvParameters){
 		/*main thread*/
 		xTaskCreate(vTask_main,"main thread",user_stack, NULL, board_prior, NULL );	
 		/* RX Handler */
-		xTaskCreate(vTask_Handler_Data,"Handler",usart_stack, NULL,usart_prior, NULL );
-		
+		xTaskCreate(vTask_Handler_Data,"Handler",usart_stack, NULL,usart_rx_prior, NULL );
+		/* RX Handler */
+		xTaskCreate(vTask_Transfer_Data,"TX",usart_stack, NULL,usart_tx_prior, NULL );
 		
 		/*start obj model*/
 		OBJ_Init();
@@ -97,10 +98,8 @@ void vBlinker (void *pvParameters){
 	}
 }
 
-volatile uint8_t power_on;
-
 /*************************************************
-USART RX handler 
+                 USART RX handler 
 *************************************************/
 void vTask_Handler_Data(void *pvParameters){
 	USART_FRAME rx_buffer;
@@ -113,6 +112,18 @@ void vTask_Handler_Data(void *pvParameters){
 		
 		//uxQueueMessagesWaiting(usart_receive_buffer);	
 		vTaskDelay(1);
+	}
+}
+/*************************************************
+            USART TX thread 
+*************************************************/
+void vTask_Transfer_Data(void *pvParameters){
+	
+	for(;;){
+		if(board_state.bit.power == 1){
+			FAST_Upd_All_OBJ_USART();
+		}
+	vTaskDelay(50);
 	}
 }
 /*************************************************

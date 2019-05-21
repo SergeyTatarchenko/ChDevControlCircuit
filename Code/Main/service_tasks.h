@@ -31,14 +31,15 @@ void vBlinker (void *pvParameters);
 /* the task of reading the state of the I/O ports */
 void vGetIOState(void *pvParameters);
 
-extern void vTask_main(void *pvParameters);
-extern void vTask_Handler_Data(void *pvParameters);
+void vTask_main(void *pvParameters);
+void vTask_Handler_Data(void *pvParameters);
+void vTask_Transfer_Data(void *pvParameters);
 
-extern volatile uint8_t power_on;
 /*----------------------------------------------*/
 #define system_prior	(configMAX_PRIORITIES-1)
-#define usart_prior		(configMAX_PRIORITIES-2)
-#define board_prior		(configMAX_PRIORITIES-3)
+#define usart_rx_prior		(configMAX_PRIORITIES-2)
+#define usart_tx_prior		(configMAX_PRIORITIES-3)
+#define board_prior		(configMAX_PRIORITIES-4)
 /*----------------------------------------------*/
 #define user_stack		(unsigned short) 256
 #define usart_stack		(unsigned short) 256
