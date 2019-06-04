@@ -47,6 +47,7 @@ void Core_Init(){
 	ADC_Init();
 	/* Init internal timer as PWM */
 	PWM_Init();
+	PWM_PIN0_OFF;
 	/*init hardware I2C module*/
 	I2CInit();
 	/*usart init*/

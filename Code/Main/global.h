@@ -65,8 +65,8 @@
 	
 #endif
 
-#define LED_OFF 		(GPIOC->BSRR = GPIO_BSRR_BS13);
-#define LED_ON 			(GPIOC->BSRR = GPIO_BSRR_BR13);
+#define LED_OFF 		(GPIOC->BSRR |= GPIO_BSRR_BS13);
+#define LED_ON 			(GPIOC->BSRR |= GPIO_BSRR_BR13);
 
 
 #define MCP23017_RESET 	(GPIOB->BSRR = GPIO_BSRR_BS5);

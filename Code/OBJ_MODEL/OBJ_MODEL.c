@@ -200,7 +200,7 @@ void OBJ_Event(int obj_id){
 	/*feedback*/
 	if(this_obj(obj_id)->obj_event == 1){
 		this_obj(obj_id)->obj_event = 0;
-		OBJ_Upd_USART(this_obj(obj_id));
+	//	OBJ_Upd_USART(this_obj(obj_id));
 	}	
 }
 
@@ -267,7 +267,7 @@ void FAST_Upd_All_OBJ_USART(void){
 	for(int counter = 1; counter < num_of_all_obj; counter ++ ){
 		_CRC_ = 0;
 		
-		if((this_obj(counter)->id[1]==0)||(this_obj(counter)->obj_visible == FALSE)){
+		if((this_obj(counter)->id[1]==0)/*||(this_obj(counter)->obj_visible == FALSE)*/){
 			if(obj_counter > num_of_obj){
 				break;
 			}else{
@@ -317,41 +317,40 @@ void Rx_OBJ_Data(USART_FRAME *mes){
 		/*error crc do not match*/
 		return;
 	}
-	
 	/*board control object*/
 	if(id == obj_STATUS){
 		this_obj(obj_STATUS)->status_field = mes->d_struct.object.status_field;
 		OBJ_Event(obj_STATUS);
 		return;
 	}
-	/*receive data (obj type 4) */
-	if((type == IND_obj_COM) && (board_state.bit.power == 1)){
-		/*take new object image*/
-		pointer = (uint8_t*)mes;
-		pointer += (sizeof(mes->d_struct.id_netw)+sizeof(mes->d_struct.id_modul));
-		memcpy(obj,pointer,sizeof(OBJ_STRUCT));
-		OBJ_Event(id);
-		return;		
-	}
-	/*object event*/
-	if(mes->d_struct.object.obj_field.default_field.control_byte.byte & event_mask){
-		/*if it is a control object*/	
-		if((type == obj->id[1])&&(type&IND_obj_CAS)&& (board_state.bit.power == 1)){
-		/*take new object image*/
-		pointer = (uint8_t*)mes;
-		
-		obj->status_field = mes->d_struct.object.status_field;	
-		obj->obj_value = mes->d_struct.object.obj_value;
-		
-		/*event bit call object handler*/
-		if(obj->obj_hardware == 1){
-			HWOBJ_Event(id);
-		}else{
+	if(board_state.bit.power == 1){
+		/*receive data (obj type 4) */
+		if(type == IND_obj_COM){
+			/*take new object image*/
+			pointer = (uint8_t*)mes;
+			pointer += (sizeof(mes->d_struct.id_netw)+sizeof(mes->d_struct.id_modul));
+			memcpy(obj,pointer,sizeof(OBJ_STRUCT));
 			OBJ_Event(id);
+			return;		
 		}
-		/*call obj handler,change event bit on feedback*/
-		
-		}	
+			/*object event*/
+		if(mes->d_struct.object.obj_field.default_field.control_byte.byte & event_mask){
+			/*if it is a control object*/	
+			if((type == obj->id[1])&&(type&IND_obj_CAS)){
+			/*take new object image*/
+			pointer = (uint8_t*)mes;
+			obj->status_field = mes->d_struct.object.status_field;	
+			obj->obj_value = mes->d_struct.object.obj_value;
+			/*event bit call object handler*/
+				if(obj->obj_hardware == 1){
+					HWOBJ_Event(id);
+				}
+				else{
+					OBJ_Event(id);
+				}
+		/*call obj handler,change event bit on feedback*/	
+			}	
+		}
 	}
 }
 

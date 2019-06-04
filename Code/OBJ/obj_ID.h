@@ -33,7 +33,7 @@ v 0.3
 #define IND_obj_OUT0          (IND_obj_NULL + 3)		// аппаратный выход 0
 #define IND_obj_OUT7          (IND_obj_NULL + 4)		// аппаратный выход 7
 /*-----------------------------------------------*/
-//#define IND_obj_IN0           (IND_obj_NULL + 5)		// аппаратный вход (порог Uпит/2)
+#define IND_obj_IN0           (IND_obj_NULL + 5)		// аппаратный вход (порог Uпит/2)
 /*-----------------------------------------------*/
 #define IND_obj_PWM0          (IND_obj_NULL + 6)		// аппаратный ШИМ 1
 #define IND_obj_PWM1          (IND_obj_NULL + 7)		// аппаратный ШИМ 2
@@ -77,9 +77,9 @@ v 0.3
 /*---------------------------------------------------------------------------------------------------*/
 
 #define _obj_cofig_	{_obj_STATUS_init},{_obj_LED_init},{_obj_TICK_1S_init},{_obj_TICK_100_ms_init}, \
-					{_obj_OUT0_init},{_obj_OUT7_init},{_obj_ADC1_init},{_obj_PWM0_init},	\
-					{_obj_PID_KP_init},{_obj_PID_KI_init},{_obj_PID_KD_init},{_obj_PID_KP_init}, \
-					{_obj_PID_SET_VAl_init},{_obj_PID_FDB_init}
+					{_obj_OUT0_init},{_obj_OUT7_init},{_obj_ADC1_init},{_obj_PWM0_init}//,	\
+					//{_obj_PID_KP_init},{_obj_PID_KI_init},{_obj_PID_KD_init},{_obj_PID_KP_init}, \
+					//{_obj_PID_SET_VAl_init},{_obj_PID_FDB_init}
 
 /*--------------------------------------------------------------------------------------*/
 /*obj handlers*/
