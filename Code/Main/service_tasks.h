@@ -24,8 +24,6 @@
 extern xSemaphoreHandle InputEvent;
 extern xSemaphoreHandle xMutex_BUS_BUSY;
 /*-----------global function prototypes---------*/
-/*initial task*/
-void StartInit(void *pvParameters);
 /*LED flasher with frequency parameter*/
 void vBlinker (void *pvParameters);
 /* the task of reading the state of the I/O ports */
@@ -36,10 +34,10 @@ void vTask_Handler_Data(void *pvParameters);
 void vTask_Transfer_Data(void *pvParameters);
 
 /*----------------------------------------------*/
-#define system_prior	(configMAX_PRIORITIES-1)
+#define system_prior		(configMAX_PRIORITIES-1)
 #define usart_rx_prior		(configMAX_PRIORITIES-2)
 #define usart_tx_prior		(configMAX_PRIORITIES-3)
-#define board_prior		(configMAX_PRIORITIES-4)
+#define board_prior			(configMAX_PRIORITIES-4)
 /*----------------------------------------------*/
 #define user_stack		(unsigned short) 256
 #define usart_stack		(unsigned short) 256

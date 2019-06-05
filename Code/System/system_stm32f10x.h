@@ -14,3 +14,6 @@
 
 /*-----------global function prototypes---------*/
 extern void SystemInit(void);
+extern void watchdog_config(void);
+
+#define IWDG_RELOAD	(IWDG->KR = 0xAAAA)

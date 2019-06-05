@@ -94,10 +94,6 @@ void OBJ_Init(){
 	OBJ_STRUCT *obj;
     obj_init_struct _model_init_[] ={_obj_cofig_};
 	
-	/*create mutex for correct usart transmit*/
-	xMutex_USART_BUSY = xSemaphoreCreateMutex();
-	usart_receive_buffer = xQueueCreate(MES_BUF_SIZE,sizeof(USART_FRAME));
-	
 	/* object memory allocation*/
 	memset(obj_mem_area,0,sizeof(OBJ_STRUCT)*num_of_all_obj);
 	objDefault =(OBJ_STRUCT*)obj_mem_area;
@@ -132,7 +128,7 @@ void OBJ_Init(){
 /*object creating and snap*/
 void obj_snap(obj_init_struct* _model_init_,int _model_size_){
 	
-	for(int i;i<(_model_size_/sizeof(obj_init_struct));i++){
+	for(int i = 0;i<(_model_size_/sizeof(obj_init_struct));i++){
 		if(_model_init_[i].obj_type == obj_hard){
 			HWObj_Create(_model_init_[i].id,_model_init_->obj_class,_model_init_[i].HW_adress);
 		}else if(_model_init_[i].obj_type == obj_soft){
@@ -177,7 +173,8 @@ void OBJ_SetState(int obj_id,int state){
 }
 
 void HWOBJ_Event(int obj_id){
-	
+
+#if TARGET != 0	
 	OBJ_STRUCT* obj;
 	obj = objDefault + obj_id;
 
@@ -188,19 +185,19 @@ void HWOBJ_Event(int obj_id){
 		   
 			Set_IO_State((int)(obj->hardware_adress - out_offset),(int)obj->obj_state);
 	}
-	   
+#endif	   
 	OBJ_Event(obj_id);
 }
 
 /* object event, call object handler and call update function, if event = 1 */
 void OBJ_Event(int obj_id){
-	
-	obj_handlers[obj_id](this_obj(obj_id));
-	
-	/*feedback*/
-	if(this_obj(obj_id)->obj_event == 1){
-		this_obj(obj_id)->obj_event = 0;
-	//	OBJ_Upd_USART(this_obj(obj_id));
+	if(this_obj(obj_id)->typeof_obj != 0){
+		obj_handlers[obj_id](this_obj(obj_id));
+		/*feedback*/
+		if(this_obj(obj_id)->obj_event == 1){
+			this_obj(obj_id)->obj_event = 0;
+			//	OBJ_Upd_USART(this_obj(obj_id));
+		}
 	}	
 }
 
@@ -352,5 +349,9 @@ void Rx_OBJ_Data(USART_FRAME *mes){
 			}	
 		}
 	}
+}
+
+void Dummy_Handler(OBJ_STRUCT *obj){
+	
 }
 

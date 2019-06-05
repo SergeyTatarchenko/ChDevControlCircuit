@@ -12,7 +12,6 @@
 #include "stdint.h"
 #include "string.h"
 /*-----------------------------------------------*/
-#include "obj_model_config.h"
 /*-----------------------------------------------*/
 /*-----------------------------------------------*/
 /*------------object description-----------------*/
@@ -140,6 +139,9 @@ typedef union{
 /*-----------------------------------------------*/
 /*--------------Common variables-----------------*/
 /*-----------------------------------------------*/
+#include "obj_ID.h"
+#include "obj_model_config.h"
+/*-----------------------------------------------*/
 /*pointer to memory space of objects*/
 extern OBJ_STRUCT *objDefault;
 /*array of object handlers*/
@@ -164,7 +166,7 @@ extern uint32_t num_of_obj;
 #if USART_DATA_FAST == TRUE
 	extern uint8_t USART_DATA[sizeof(USART_FRAME)*num_of_all_obj];	
 #endif
-
+void Dummy_Handler(OBJ_STRUCT *obj);
 /*-----------------------------------------------*/
 /*-----------------------------------------------*/
 /*----------Common functions prototypes----------*/
@@ -195,7 +197,7 @@ extern uint8_t Check_CRC(USART_FRAME *Rx_obj_c);
 
 /*-----------------------------------------------*/
 extern void obj_snap(obj_init_struct* _model_init_,int _model_size_);
-#include "obj_ID.h"
+
 /*-----------------------------------------------*/
 
 

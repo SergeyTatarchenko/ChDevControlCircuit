@@ -5,6 +5,8 @@
 * Description        : ---
 **************************************************/
 #include "service_tasks.h"
+#include <stm32f10x.h>
+
 /*----------- global variables-------------------*/
 /*semaphore for I/O pool*/
 xSemaphoreHandle InputEvent;
@@ -14,48 +16,6 @@ uint32_t BlinkFrequency; //LED flashing frequency
 /*mutex for I2C , perform correct transmit */
 xSemaphoreHandle xMutex_BUS_BUSY;
 
-/*************************************************
- Initial configuration and start other tasks
-*************************************************/
-void StartInit(void *pvParameters){	
-	_Bool state;
-	Core_Init();
-	
-	LED_ON;
-	/**/
-	InputEvent = xSemaphoreCreateCounting(3,0);
-	xMutex_BUS_BUSY = xSemaphoreCreateMutex();
-	//
-
-	/*start other tasks*/	
-	state = Get_IO_State();
-	//state =1;
-	
-	/*high level tasks*/
-	if(state){
-		LED_OFF;
-		Set_IO_Byte(0x00);
-		
-		/*run with higher priority (use I2C)*/
-		xTaskCreate(vGetIOState,"I/O pool ", system_stack, NULL,system_prior, NULL );
-		/*main thread*/
-		xTaskCreate(vTask_main,"main thread",user_stack, NULL, board_prior, NULL );	
-		/* RX Handler */
-		xTaskCreate(vTask_Handler_Data,"Handler",usart_stack, NULL,usart_rx_prior, NULL );
-		/* RX Handler */
-		xTaskCreate(vTask_Transfer_Data,"TX",usart_stack, NULL,usart_tx_prior, NULL );
-		
-		/*start obj model*/
-		OBJ_Init();
-	
-	
-	}else{
-		LED_ON;
-		/*internal error, loading aborted*/		
-		// add error handler
-	}
-	vTaskDelete(NULL); /*delete task*/	
-}
 /*************************************************
 the task is performed on a semaphore "InputEvent"
 *************************************************/
@@ -102,14 +62,14 @@ void vBlinker (void *pvParameters){
                  USART RX handler 
 *************************************************/
 void vTask_Handler_Data(void *pvParameters){
-	USART_FRAME rx_buffer;
 	
+	USART_FRAME rx_buffer;
 	/*USART receive complete interrupt on NVIC*/
 	NVIC_EnableIRQ (USART1_IRQn);
 	for(;;){
+		
 		xQueueReceive(usart_receive_buffer,&rx_buffer,portMAX_DELAY);
 		Rx_OBJ_Data(&rx_buffer);
-		
 		//uxQueueMessagesWaiting(usart_receive_buffer);	
 		vTaskDelay(1);
 	}
@@ -138,7 +98,8 @@ void vTask_main(void *pvParameters){
 	board_state.bit.debug = DEBUG_MODE;
 	
 	for(;;){
-		vTaskDelay(1);		
+		vTaskDelay(1);
+		IWDG_RELOAD;		
 		/*while bit power on (bit state on in obj_STATUS))*/
 		if(board_state.bit.power == 1){
 			board_task(tick);

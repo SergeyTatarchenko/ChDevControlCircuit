@@ -1,8 +1,8 @@
 /*************************************************
 * File Name          : system_stm32f10x.c
 * Author             : Tatarchenko S.
-* Version            : v 1.0
-* Description        : SYSCLK config for MCU
+* Version            : v 1.1
+* Description        : SYSCLK and IWDG config for MCU
 *************************************************/
 #include "system_stm32f10x.h"
 /*-----------local variables--------------------*/
@@ -54,5 +54,23 @@ void SystemInit(void) {
 	else{
 	/*HSE not working*/
 	}
-} 
+	watchdog_config();
+}
+void watchdog_config(){
+	
+	/* WD access enable */
+	IWDG->KR = 0x5555;
+	/*WD prescaler = 16, clock = 40 kHz/16 = 2,5 kHz
+		100 ms = 10 Hz, 2500/10 = 250
+	*/
+	IWDG->PR |= IWDG_PR_PR_1; /*010 - divider /16*/
+	IWDG->RLR = 250;		/*reset CPU after 100 ms*/	
+	
+	IWDG_RELOAD;
+	/*enable debug*/
+	DBGMCU->CR |= DBGMCU_CR_DBG_IWDG_STOP;
+	/*WD enable*/
+	IWDG->KR = 0xCCCC;
+	
+}
 
