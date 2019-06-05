@@ -19,7 +19,7 @@
 #ifdef HARDWARE_OBJECT
     #define NUM_OF_HWOBJ    20
 #endif
-
+#define obj_limit	40
 /*-------------------------------------------------
                   FreeRTOS 
 -------------------------------------------------*/

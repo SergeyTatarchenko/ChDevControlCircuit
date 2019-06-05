@@ -179,24 +179,27 @@ void HWOBJ_Event(int obj_id){
 	obj = objDefault + obj_id;
 
 	/*output event*/
-	if((obj->hardware_adress == out_0)||(obj->hardware_adress == out_1)||(obj->hardware_adress == out_2)||
-	   (obj->hardware_adress == out_3)||(obj->hardware_adress == out_4)||(obj->hardware_adress == out_5)||
-	   (obj->hardware_adress == out_6)||(obj->hardware_adress == out_7)){
-		   
+	if((obj->hardware_adress >= out_0)&&((obj->hardware_adress <= out_7))){
 			Set_IO_State((int)(obj->hardware_adress - out_offset),(int)obj->obj_state);
 	}
 #endif	   
-	OBJ_Event(obj_id);
 }
 
 /* object event, call object handler and call update function, if event = 1 */
 void OBJ_Event(int obj_id){
+	
 	if(this_obj(obj_id)->typeof_obj != 0){
+		if(this_obj(obj_id)->obj_hardware == TRUE){
+			HWOBJ_Event(obj_id);		
+		}
 		obj_handlers[obj_id](this_obj(obj_id));
 		/*feedback*/
+		
 		if(this_obj(obj_id)->obj_event == 1){
 			this_obj(obj_id)->obj_event = 0;
-			//	OBJ_Upd_USART(this_obj(obj_id));
+			#if ((USART_DATA_FAST == FALSE)&&(MODE == USART_MODE))
+				OBJ_Upd_USART(this_obj(obj_id));
+			#endif
 		}
 	}	
 }
@@ -339,13 +342,8 @@ void Rx_OBJ_Data(USART_FRAME *mes){
 			obj->status_field = mes->d_struct.object.status_field;	
 			obj->obj_value = mes->d_struct.object.obj_value;
 			/*event bit call object handler*/
-				if(obj->obj_hardware == 1){
-					HWOBJ_Event(id);
-				}
-				else{
-					OBJ_Event(id);
-				}
-		/*call obj handler,change event bit on feedback*/	
+			OBJ_Event(id);
+			/*call obj handler,change event bit on feedback*/	
 			}	
 		}
 	}

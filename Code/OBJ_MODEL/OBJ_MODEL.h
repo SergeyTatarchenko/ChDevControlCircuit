@@ -110,6 +110,12 @@ typedef union{
 /*---------------------------------------------*/
 #define this_obj(obj_id)				(objDefault + obj_id)
 #define obj_set_visible(obj_id,state)	this_obj(obj_id)->obj_visible = state
+#define obj_update(obj_id)				obj_handlers[obj_id](this_obj(obj_id))												
+#define obj_state_on(obj_id)			this_obj(obj_id)->obj_state = TRUE;	\
+										OBJ_Event(obj_id)
+#define obj_state_off(obj_id)			this_obj(obj_id)->obj_state = FALSE; \
+										OBJ_Event(obj_id)
+
 
 /*-----------------------------------------------*/
 /*-----------struct for USART frame--------------*/
