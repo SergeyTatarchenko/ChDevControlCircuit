@@ -41,11 +41,11 @@ void LED_Control_Handler(OBJ_STRUCT *obj){
 			}else{
 				LED_OFF;
 			}
-	if(obj->obj_state == TRUE){
-		obj_state_on(IND_obj_OUT7);
-	}else{
-		obj_state_off(IND_obj_OUT7);	
-	}		
+//	if(obj->obj_state == TRUE){
+//		obj_state_on(IND_obj_OUT7);
+//	}else{
+//		obj_state_off(IND_obj_OUT7);	
+//	}		
 }
 void PWM_Handler(OBJ_STRUCT *obj){
 	

@@ -24,17 +24,6 @@ AnalogState_REGISTR *AIN_Pointer;
  
 /*data array for adc*/
 uint16_t ADC1_DataArray[ADC1_BUF_SIZE];
-/* data array for usart obj transfer */
-uint8_t	usart_data_transmit_array[USART1_DEFAULT_BUF_SIZE];
-uint8_t	usart_data_stream[USART_STREAM_SIZE];
-/* data array for usart obj receive */
-uint8_t usart_data_receive_array[USART1_DEFAULT_BUF_SIZE];
-/*mutex  to perform currect usart transmit */
-xSemaphoreHandle xMutex_USART_BUSY;
-/*queue of messages from usart module*/
-xQueueHandle usart_receive_buffer;
-/*usart data byte counter */
-uint8_t usart_irq_counter;
 /*************************************************
 init all system core drivers
 *************************************************/
@@ -185,3 +174,70 @@ void adc_calc_value(){
 	adc_val->TEMP_SENSOR = (uint16_t)((float)(1430 - adc_val->TEMP_SENSOR)/(float)(4.3) +25);
 	
 }
+
+/*-----------------------------------------------*/
+void USART1_IRQHandler(){
+	uint8_t buff;
+	
+	if(USART1->SR &= USART_SR_RXNE){
+		
+		buff = USART1->DR;
+		
+		switch(buff){
+			/**/
+			case ID_NETWORK:
+				if(usart_irq_counter == 0){
+					usart_data_receive_array[usart_irq_counter] = buff;
+					usart_irq_counter++;
+				}else{
+					if((usart_irq_counter < LEN_USART_MSG_OBJ) && (usart_irq_counter > (LEN_HEAD_SIZE -1))){
+						/**/
+						usart_data_receive_array[usart_irq_counter] = buff;
+						if(usart_irq_counter == (LEN_USART_MSG_OBJ)){
+							break;
+						}
+						usart_irq_counter++;
+					}else{
+						usart_irq_counter = 0;
+					}
+				}
+				break;
+			/**/	
+			case ID_REMOTE_CNTRL:
+				if(usart_irq_counter == 1){
+					usart_data_receive_array[usart_irq_counter] = buff;
+					usart_irq_counter++;
+				}else{
+					if((usart_irq_counter < LEN_USART_MSG_OBJ) && (usart_irq_counter > (LEN_HEAD_SIZE -1))){
+						usart_data_receive_array[usart_irq_counter] = buff;
+						if(usart_irq_counter == (LEN_USART_MSG_OBJ)){
+							break;
+						}
+						usart_irq_counter++;
+					}else{
+						usart_irq_counter = 0;
+					}
+				}
+				break;
+			/**/	
+			default:
+				if((usart_irq_counter < LEN_USART_MSG_OBJ) && (usart_irq_counter > (LEN_HEAD_SIZE -1))){
+					usart_data_receive_array[usart_irq_counter] = buff;
+					if(usart_irq_counter == (LEN_USART_MSG_OBJ)){
+							break;
+						}
+						usart_irq_counter++;
+					}else{
+						usart_irq_counter = 0;
+					}
+				break;
+		}
+		
+		if(usart_irq_counter == (LEN_USART_MSG_OBJ)){
+			xQueueSendFromISR(usart_receive_buffer,usart_data_receive_array,0);
+			usart_irq_counter = 0;	
+		}	
+	}
+}
+
+/*-----------------------------------------------*/

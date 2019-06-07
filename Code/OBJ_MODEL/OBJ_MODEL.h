@@ -8,8 +8,11 @@
 #define	OBJ_DATA_H_
 
 /*-----------------------------------------------*/
-#include "stm32f10x.h"
-#include "stdint.h"
+#include "FreeRTOS.h"
+#include "task.h"
+#include "queue.h"
+#include "semphr.h"
+/*----------------------------------------------*/
 #include "string.h"
 /*-----------------------------------------------*/
 /*-----------------------------------------------*/
@@ -132,6 +135,35 @@ typedef union{
 }USART_FRAME;
 #pragma pack(pop)
 
+
+#define USART1_DEFAULT_BUF_SIZE 14
+	
+#ifdef	LEN_USART_MSG_OBJ
+	#undef USART1_DEFAULT_BUF_SIZE
+	#define USART1_DEFAULT_BUF_SIZE LEN_USART_MSG_OBJ
+#endif
+
+#define USART_STREAM_SIZE	(USART1_DEFAULT_BUF_SIZE*256)
+
+#define USART_DATA_TYPE1	1
+#define USART_DATA_TYPE2	2
+
+/*-----------------------------------------------*/
+/*         system arrays for USART               */
+/*-----------------------------------------------*/
+
+/* data array for usart obj transfer */
+extern uint8_t	usart_data_transmit_array[USART1_DEFAULT_BUF_SIZE];
+extern uint8_t	usart_data_stream[USART_STREAM_SIZE];
+/* data array for usart obj receive */
+extern uint8_t usart_data_receive_array[USART1_DEFAULT_BUF_SIZE];
+/*mutex  to perform currect usart transmit */
+extern xSemaphoreHandle xMutex_USART_BUSY;
+/*queue of messages from usart module*/
+extern xQueueHandle usart_receive_buffer;
+/*usart data byte counter */
+extern uint8_t usart_irq_counter;
+
 /*-----------------------------------------------*/
 /*-----------------------------------------------*/
 /*           struct for CAN frame                */
@@ -145,7 +177,6 @@ typedef union{
 /*-----------------------------------------------*/
 /*--------------Common variables-----------------*/
 /*-----------------------------------------------*/
-#include "obj_ID.h"
 #include "obj_model_config.h"
 /*-----------------------------------------------*/
 /*pointer to memory space of objects*/
@@ -204,7 +235,8 @@ extern uint8_t Check_CRC(USART_FRAME *Rx_obj_c);
 /*-----------------------------------------------*/
 extern void obj_snap(obj_init_struct* _model_init_,int _model_size_);
 
+/*usart transfer , board specific */
+__weak void send_usart_message(uint8_t *message,uint32_t buf_size);
+
 /*-----------------------------------------------*/
-
-
 #endif

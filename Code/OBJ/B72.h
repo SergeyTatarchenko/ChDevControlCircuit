@@ -2,7 +2,8 @@
 #define	B72_H_
 
 #include "OBJ_MODEL.h"
-
+#include "obj_ID.h"
+#include "global.h"
 /*-------------------------------------------------*/
 #define	ID_NETWORK			0x01
 #define	ID_DEVICE			0x72

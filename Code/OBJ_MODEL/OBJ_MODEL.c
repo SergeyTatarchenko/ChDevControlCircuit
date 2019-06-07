@@ -22,72 +22,21 @@ OBJ_STRUCT *HW_OBJ[NUM_OF_HWOBJ];
 /*pointer to an array of frames in the message for USART*/
 uint8_t USART_DATA[sizeof(USART_FRAME)*num_of_all_obj];
 
-/*-----------------------------------------------*/
-void USART1_IRQHandler(){
-	uint8_t buff;
-	
-	if(USART1->SR &= USART_SR_RXNE){
-		
-		buff = USART1->DR;
-		
-		switch(buff){
-			/**/
-			case ID_NETWORK:
-				if(usart_irq_counter == 0){
-					usart_data_receive_array[usart_irq_counter] = buff;
-					usart_irq_counter++;
-				}else{
-					if((usart_irq_counter < LEN_USART_MSG_OBJ) && (usart_irq_counter > (LEN_HEAD_SIZE -1))){
-						/**/
-						usart_data_receive_array[usart_irq_counter] = buff;
-						if(usart_irq_counter == (LEN_USART_MSG_OBJ)){
-							break;
-						}
-						usart_irq_counter++;
-					}else{
-						usart_irq_counter = 0;
-					}
-				}
-				break;
-			/**/	
-			case ID_REMOTE_CNTRL:
-				if(usart_irq_counter == 1){
-					usart_data_receive_array[usart_irq_counter] = buff;
-					usart_irq_counter++;
-				}else{
-					if((usart_irq_counter < LEN_USART_MSG_OBJ) && (usart_irq_counter > (LEN_HEAD_SIZE -1))){
-						usart_data_receive_array[usart_irq_counter] = buff;
-						if(usart_irq_counter == (LEN_USART_MSG_OBJ)){
-							break;
-						}
-						usart_irq_counter++;
-					}else{
-						usart_irq_counter = 0;
-					}
-				}
-				break;
-			/**/	
-			default:
-				if((usart_irq_counter < LEN_USART_MSG_OBJ) && (usart_irq_counter > (LEN_HEAD_SIZE -1))){
-					usart_data_receive_array[usart_irq_counter] = buff;
-					if(usart_irq_counter == (LEN_USART_MSG_OBJ)){
-							break;
-						}
-						usart_irq_counter++;
-					}else{
-						usart_irq_counter = 0;
-					}
-				break;
-		}
-		
-		if(usart_irq_counter == (LEN_USART_MSG_OBJ)){
-			xQueueSendFromISR(usart_receive_buffer,usart_data_receive_array,0);
-			usart_irq_counter = 0;	
-		}	
-	}
-}
+
+/* data array for usart obj transfer */
+uint8_t	usart_data_transmit_array[USART1_DEFAULT_BUF_SIZE];
+uint8_t	usart_data_stream[USART_STREAM_SIZE];
+/* data array for usart obj receive */
+uint8_t usart_data_receive_array[USART1_DEFAULT_BUF_SIZE];
+/*mutex  to perform currect usart transmit */
+xSemaphoreHandle xMutex_USART_BUSY;
+/*queue of messages from usart module*/
+xQueueHandle usart_receive_buffer;
+/*usart data byte counter */
+uint8_t usart_irq_counter;
 
 /*-----------------------------------------------*/
+
 /*init obj model*/
 void OBJ_Init(){
 	
@@ -318,7 +267,7 @@ void Rx_OBJ_Data(USART_FRAME *mes){
 		return;
 	}
 	/*board control object*/
-	if(id == obj_STATUS){
+	if(id ==  (IND_obj_NULL + 1)){
 		this_obj(obj_STATUS)->status_field = mes->d_struct.object.status_field;
 		OBJ_Event(obj_STATUS);
 		return;
@@ -349,6 +298,9 @@ void Rx_OBJ_Data(USART_FRAME *mes){
 	}
 }
 
+__weak void send_usart_message(uint8_t *message,uint32_t buf_size){
+	
+}
 void Dummy_Handler(OBJ_STRUCT *obj){
 	
 }

@@ -20,6 +20,11 @@
     #define NUM_OF_HWOBJ    20
 #endif
 #define obj_limit	40
+
+#ifndef TARGET
+	#include "DEFAULT.h"
+#endif
+
 /*-------------------------------------------------
                   FreeRTOS 
 -------------------------------------------------*/
@@ -30,15 +35,16 @@
 /*-------------------------------------------------
                 !board special!
 -------------------------------------------------*/
-#include "global.h"
 /*     network and board description             */
+#ifdef	TARGET
 
-#if	TARGET == 0
-	#include "TEST.h"
-#elif TARGET == 72
-	#include "B72.h"
+	#if	TARGET == 0
+		#include "TEST.h"
+	#elif TARGET == 72
+		#include "B72.h"
+	#endif
+
 #endif
-
 
 #endif
 

@@ -8,7 +8,8 @@
 /*************************************************/
 
 void board_task(int task_tick){
-	
+
+#ifdef TARGET	
 	adc_calc_value();
 	OBJ_Event(IND_obj_ADC1);
 
@@ -18,5 +19,5 @@ void board_task(int task_tick){
 	if(task_tick%100 == 0){
 		OBJ_Event(IND_obj_TICK_100_ms);
 	}
-	
+#endif
 }   

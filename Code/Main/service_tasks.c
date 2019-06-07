@@ -83,7 +83,7 @@ void vTask_Transfer_Data(void *pvParameters){
 		if(board_state.bit.power == 1){
 			FAST_Upd_All_OBJ_USART();
 		}
-	vTaskDelay(50);
+	vTaskDelay(10);
 	}
 }
 /*************************************************
