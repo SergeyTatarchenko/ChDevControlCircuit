@@ -18,10 +18,10 @@
 /*-----------------------------------------------*/
 #define IND_obj_PWM0          (IND_obj_NULL + 6)		// аппаратный ШИМ 1
 #define IND_obj_PWM1          (IND_obj_NULL + 7)		// аппаратный ШИМ 2
-			/*-----------------SOFTOBJ-----------------------*/
-#define IND_obj_TICK_1S       (IND_obj_NULL + 8)	// тик тест 1c
-#define IND_obj_TICK_100_ms   (IND_obj_NULL + 9)	// тик тест 100 мс
-#define IND_obj_LED           (IND_obj_NULL + 10)	// светодиод на плате
+/*-----------------SOFTOBJ-----------------------*/
+#define IND_obj_TICK_1S       (IND_obj_NULL + 8)		// тик тест 1c
+#define IND_obj_TICK_100_ms   (IND_obj_NULL + 9)		// тик тест 100 мс
+#define IND_obj_LED           (IND_obj_NULL + 10)		// светодиод на плате
 #define IND_obj_PID_KP		  (IND_obj_NULL + 11)
 #define IND_obj_PID_KI		  (IND_obj_NULL + 12)
 #define IND_obj_PID_KD		  (IND_obj_NULL + 13)
