@@ -91,11 +91,12 @@ void vTask_Transfer_Data(void *pvParameters){
 *************************************************/	
 
 void vTask_main(void *pvParameters){
-	volatile int tick = 0,overload = 3600000UL;
 	
+	volatile int tick = 0,overload = 3600000UL;
 	board_state.bit.mode = USART_MODE;
 	board_state.bit.hwobj = HARDWARE_OBJECT;
 	board_state.bit.debug = DEBUG_MODE;
+	board_pr_init();
 	
 	for(;;){
 		vTaskDelay(1);

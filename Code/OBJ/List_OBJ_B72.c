@@ -15,15 +15,16 @@ void board_START(OBJ_STRUCT *obj){
 
 /*показания ацп*/
 void ADC_Handler(OBJ_STRUCT *obj){
-	
+
 	uint16_t *pointer = (uint16_t*)adc_val;
-	
-	this_obj(obj_STATUS)->obj_value = adc_val->TEMP_SENSOR;
-	for(int counter = adc_0;counter <= adc_5;counter++){
-		if(HW_OBJ[counter]->obj_hardware != 0){
+	if(obj->obj_state){
+		this_obj(obj_STATUS)->obj_value = adc_val->TEMP_SENSOR;
+		for(int counter = adc_0;counter <= adc_5;counter++){
+			if(HW_OBJ[counter]->obj_hardware != 0){
 			pU16(HW_OBJ[counter]->obj_value) = *pointer;
-		}
+			}
 		pointer++;
+		}	
 	}
 }
 
@@ -31,6 +32,12 @@ void ADC_Handler(OBJ_STRUCT *obj){
 void TICK_Handler(OBJ_STRUCT *obj){
 	
 	obj->obj_value++;
+	
+	if(GPIOC->ODR&=GPIO_ODR_ODR13){
+				LED_ON;
+			}else{
+				LED_OFF;
+			}
 }
 
 /*управление светодиодом*/
@@ -40,13 +47,9 @@ void LED_Control_Handler(OBJ_STRUCT *obj){
 				LED_ON;
 			}else{
 				LED_OFF;
-			}
-//	if(obj->obj_state == TRUE){
-//		obj_state_on(IND_obj_OUT7);
-//	}else{
-//		obj_state_off(IND_obj_OUT7);	
-//	}		
+			}		
 }
+
 void PWM_Handler(OBJ_STRUCT *obj){
 	
 	if(obj->obj_state == 1){

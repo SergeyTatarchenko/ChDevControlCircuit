@@ -21,5 +21,5 @@
 /*-----------global variables-------------------*/
 /*-----------global function prototypes---------*/
 void board_task(int task_tick);
-
+void board_pr_init(void);
 #endif

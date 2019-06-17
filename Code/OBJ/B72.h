@@ -33,27 +33,36 @@ v 0.3
 #define _obj_STATUS_init       obj_STATUS           ,IND_obj_CAS  ,obj_soft  ,   NULL   ,board_START
 #define _obj_LED_init	       IND_obj_LED          ,IND_obj_CAS  ,obj_soft  ,   NULL   ,LED_Control_Handler
 #define _obj_TICK_1S_init      IND_obj_TICK_1S      ,IND_obj_SWC  ,obj_soft  ,   NULL   ,TICK_Handler
-#define _obj_TICK_100_ms_init  IND_obj_TICK_100_ms  ,IND_obj_SWC  ,obj_soft  ,   NULL   ,TICK_Handler
+#define IND_obj_ADC_CONV_init  INDIND_obj_ADC_CONV  ,IND_obj_COM  ,obj_soft  ,   NULL   ,ADC_Handler
 
-#define _obj_PID_KP_init       IND_obj_PID_KP        ,IND_obj_COM  ,obj_soft  ,   NULL   ,NULL
-#define _obj_PID_KI_init       IND_obj_PID_KI        ,IND_obj_COM  ,obj_soft  ,   NULL   ,NULL
-#define _obj_PID_KD_init       IND_obj_PID_KD        ,IND_obj_COM  ,obj_soft  ,   NULL   ,NULL
-#define _obj_PID_KP_init       IND_obj_PID_KP        ,IND_obj_COM  ,obj_soft  ,   NULL   ,NULL
+
+#define _obj_PID_KP_init       IND_obj_PID_KP       ,IND_obj_COM  ,obj_soft  ,   NULL   ,NULL
+#define _obj_PID_KI_init       IND_obj_PID_KI       ,IND_obj_COM  ,obj_soft  ,   NULL   ,NULL
+#define _obj_PID_KD_init       IND_obj_PID_KD       ,IND_obj_COM  ,obj_soft  ,   NULL   ,NULL
+#define _obj_PID_KP_init       IND_obj_PID_KP       ,IND_obj_COM  ,obj_soft  ,   NULL   ,NULL
+
 
 #define _obj_PID_SET_VAl_init  IND_obj_PID_SET_VAl   ,IND_obj_COM  ,obj_soft  ,   NULL   ,NULL
 #define _obj_PID_FDB_init      IND_obj_PID_FDB       ,IND_obj_COM  ,obj_soft  ,   NULL   ,NULL
-                               
+
+
 /*---------------------------------------------------------------------------------------------------*/
-#define _obj_ADC1_init	   IND_obj_ADC1         ,IND_obj_CAS  ,obj_hard  ,   adc_0   ,ADC_Handler
-#define _obj_PWM0_init	   IND_obj_PWM0         ,IND_obj_CAS  ,obj_hard  ,   pwm_0   ,PWM_Handler
-#define _obj_OUT0_init	   IND_obj_OUT0         ,IND_obj_CAS  ,obj_hard  ,   out_0   ,NULL
+#define _obj_ADC0_init	   IND_obj_ADC0         ,IND_obj_CAS  ,obj_hard  ,   adc_0   ,NULL
+#define _obj_ADC1_init	   IND_obj_ADC1         ,IND_obj_CAS  ,obj_hard  ,   adc_1   ,NULL
+#define _obj_ADC2_init	   IND_obj_ADC2         ,IND_obj_CAS  ,obj_hard  ,   adc_2   ,NULL
+#define _obj_ADC3_init	   IND_obj_ADC3         ,IND_obj_CAS  ,obj_hard  ,   adc_3   ,NULL
+#define _obj_ADC4_init	   IND_obj_ADC4         ,IND_obj_CAS  ,obj_hard  ,   adc_4   ,NULL
+#define _obj_ADC5_init	   IND_obj_ADC5         ,IND_obj_CAS  ,obj_hard  ,   adc_5   ,NULL
+#define _obj_PWM0_init	   IND_obj_PWM0         ,IND_obj_CAS  ,obj_hard  ,   pwm_0   ,NULL
+#define _obj_OUT6_init	   IND_obj_OUT6         ,IND_obj_CAS  ,obj_hard  ,   out_6   ,NULL
 #define _obj_OUT7_init	   IND_obj_OUT7         ,IND_obj_CAS  ,obj_hard  ,   out_7   ,NULL
 /*---------------------------------------------------------------------------------------------------*/
 
-#define _obj_cofig_	{_obj_STATUS_init},{_obj_LED_init},{_obj_TICK_1S_init},{_obj_TICK_100_ms_init}, \
-					{_obj_OUT0_init},{_obj_OUT7_init},{_obj_ADC1_init},{_obj_PWM0_init}//,	\
-					//{_obj_PID_KP_init},{_obj_PID_KI_init},{_obj_PID_KD_init},{_obj_PID_KP_init}, \
-					//{_obj_PID_SET_VAl_init},{_obj_PID_FDB_init}
+#define _obj_cofig_	{_obj_STATUS_init},{_obj_LED_init},{_obj_TICK_1S_init}, \
+					{_obj_PID_KP_init},{_obj_PID_KI_init},{_obj_PID_KD_init},{_obj_PID_KP_init},	\
+					{_obj_PID_SET_VAl_init},{_obj_PID_FDB_init},	\
+					{_obj_ADC0_init},{_obj_ADC1_init},{_obj_ADC2_init},{_obj_ADC3_init},{_obj_ADC4_init},{_obj_ADC5_init},	\
+					{_obj_OUT6_init},{_obj_OUT7_init},{_obj_PWM0_init}
 
 /*--------------------------------------------------------------------------------------*/
 			

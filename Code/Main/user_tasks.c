@@ -7,11 +7,19 @@
 #include "user_tasks.h"
 /*************************************************/
 
+void board_pr_init(){
+	
+	obj_state_on(IND_obj_ADC_CONV);
+	
+	obj_state_off(IND_obj_OUT6);
+	obj_state_off(IND_obj_OUT7);
+}
+
 void board_task(int task_tick){
 
 #ifdef TARGET	
 	adc_calc_value();
-	OBJ_Event(IND_obj_ADC1);
+	OBJ_Event(IND_obj_ADC0);
 
 	if(task_tick%1000 == 0){
 		OBJ_Event(IND_obj_TICK_1S);
