@@ -43,11 +43,14 @@ void TICK_Handler(OBJ_STRUCT *obj){
 /*управление светодиодом*/
 void LED_Control_Handler(OBJ_STRUCT *obj){
 	
+	if(obj->obj_state != 0){
 		if(GPIOC->ODR&=GPIO_ODR_ODR13){
-				LED_ON;
-			}else{
-				LED_OFF;
-			}		
+			LED_ON;
+		}
+		else{
+			LED_OFF;
+		}		
+	}
 }
 
 void PWM_Handler(OBJ_STRUCT *obj){
