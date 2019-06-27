@@ -1274,7 +1274,7 @@
             <v6Rtti>0</v6Rtti>
             <VariousControls>
               <MiscControls></MiscControls>
-              <Define>TARGET = 72</Define>
+              <Define>TARGET = 72, USER_PARAM = 1</Define>
               <Undefine></Undefine>
               <IncludePath>\Code\System;.\Code\FreeRTOS;.\Code\FreeRTOS\include;.\Code\Main;.\Code\System;.\Code\Drivers;.\Code\Utility_Func;.\Code\OBJ;..\SOM\OBJ_MODEL</IncludePath>
             </VariousControls>

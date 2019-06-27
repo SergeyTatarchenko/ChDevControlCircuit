@@ -18,14 +18,14 @@ void board_pr_init(){
 void board_task(int task_tick){
 
 #ifdef TARGET	
+	/*get value in mV of all sensors*/
 	adc_calc_value();
+	/*obj snap*/
 	OBJ_Event(IND_obj_ADC_CONV);
-
+	
+	
 	if(task_tick%1000 == 0){
 		OBJ_Event(IND_obj_TICK_1S);
-	}
-	if(task_tick%100 == 0){
-		OBJ_Event(IND_obj_TICK_100_ms);
 	}
 #endif
 }   

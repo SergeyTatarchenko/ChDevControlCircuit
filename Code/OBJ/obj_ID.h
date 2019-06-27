@@ -9,12 +9,12 @@
 /*-----------------------------------------------*/
 #define obj_STATUS			  (IND_obj_NULL + 1)	
 /*---------------------HWOBJ---------------------*/
-#define IND_obj_ADC0          (IND_obj_NULL + 2)		// аппаратный ацп 1
-#define IND_obj_ADC1          (IND_obj_NULL + 3)		// аппаратный ацп 2
-#define IND_obj_ADC2          (IND_obj_NULL + 4)		// аппаратный ацп 3
-#define IND_obj_ADC3          (IND_obj_NULL + 5)		// аппаратный ацп 4
-#define IND_obj_ADC4          (IND_obj_NULL + 6)		// аппаратный ацп 5
-#define IND_obj_ADC5          (IND_obj_NULL + 7)		// аппаратный ацп 6
+#define IND_obj_aINV          (IND_obj_NULL + 2)		// аппаратный ацп 1 [входное напряжение ]
+#define IND_obj_aINC          (IND_obj_NULL + 3)		// аппаратный ацп 2 [входной ток        ]
+#define IND_obj_aOUTV         (IND_obj_NULL + 4)		// аппаратный ацп 3 [выходное напряжение]
+#define IND_obj_aOUTC         (IND_obj_NULL + 5)		// аппаратный ацп 4 [выходной ток       ]
+#define IND_obj_aDRV          (IND_obj_NULL + 6)		// аппаратный ацп 5 [напряжение дросселя]
+#define IND_obj_aDRC          (IND_obj_NULL + 7)		// аппаратный ацп 6 [ток дросселя       ] 
 /*-----------------------------------------------*/
 #define IND_obj_OUT6          (IND_obj_NULL + 8)		// аппаратный выход 6
 #define IND_obj_OUT7          (IND_obj_NULL + 9)		// аппаратный выход 7
