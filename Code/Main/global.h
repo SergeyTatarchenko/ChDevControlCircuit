@@ -102,6 +102,17 @@ extern _Bool Get_AIn_State(int port);
 
 /*calc adc value*/
 void adc_calc_value(void);
+
+#define adc_filter_size	20
+extern uint16_t adc_moving_average_filter(uint16_t *buff, uint32_t buff_size);
+
+extern uint16_t adc_ch1_buffer[adc_filter_size];
+extern uint16_t adc_ch2_buffer[adc_filter_size];
+extern uint16_t adc_ch3_buffer[adc_filter_size];
+extern uint16_t adc_ch4_buffer[adc_filter_size];
+extern uint16_t adc_ch5_buffer[adc_filter_size];
+extern uint16_t adc_ch6_buffer[adc_filter_size];
+
 /*low priority tasks**********************************************************
 ******************************************************************************/
 /*error handler for internal errors during execution ( MCP23017 error )*/

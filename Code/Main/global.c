@@ -58,7 +58,7 @@ void Core_Init(){
 	MCP23017_START;
 	
 	/*test*/
-	CAN_init();
+//	CAN_init();
 /*not used */
 	
 	/*external multiplexor init*/
@@ -157,7 +157,9 @@ void send_usart_message(uint8_t *message,uint32_t buf_size){
 	else {
 		memcpy(usart_data_stream,message,buf_size);
 		DMA_Ch4_Reload(USART_DATA_TYPE2,buf_size);}
-}                                                                     
+}
+
+
 /*************************************************
 calc adc value, fill struct with mv 
 *************************************************/
@@ -174,6 +176,28 @@ void adc_calc_value(){
 	adc_val->TEMP_SENSOR = (uint16_t)((float)(1430 - adc_val->TEMP_SENSOR)/(float)(4.3) +25);
 	
 }
+
+/*************************************************
+фильтр скользящего среднего для канала АЦП с шумом 
+*************************************************/
+uint16_t adc_moving_average_filter(uint16_t *buff, uint32_t buff_size){
+	
+	uint32_t ExpectedValue;
+	int counter = 0;
+	
+	for(counter = 0 ;counter < buff_size; counter ++){
+		ExpectedValue += buff[counter];
+	}
+	ExpectedValue = ExpectedValue/buff_size;
+	return (uint16_t)ExpectedValue;
+}
+
+uint16_t adc_ch1_buffer[adc_filter_size];
+uint16_t adc_ch2_buffer[adc_filter_size];
+uint16_t adc_ch3_buffer[adc_filter_size];
+uint16_t adc_ch4_buffer[adc_filter_size];
+uint16_t adc_ch5_buffer[adc_filter_size];
+uint16_t adc_ch6_buffer[adc_filter_size];
 
 /*-----------------------------------------------*/
 void USART1_IRQHandler(){

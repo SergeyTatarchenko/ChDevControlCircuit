@@ -83,7 +83,7 @@ void vTask_Transfer_Data(void *pvParameters){
 		if(board_state.bit.power == 1){
 			FAST_Upd_All_OBJ_USART();
 		}
-	vTaskDelay(10);
+	vTaskDelay(50);
 	}
 }
 /*************************************************
@@ -104,7 +104,7 @@ void vTask_main(void *pvParameters){
 		/*while bit power on (bit state on in obj_STATUS))*/
 		if(board_state.bit.power == 1){
 			board_task(tick);
-			if(tick<=overload ){
+			if(tick <= overload ){
 				tick++;
 			}
 			else{

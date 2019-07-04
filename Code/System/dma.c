@@ -93,15 +93,15 @@ void DMA1_Channel4_IRQHandler(){
 	
 }
 
-void DMA1_Channel5_IRQHandler(){
+void DMA1_Channel1_IRQHandler(){
 	
+	static uint32_t buffer_counter;
 	
-		/*interrupt on transfer complete */
-	if(DMA1->ISR &= DMA_ISR_TCIF5){
-		DMA1->IFCR |= DMA_IFCR_CTCIF5;
+	/*DMA channel 1 transfer complete*/
+	if(DMA1->ISR &= DMA_ISR_TCIF1){
+		DMA1->IFCR |= DMA_IFCR_CTCIF1;
+		
 	}
-	
-	xQueueSendFromISR(usart_receive_buffer,usart_data_receive_array,0);
 }
 /*************************************************
 Reload DMA Channel 4 
