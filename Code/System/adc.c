@@ -39,7 +39,6 @@ void ADC_Init(){
 	ADC1->CR2 |=ADC_CR2_TSVREFE;
 	ADC1->SMPR1 |= ADC_SMPR1_SMP16_1;
 	
-	
 	/*lenght of channel sequence
 	L[3:0] = 110 - 7 conversions*/
 	ADC1->SQR1 |= (ADC_SQR1_L_1 | ADC_SQR1_L_2);
@@ -51,6 +50,11 @@ void ADC_Init(){
 				  ADC_SQR3_SQ4_2| //PA4 -4
 				  ADC_SQR3_SQ5_2|ADC_SQR3_SQ5_0| //PA5 -5
 		          ADC_SQR3_SQ6_2|ADC_SQR3_SQ6_1); //PA6 -6
+	
+	/*ADC sample time  13.5 cycles */
+	ADC1->SMPR2 |= (ADC_SMPR2_SMP1_1|ADC_SMPR2_SMP2_1|ADC_SMPR2_SMP3_1|
+					ADC_SMPR2_SMP4_1|ADC_SMPR2_SMP5_1|ADC_SMPR2_SMP6_1);
+	
 	
 	ADC1->SQR2 |= ADC_SQR2_SQ7_4;				//Temperature Sensor - 7			  
 	

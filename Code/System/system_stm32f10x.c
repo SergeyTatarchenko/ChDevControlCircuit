@@ -42,7 +42,7 @@ void SystemInit(void) {
 			/*clock config for ADC1 12 MHz max
 		      HSE oscillator clock selected as PLL input clock
 	 	      72 Mhz PLL clock  when HSE is 12 MHz*/
-			RCC->CFGR |= (RCC_CFGR_ADCPRE_DIV6|RCC_CFGR_PLLSRC|RCC_CFGR_PLLMULL6);		
+			RCC->CFGR |= (RCC_CFGR_ADCPRE_DIV8|RCC_CFGR_PLLSRC|RCC_CFGR_PLLMULL6);		
 			/*PLL On*/
 			RCC->CR |= RCC_CR_PLLON;
 			while((RCC->CR & RCC_CR_PLLRDY) == 0){};		
