@@ -27,57 +27,6 @@ void ADC_Handler(OBJ_STRUCT *obj){
 	this_obj(IND_obj_aDRV)->obj_value = adc_val->CH5_ADC;
 	this_obj(IND_obj_aDRC)->obj_value = adc_val->CH6_ADC;
 
-	//	/*input voltage DVL 1000 - 50uA/V */
-//	indication =((3300 - adc_val->CH1_ADC)/load)*20;
-<<<<<<< HEAD
-=======
-//	if(indication > 0){
-//		this_obj(IND_obj_aINV)->obj_value = indication;
-//	}else{
-//		this_obj(IND_obj_aINV)->obj_value = 0;
-//	}
-//	
-//	/*input current LAC 300 - 33uA/A */
-//	indication =((3300 - adc_val->CH2_ADC)/load)*30;
-//	if(indication > 0){
-//		this_obj(IND_obj_aINC)->obj_value = indication;
-//	}else{
-//		this_obj(IND_obj_aINC)->obj_value = 0;
-//	}
-//	
-//	/*output voltage DVL 1000 - 50uA/V */
-//	indication =((3300 - adc_val->CH3_ADC)/load)*20;
-//	if(indication > 0){
-//		this_obj(IND_obj_aOUTV)->obj_value = indication;
-//	}else{
-//		this_obj(IND_obj_aOUTV)->obj_value = 0;
-//	}
-//	
-//	/*output current LAC 300 - 33uA/A */
-//	indication =((3300 - adc_val->CH4_ADC)/load)*30;
-//	if(indication > 0){
-//		this_obj(IND_obj_aOUTC)->obj_value = indication;
-//	}else{
-//		this_obj(IND_obj_aOUTC)->obj_value = 0;
-//	}
-//	
-//	/*inductor voltage DVL 1000 - 50uA/V */
-//	indication =((3300 - adc_val->CH5_ADC)/load)*20;
-//	if(indication > 0){
-//		this_obj(IND_obj_aDRV)->obj_value = indication;
-//	}else{
-//		this_obj(IND_obj_aDRV)->obj_value = 0;
-//	}
-	
-//	/*inductor current LAC 300 - 33uA/A */
-//	indication =((3300 - adc_val->CH4_ADC)/load)*30;
->>>>>>> ccdce0d62b0ec9f5686006edd52787e3aa8ae81a
-//	if(indication > 0){
-//		this_obj(IND_obj_aINV)->obj_value = indication;
-//	}else{
-//		this_obj(IND_obj_aINV)->obj_value = 0;
-//	}
-	
 }
 
 /*тик с каждым ивентом*/

@@ -27,6 +27,8 @@ void DMA_ADC1_Setup(){
 	DMA1_Channel1->CNDTR = ADC1_BUF_SIZE;
 	/*high priority level */
 	DMA1_Channel1->CCR |= DMA_CCR1_PL_1;
+	/*Transfer complete interrupt enable */
+	DMA1_Channel1->CCR |= DMA_CCR1_TCIE;
 	/*DMA1 on*/
 	DMA1_Channel1->CCR |= DMA_CCR1_EN;
 }
@@ -95,14 +97,33 @@ void DMA1_Channel4_IRQHandler(){
 
 void DMA1_Channel1_IRQHandler(){
 	
-	static uint32_t buffer_counter;
-	
+	static uint32_t buffer_counter = 0;
+	static portBASE_TYPE xTaskWoken = pdFALSE;
 	/*DMA channel 1 transfer complete*/
 	if(DMA1->ISR &= DMA_ISR_TCIF1){
 		DMA1->IFCR |= DMA_IFCR_CTCIF1;
 		
+		if(buffer_counter < adc_filter_size){
+		
+		adc_ch1_buffer[buffer_counter] = ADC1_DataArray[0];
+		adc_ch2_buffer[buffer_counter] = ADC1_DataArray[1];
+		adc_ch3_buffer[buffer_counter] = ADC1_DataArray[2];
+		adc_ch4_buffer[buffer_counter] = ADC1_DataArray[3];
+		adc_ch5_buffer[buffer_counter] = ADC1_DataArray[4];
+		adc_ch6_buffer[buffer_counter] = ADC1_DataArray[5];
+		
+		buffer_counter ++;	
+		}else{
+			/*выдача семафора на вызов функции фильтра для каждого канала*/
+			buffer_counter = 0;
+			xSemaphoreGiveFromISR(FilterReady,&xTaskWoken);
+			if(xTaskWoken == pdTRUE){
+				taskYIELD();
+			}
+		}
 	}
 }
+
 /*************************************************
 Reload DMA Channel 4 
 *************************************************/

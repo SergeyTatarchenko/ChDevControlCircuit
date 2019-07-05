@@ -20,6 +20,8 @@ void Init_(){
 		LED_OFF;
 		Set_IO_Byte(0x00);
 		InputEvent = xSemaphoreCreateCounting(3,0);
+		FilterReady = xSemaphoreCreateBinary();
+		
 		xMutex_BUS_BUSY = xSemaphoreCreateMutex();
 		/*create mutex for correct usart transmit*/
 		xMutex_USART_BUSY = xSemaphoreCreateMutex();
@@ -33,6 +35,10 @@ void Init_(){
 		xTaskCreate(vTask_Handler_Data,"Handler",usart_stack, NULL,usart_rx_prior, NULL );
 		/* RX Handler */
 		xTaskCreate(vTask_Transfer_Data,"TX",usart_stack, NULL,usart_tx_prior, NULL );
+		
+		
+		/*filter function*/
+	//	xTaskCreate(vTask_ADC_filter,"filter",system_stack, NULL,board_prior, NULL );
 		
 		/*start obj model*/
 		OBJ_Init();

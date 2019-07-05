@@ -103,7 +103,8 @@ extern _Bool Get_AIn_State(int port);
 /*calc adc value*/
 void adc_calc_value(void);
 
-#define adc_filter_size	20
+
+#define adc_filter_size	60
 extern uint16_t adc_moving_average_filter(uint16_t *buff, uint32_t buff_size);
 
 extern uint16_t adc_ch1_buffer[adc_filter_size];
@@ -155,6 +156,13 @@ typedef struct{
 #pragma pack(push,1)
 
 typedef struct{
+	
+	uint16_t adc1_value;
+	uint16_t adc2_value;
+	uint16_t adc3_value;
+	uint16_t adc4_value;
+	uint16_t adc5_value;
+	uint16_t adc6_value;
 	
 	uint16_t CH1_ADC;
 	uint16_t CH2_ADC;

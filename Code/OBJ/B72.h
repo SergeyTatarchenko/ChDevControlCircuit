@@ -52,7 +52,7 @@ v 0.3
 #define _obj_ADC3_init	   IND_obj_aOUTC        ,IND_obj_CAS  ,obj_soft  ,   adc_3   ,NULL
 #define _obj_ADC4_init	   IND_obj_aDRV         ,IND_obj_CAS  ,obj_soft  ,   adc_4   ,NULL
 #define _obj_ADC5_init	   IND_obj_aDRC         ,IND_obj_CAS  ,obj_soft  ,   adc_5   ,NULL
-#define _obj_PWM0_init	   IND_obj_PWM0         ,IND_obj_CAS  ,obj_hard  ,   pwm_0   ,NULL
+#define _obj_PWM0_init	   IND_obj_PWM0         ,IND_obj_CAS  ,obj_hard  ,   pwm_0   ,PWM_Handler
 #define _obj_OUT6_init	   IND_obj_OUT6         ,IND_obj_CAS  ,obj_hard  ,   out_6   ,NULL
 #define _obj_OUT7_init	   IND_obj_OUT7         ,IND_obj_CAS  ,obj_hard  ,   out_7   ,NULL
 /*---------------------------------------------------------------------------------------------------*/

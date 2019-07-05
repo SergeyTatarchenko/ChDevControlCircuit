@@ -22,4 +22,9 @@
 /*-----------global function prototypes---------*/
 void board_task(int task_tick);
 void board_pr_init(void);
+
+extern xSemaphoreHandle FilterReady;
+
+void vTask_ADC_filter(void *pvParameters);
+void filter_enable(void);
 #endif

@@ -67,8 +67,7 @@ void Core_Init(){
 	IO_Pointer =&IO_STATE;
 	AIN_Pointer =&AIN_State;
 	
-	/*adc init*/
-	ADC1_On
+
 	adc_val = &value_ADC;
 
 }
@@ -165,6 +164,14 @@ calc adc value, fill struct with mv
 *************************************************/
 void adc_calc_value(){
 	
+//	adc_val->CH1_ADC = (adc_val->adc1_value*(uint16_t)INT_ADC_REF)/(uint16_t)ADC_DEPTH;
+//	adc_val->CH2_ADC = (adc_val->adc2_value*(uint16_t)INT_ADC_REF)/(uint16_t)ADC_DEPTH;
+//	adc_val->CH3_ADC = (adc_val->adc3_value*(uint16_t)INT_ADC_REF)/(uint16_t)ADC_DEPTH;
+//	adc_val->CH4_ADC = (adc_val->adc4_value*(uint16_t)INT_ADC_REF)/(uint16_t)ADC_DEPTH;
+//	adc_val->CH5_ADC = (adc_val->adc5_value*(uint16_t)INT_ADC_REF)/(uint16_t)ADC_DEPTH;
+//	adc_val->CH6_ADC = (adc_val->adc6_value*(uint16_t)INT_ADC_REF)/(uint16_t)ADC_DEPTH;
+	
+	
 	adc_val->CH1_ADC = (ADC1_DataArray[0]*(uint16_t)INT_ADC_REF)/(uint16_t)ADC_DEPTH;
 	adc_val->CH2_ADC = (ADC1_DataArray[1]*(uint16_t)INT_ADC_REF)/(uint16_t)ADC_DEPTH;
 	adc_val->CH3_ADC = (ADC1_DataArray[2]*(uint16_t)INT_ADC_REF)/(uint16_t)ADC_DEPTH;
@@ -184,6 +191,7 @@ uint16_t adc_moving_average_filter(uint16_t *buff, uint32_t buff_size){
 	
 	uint32_t ExpectedValue;
 	int counter = 0;
+	ExpectedValue = 0;
 	
 	for(counter = 0 ;counter < buff_size; counter ++){
 		ExpectedValue += buff[counter];
