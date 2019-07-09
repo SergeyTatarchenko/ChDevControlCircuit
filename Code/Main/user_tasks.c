@@ -18,6 +18,12 @@ void board_pr_init(){
 	obj_state_off(IND_obj_OUT6);
 	obj_state_off(IND_obj_OUT7);
 	
+	
+	obj_state_off(IND_obj_PWM1);
+	obj_state_off(IND_obj_PWM2);
+	obj_state_off(IND_obj_PWM_FREQ);
+	obj_state_off(IND_obj_PWM_ON);
+	
 	/*adc init*/
 	ADC1_On
 	

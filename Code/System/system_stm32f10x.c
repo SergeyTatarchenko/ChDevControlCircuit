@@ -61,10 +61,12 @@ void watchdog_config(){
 	/* WD access enable */
 	IWDG->KR = 0x5555;
 	/*WD prescaler = 16, clock = 40 kHz/16 = 2,5 kHz
-		100 ms = 10 Hz, 2500/10 = 250
+		1) 100 ms = 10 Hz, 2500/10 = 250
+		2) 500 ms = 2 Hz   2500/2  = 1250
 	*/
 	IWDG->PR |= IWDG_PR_PR_1; /*010 - divider /16*/
-	IWDG->RLR = 250;		/*reset CPU after 100 ms*/	
+//	IWDG->RLR = 250;		/*reset CPU after 100 ms*/
+	IWDG->RLR = 1250;		/*reset CPU after 500 ms*/	
 	
 	IWDG_RELOAD;
 	/*enable debug*/

@@ -21,16 +21,21 @@
 /*-----------------------------------------------*/
 #define IND_obj_IN0           (IND_obj_NULL + 10)		// аппаратный вход (порог Uпит/2)
 /*-----------------------------------------------*/
-#define IND_obj_PWM0          (IND_obj_NULL + 11)		// аппаратный ШИМ
+#define IND_obj_PWM1          (IND_obj_NULL + 11)		// аппаратный ШИМ 1
+#define IND_obj_PWM2          (IND_obj_NULL + 12)		// аппаратный ШИМ 2
+
 /*-----------------SOFTOBJ-----------------------*/
-#define IND_obj_TICK_1S       (IND_obj_NULL + 12)		// тик тест 1c
-#define IND_obj_TICK_100_ms   (IND_obj_NULL + 13)		// тик тест 100 мс
-#define IND_obj_LED           (IND_obj_NULL + 14)		// светодиод на плате
-#define IND_obj_ADC_CONV      (IND_obj_NULL + 15)		// Включение обработки датчиков через АЦП
-#define IND_obj_PID_KP		  (IND_obj_NULL + 16)
-#define IND_obj_PID_KI		  (IND_obj_NULL + 17)
-#define IND_obj_PID_KD		  (IND_obj_NULL + 18)
-#define IND_obj_PID_SET_VAl	  (IND_obj_NULL + 19)
-#define IND_obj_PID_FDB		  (IND_obj_NULL + 20)
+
+#define IND_obj_TICK_1S       (IND_obj_NULL + 13)		// тик тест 1c
+#define IND_obj_TICK_100_ms   (IND_obj_NULL + 14)		// тик тест 100 мс
+#define IND_obj_LED           (IND_obj_NULL + 15)		// светодиод на плате
+#define IND_obj_ADC_CONV      (IND_obj_NULL + 16)		// Включение обработки датчиков через АЦП
+#define IND_obj_PWM_FREQ      (IND_obj_NULL + 17)		// Контроль частоты ШИМ 
+#define IND_obj_PWM_ON        (IND_obj_NULL + 18)		// Вкл./Выкл. ШИМ 
+#define IND_obj_PID_KP		  (IND_obj_NULL + 19)
+#define IND_obj_PID_KI		  (IND_obj_NULL + 20)
+#define IND_obj_PID_KD		  (IND_obj_NULL + 21)
+#define IND_obj_PID_SET_VAl	  (IND_obj_NULL + 22)
+#define IND_obj_PID_FDB		  (IND_obj_NULL + 23)
 
 #endif

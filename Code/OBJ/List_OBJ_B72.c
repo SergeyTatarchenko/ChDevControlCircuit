@@ -10,6 +10,16 @@ void board_START(OBJ_STRUCT *obj){
 		board_state.bit.power = 1;
 	}else{
 		board_state.bit.power = 0;
+		
+		obj_state_off(IND_obj_PWM1);
+		obj_state_off(IND_obj_PWM2);
+		obj_state_off(IND_obj_PWM_FREQ);
+		obj_state_off(IND_obj_PWM_ON);
+		
+		obj_state_off(IND_obj_ADC_CONV);
+		
+		obj_state_off(IND_obj_OUT6);
+		obj_state_off(IND_obj_OUT7);
 	}
 }
 
@@ -51,14 +61,46 @@ void LED_Control_Handler(OBJ_STRUCT *obj){
 	}
 }
 
-void PWM_Handler(OBJ_STRUCT *obj){
+/*контроль канала ШИМ 1*/
+void PWM1_Handler(OBJ_STRUCT *obj){
 	
 	if(obj->obj_state == 1){
-		PWM_ON
-		PWMSetValue(obj->obj_value);
-	
-	}else{
-		PWM_OFF
-		PWMSetValue(0);
+		obj_state_off(IND_obj_PWM2);
+		PWMSetActiveChannel(CH3);
 	}
-} 
+}
+
+/*контроль канала ШИМ 2*/
+void PWM2_Handler(OBJ_STRUCT *obj){
+	if(obj->obj_state == 1){
+		obj_state_off(IND_obj_PWM1);
+		PWMSetActiveChannel(CH4);
+	}
+}
+
+/*контроль частоты ШИМ*/
+void PWM_freq_config_Handler(OBJ_STRUCT *obj){
+	if(obj->obj_state){
+		PWMSetFrequency(obj->obj_value);
+	}else{
+		obj_state_off(IND_obj_PWM_ON);
+	}
+}
+
+/*Включение и выключение ШИМ в микросхеме*/
+void PWM_Control_Handler(OBJ_STRUCT *obj){
+	if(obj->obj_state){
+		if(this_obj(IND_obj_PWM1)->obj_state == 1){
+			PWMSetValue(CH3,obj->obj_value);
+			PWM_ON;	
+		}
+		if(this_obj(IND_obj_PWM2)->obj_state == 1){
+			PWMSetValue(CH4,obj->obj_value);
+			PWM_ON;
+		}
+	}else{
+		PWM_OFF;
+		PWMSetValue(CH3,0);
+		PWMSetValue(CH4,0);
+	}
+}

@@ -1,7 +1,7 @@
 /*************************************************
 * File Name          : pwm.c
 * Author             : Tatarchenko S.
-* Version            : v 1.0
+* Version            : v 1.1
 * Description        : PWM module 2 channels
 *************************************************/
 #include "pwm.h"
@@ -20,33 +20,65 @@ void PWM_Init(){
 	
 	GPIOB->CRL |=(GPIO_CRL_CNF0_1|GPIO_CRL_MODE0|	//PB0 AF PP
 				  GPIO_CRL_CNF1_1|GPIO_CRL_MODE1);	//PB1 AF PP
-	
-	TIM3->CCER |= (TIM_CCER_CC3E | TIM_CCER_CC3P|
-	               TIM_CCER_CC4E | TIM_CCER_CC4P);
-	
+
 	/*prescaler value*/
 	TIM3->PSC = TIM3_PSC;
 	
-	/*auto-reload value*/
-	TIM3->ARR = PERIOD_PWM;
-	
 	/*main output enable*/
 	TIM3->BDTR |= TIM_BDTR_MOE;
-	
-  TIM3->CCMR2 = (TIM_CCMR2_OC3M_2 | TIM_CCMR2_OC3M_1|TIM_CCMR2_OC3M_0|
-	             TIM_CCMR2_OC4M_2 | TIM_CCMR2_OC4M_1|TIM_CCMR2_OC4M_0);
+  
+  /*PWM mode 1 */	
+  TIM3->CCMR2 = (TIM_CCMR2_OC3M_2 | TIM_CCMR2_OC3M_1|
+	             TIM_CCMR2_OC4M_2 | TIM_CCMR2_OC4M_1);
 }
 
-/*************************************************
-Set PWM value for TIM1 CH3/CH4
-2 channels together
-*************************************************/
-void PWMSetValue(uint16_t value){
+/*set active PWM channel */
+void PWMSetActiveChannel(PWM_CHANNEL channel){
+	int active_channel = (int)channel;
 	
-	if((value<=PWM_MAX_VALUE) && (value>0)){
+	PWM_OFF;
+	TIM3->CCER &= ~(TIM_CCER_CC3E | TIM_CCER_CC3P|
+				    TIM_CCER_CC4E | TIM_CCER_CC4P);
+	switch(active_channel){
+		case CH3:
+			TIM3->CCER |= (TIM_CCER_CC3E);
+			break;
+		case CH4:
+			TIM3->CCER |= (TIM_CCER_CC4E);
+			break;
+		default:
+			break;
+	}
+}
+/* PWM frequency config get value in Hz*/
+void PWMSetFrequency(int frequency){
+	int TimerFrequency = 1000000;
+	int prescaler = 0;
+	PWM_OFF;
+	prescaler = TimerFrequency/frequency;
+	/*auto-reload value*/
+	TIM3->ARR = (uint16_t)prescaler;
+}
+/*************************************************
+Set PWM value for TIM3 CH3/CH4
+*************************************************/
+void PWMSetValue(PWM_CHANNEL channel,uint16_t value){
+	int setup_value;
+	int max_value = TIM3->ARR;
+	
+	if((value <= PWM_MAX_VALUE) && (value>0)){
+		setup_value = (value*max_value)/PWM_MAX_VALUE;
 		
-		TIM3->CCR3 = (uint16_t)value;
-		/*выделить в отдельную функцию по необходимости*/
-		TIM3->CCR4 = (uint16_t)value;
+		if(channel == CH3){
+			TIM3->CCR3 = (uint16_t)setup_value;
+			return;
+		}
+		if(channel == CH4){
+			TIM3->CCR4 = (uint16_t)setup_value;
+			return;
+		}
+	}else{
+		TIM3->CCR4 = 0;
+		TIM3->CCR3 = 0;
 	}
 }

@@ -52,7 +52,10 @@ v 0.3
 #define _obj_ADC3_init	   IND_obj_aOUTC        ,IND_obj_CAS  ,obj_soft  ,   adc_3   ,NULL
 #define _obj_ADC4_init	   IND_obj_aDRV         ,IND_obj_CAS  ,obj_soft  ,   adc_4   ,NULL
 #define _obj_ADC5_init	   IND_obj_aDRC         ,IND_obj_CAS  ,obj_soft  ,   adc_5   ,NULL
-#define _obj_PWM0_init	   IND_obj_PWM0         ,IND_obj_CAS  ,obj_hard  ,   pwm_0   ,PWM_Handler
+#define _obj_PWM1_init	   IND_obj_PWM1         ,IND_obj_CAS  ,obj_soft  ,   pwm_0   ,PWM1_Handler
+#define _obj_PWM2_init	   IND_obj_PWM2         ,IND_obj_CAS  ,obj_soft  ,   pwm_1   ,PWM2_Handler
+#define _obj_PWM_FRQ_init  IND_obj_PWM_FREQ     ,IND_obj_CAS  ,obj_soft  ,   NULL    ,PWM_freq_config_Handler
+#define _obj_PWM_ON_init   IND_obj_PWM_ON       ,IND_obj_CAS  ,obj_soft  ,   NULL    ,PWM_Control_Handler
 #define _obj_OUT6_init	   IND_obj_OUT6         ,IND_obj_CAS  ,obj_hard  ,   out_6   ,NULL
 #define _obj_OUT7_init	   IND_obj_OUT7         ,IND_obj_CAS  ,obj_hard  ,   out_7   ,NULL
 /*---------------------------------------------------------------------------------------------------*/
@@ -61,7 +64,8 @@ v 0.3
 					{_obj_PID_KP_init},{_obj_PID_KI_init},{_obj_PID_KD_init},{_obj_PID_KP_init},	\
 					{_obj_PID_SET_VAl_init},{_obj_PID_FDB_init},{_obj_ADC_CONV_init},	\
 					{_obj_ADC0_init},{_obj_ADC1_init},{_obj_ADC2_init},{_obj_ADC3_init},{_obj_ADC4_init},{_obj_ADC5_init},	\
-					{_obj_OUT6_init},{_obj_OUT7_init},{_obj_PWM0_init}
+					{_obj_OUT6_init},{_obj_OUT7_init},{_obj_PWM1_init},{_obj_PWM2_init},{_obj_PWM_FRQ_init},{_obj_PWM_ON_init}
+					
 
 /*--------------------------------------------------------------------------------------*/
 			
@@ -71,5 +75,10 @@ void board_START(OBJ_STRUCT *obj);
 void ADC_Handler(OBJ_STRUCT *obj);
 void TICK_Handler(OBJ_STRUCT *obj);
 void LED_Control_Handler(OBJ_STRUCT *obj);
-void PWM_Handler(OBJ_STRUCT *obj);
+					
+void PWM1_Handler(OBJ_STRUCT *obj);
+void PWM2_Handler(OBJ_STRUCT *obj);
+void PWM_freq_config_Handler(OBJ_STRUCT *obj);
+void PWM_Control_Handler(OBJ_STRUCT *obj);
+					
 #endif
