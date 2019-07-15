@@ -19,23 +19,33 @@
 #define IND_obj_OUT6          (IND_obj_NULL + 8)		// аппаратный выход 6
 #define IND_obj_OUT7          (IND_obj_NULL + 9)		// аппаратный выход 7
 /*-----------------------------------------------*/
-#define IND_obj_IN0           (IND_obj_NULL + 10)		// аппаратный вход (порог Uпит/2)
+#define IND_obj_IN0           (IND_obj_NULL + 10)		// аппаратный вход (порог Uпит/2) - не работает!!!
 /*-----------------------------------------------*/
-#define IND_obj_PWM1          (IND_obj_NULL + 11)		// аппаратный ШИМ 1
-#define IND_obj_PWM2          (IND_obj_NULL + 12)		// аппаратный ШИМ 2
+#define IND_obj_PWM1          (IND_obj_NULL + 11)		// [аппаратный ШИМ 1 активен]
+#define IND_obj_PWM2          (IND_obj_NULL + 12)		// [аппаратный ШИМ 2 активен]
 
 /*-----------------SOFTOBJ-----------------------*/
 
-#define IND_obj_TICK_1S       (IND_obj_NULL + 13)		// тик тест 1c
-#define IND_obj_TICK_100_ms   (IND_obj_NULL + 14)		// тик тест 100 мс
-#define IND_obj_LED           (IND_obj_NULL + 15)		// светодиод на плате
-#define IND_obj_ADC_CONV      (IND_obj_NULL + 16)		// Включение обработки датчиков через АЦП
-#define IND_obj_PWM_FREQ      (IND_obj_NULL + 17)		// Контроль частоты ШИМ 
-#define IND_obj_PWM_ON        (IND_obj_NULL + 18)		// Вкл./Выкл. ШИМ 
-#define IND_obj_PID_KP		  (IND_obj_NULL + 19)
-#define IND_obj_PID_KI		  (IND_obj_NULL + 20)
-#define IND_obj_PID_KD		  (IND_obj_NULL + 21)
-#define IND_obj_PID_SET_VAl	  (IND_obj_NULL + 22)
-#define IND_obj_PID_FDB		  (IND_obj_NULL + 23)
+#define IND_obj_TICK_1S       (IND_obj_NULL + 13)		// [тик тест 1c]
+#define IND_obj_TICK_100_ms   (IND_obj_NULL + 14)		// [тик тест 100 мс]
+#define IND_obj_LED           (IND_obj_NULL + 15)		// [светодиод на плате]
+#define IND_obj_ADC_CONV      (IND_obj_NULL + 16)		// [Обработка датчиков ADC]
+#define IND_obj_PWM_FREQ      (IND_obj_NULL + 17)		// [Установка частоты ШИМ] 
+#define IND_obj_PWM_ON        (IND_obj_NULL + 18)		// [Вкл./Выкл. ШИМ] 
+
+/*ПИД регулятор - 1*/
+#define IND_obj_PID1_KP		  (IND_obj_NULL + 19)
+#define IND_obj_PID1_KI		  (IND_obj_NULL + 20)
+#define IND_obj_PID1_KD		  (IND_obj_NULL + 21)
+#define IND_obj_PID1_SET_VAl  (IND_obj_NULL + 22)
+#define IND_obj_PID1_FDB	  (IND_obj_NULL + 23)
+
+/*управление режимами преобразователя (тестовое) */
+
+#define IND_obj_BUCK_MODE	  (IND_obj_NULL + 24)
+#define IND_obj_BOOST_MODE	  (IND_obj_NULL + 25)
+
+#define IND_obj_PIN0PWM		  (IND_obj_NULL + 26)
+#define IND_obj_PIN1PWM		  (IND_obj_NULL + 27)
 
 #endif

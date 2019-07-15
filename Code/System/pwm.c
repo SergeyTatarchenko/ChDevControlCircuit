@@ -37,14 +37,16 @@ void PWMSetActiveChannel(PWM_CHANNEL channel){
 	int active_channel = (int)channel;
 	
 	PWM_OFF;
-	TIM3->CCER &= ~(TIM_CCER_CC3E | TIM_CCER_CC3P|
-				    TIM_CCER_CC4E | TIM_CCER_CC4P);
 	switch(active_channel){
 		case CH3:
 			TIM3->CCER |= (TIM_CCER_CC3E);
 			break;
 		case CH4:
 			TIM3->CCER |= (TIM_CCER_CC4E);
+			break;
+		case ALL_CH_OFF:
+				TIM3->CCER &= ~(TIM_CCER_CC3E | TIM_CCER_CC3P|
+								TIM_CCER_CC4E | TIM_CCER_CC4P);
 			break;
 		default:
 			break;
