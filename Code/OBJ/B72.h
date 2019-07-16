@@ -47,9 +47,6 @@ v 0.3
  
 #define _obj_BUCK_init         IND_obj_BUCK_MODE    ,IND_obj_CAS  ,obj_soft  ,   NULL    ,BUCK_Mode_Handler
 #define _obj_BOOST_init        IND_obj_BOOST_MODE   ,IND_obj_CAS  ,obj_soft  ,   NULL    ,BOOST_Mode_Handler
-
-#define _obj_PWMPIN0_init      IND_obj_PIN0PWM 		,IND_obj_CAS  ,obj_soft  ,   NULL    ,PWM_Pin_Control_Handler
-#define _obj_PWMPIN1_init      IND_obj_PIN1PWM  	,IND_obj_CAS  ,obj_soft  ,   NULL    ,PWM_Pin_Control_Handler
 	
 /*---------------------------------------------------------------------------------------------------*/
 #define _obj_ADC0_init	   IND_obj_aINV         ,IND_obj_CAS  ,obj_hard  ,   adc_0   ,NULL
@@ -60,8 +57,8 @@ v 0.3
 #define _obj_ADC5_init	   IND_obj_aDRC         ,IND_obj_CAS  ,obj_hard  ,   adc_5   ,NULL
 #define _obj_PWM1_init	   IND_obj_PWM1         ,IND_obj_CAS  ,obj_soft  ,   pwm_0   ,PWM1_Handler
 #define _obj_PWM2_init	   IND_obj_PWM2         ,IND_obj_CAS  ,obj_soft  ,   pwm_1   ,PWM2_Handler
-#define _obj_OUT6_init	   IND_obj_OUT6         ,IND_obj_CAS  ,obj_hard  ,   out_6   ,NULL
-#define _obj_OUT7_init	   IND_obj_OUT7         ,IND_obj_CAS  ,obj_hard  ,   out_7   ,NULL
+#define _obj_OUT6_init	   IND_obj_PredZar      ,IND_obj_CAS  ,obj_hard  ,   out_6   ,NULL
+#define _obj_OUT7_init	   IND_obj_KM1          ,IND_obj_CAS  ,obj_hard  ,   out_7   ,NULL
 /*---------------------------------------------------------------------------------------------------*/
 
 #define _obj_cofig_	{_obj_STATUS_init}, \
@@ -88,7 +85,5 @@ void PWM_Control_Handler(OBJ_STRUCT *obj);
 
 void BUCK_Mode_Handler(OBJ_STRUCT *obj);
 void BOOST_Mode_Handler(OBJ_STRUCT *obj);					
-
-void PWM_Pin_Control_Handler(OBJ_STRUCT *obj);					
 					
 #endif

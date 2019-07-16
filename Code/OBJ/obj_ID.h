@@ -16,8 +16,8 @@
 #define IND_obj_aDRV          (IND_obj_NULL + 6)		// аппаратный ацп 5 [напряжение дросселя]
 #define IND_obj_aDRC          (IND_obj_NULL + 7)		// аппаратный ацп 6 [ток дросселя       ] 
 /*-----------------------------------------------*/
-#define IND_obj_OUT6          (IND_obj_NULL + 8)		// аппаратный выход 6
-#define IND_obj_OUT7          (IND_obj_NULL + 9)		// аппаратный выход 7
+#define IND_obj_PredZar       (IND_obj_NULL + 8)		// аппаратный выход [вкл. плату предзаряда]
+#define IND_obj_KM1           (IND_obj_NULL + 9)		// аппаратный выход [вкл. контактор КМ1]
 /*-----------------------------------------------*/
 #define IND_obj_IN0           (IND_obj_NULL + 10)		// аппаратный вход (порог Uпит/2) - не работает!!!
 /*-----------------------------------------------*/
@@ -44,8 +44,4 @@
 
 #define IND_obj_BUCK_MODE	  (IND_obj_NULL + 24)
 #define IND_obj_BOOST_MODE	  (IND_obj_NULL + 25)
-
-#define IND_obj_PIN0PWM		  (IND_obj_NULL + 26)
-#define IND_obj_PIN1PWM		  (IND_obj_NULL + 27)
-
 #endif

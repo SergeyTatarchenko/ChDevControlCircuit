@@ -9,16 +9,24 @@
 
 xSemaphoreHandle FilterReady;
 
-
-void board_pr_init(){
+/*setup before loop*/
+void obj_model_setup()
+{
 	
-	//filter_enable();
+	task_priority.system_priority = configMAX_PRIORITIES-1;
+	task_priority.rx_priority     = configMAX_PRIORITIES-2;
+	task_priority.tx_priority     = configMAX_PRIORITIES-3;
+	task_priority.user_priority   = configMAX_PRIORITIES-4;
+	
+	/*256*2 byte block */
+	task_priority.stack_user  = 256; 
+	task_priority.stack_tx_rx = 256;
+	
+	task_priority.tick_update_rate = 50;
 	
 	obj_state_on(IND_obj_ADC_CONV);
-	obj_state_off(IND_obj_OUT6);
-	obj_state_off(IND_obj_OUT7);
-	
-	
+	obj_state_off(IND_obj_PredZar);
+	obj_state_off(IND_obj_KM1);
 	obj_state_off(IND_obj_PWM1);
 	obj_state_off(IND_obj_PWM2);
 	obj_state_off(IND_obj_PWM_FREQ);
@@ -26,7 +34,23 @@ void board_pr_init(){
 	
 	/*adc init*/
 	ADC1_On
+	/*usart interrupt enable*/
+	NVIC_EnableIRQ (USART1_IRQn);
 	
+}
+
+/*1 ms loop after setup*/
+void obj_model_task(int tick)
+{
+	IWDG_RELOAD;
+	if(board_power){
+	adc_calc_value();
+	OBJ_Event(IND_obj_ADC_CONV);
+	
+	if(tick%1000 == 0){
+		OBJ_Event(IND_obj_TICK_1S);
+		}
+	}
 }
 
 void filter_enable(void){
@@ -37,22 +61,6 @@ void filter_enable(void){
 	NVIC_EnableIRQ (DMA1_Channel1_IRQn);
 
 }
-
-void board_task(int task_tick){
-
-#ifdef TARGET	
-	/*get value in mV of all sensors*/
-	adc_calc_value();
-	/*obj snap*/
-	OBJ_Event(IND_obj_ADC_CONV);
-	
-	
-	if(task_tick%1000 == 0){
-		OBJ_Event(IND_obj_TICK_1S);
-	}
-	
-#endif
-}   
 
 void vTask_ADC_filter(void *pvParameters){
 	

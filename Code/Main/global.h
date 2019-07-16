@@ -104,7 +104,7 @@ extern _Bool Get_AIn_State(int port);
 void adc_calc_value(void);
 
 
-#define adc_filter_size	60
+#define adc_filter_size	10
 extern uint16_t adc_moving_average_filter(uint16_t *buff, uint32_t buff_size);
 
 extern uint16_t adc_ch1_buffer[adc_filter_size];

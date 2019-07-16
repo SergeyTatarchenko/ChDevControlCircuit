@@ -18,8 +18,8 @@ void board_START(OBJ_STRUCT *obj){
 		
 		obj_state_off(IND_obj_ADC_CONV);
 		
-		obj_state_off(IND_obj_OUT6);
-		obj_state_off(IND_obj_OUT7);
+		obj_state_off(IND_obj_PredZar);
+		obj_state_off(IND_obj_KM1);
 	}
 }
 
@@ -91,7 +91,7 @@ void BUCK_Mode_Handler(OBJ_STRUCT *obj)
 {
 	if(obj->obj_state == 1){
 		/*вкл контактор*/
-		obj_state_on(IND_obj_OUT7);
+		obj_state_on(IND_obj_KM1);
 		
 		/*включение ШИМ канала для верхнего транзистора, нижний транзистор закрыт*/
 		obj_state_on(IND_obj_PWM2);	
@@ -106,7 +106,7 @@ void BUCK_Mode_Handler(OBJ_STRUCT *obj)
 		obj_state_off(IND_obj_PWM_ON);
 		obj_state_off(IND_obj_PWM2);
 		/*выкл контактор*/
-		obj_state_off(IND_obj_OUT7);
+		obj_state_off(IND_obj_KM1);
 	}
 }
 
@@ -116,7 +116,7 @@ void BOOST_Mode_Handler(OBJ_STRUCT *obj)
 	if(obj->obj_state == 1){
 		
 		/*вкл контактор*/
-		obj_state_on(IND_obj_OUT7);
+		obj_state_on(IND_obj_KM1);
 		
 		/*включение ШИМ канала для нижнего транзистора, верхний транзистор открыт*/
 		obj_state_on(IND_obj_PWM1);	
@@ -135,25 +135,8 @@ void BOOST_Mode_Handler(OBJ_STRUCT *obj)
 		obj_state_off(IND_obj_PWM2);
 		
 		/*выкл контактор*/
-		obj_state_off(IND_obj_OUT7);
+		obj_state_off(IND_obj_KM1);
 
-	}
-}
-/*ручное управление каналами ШИМ */
-void PWM_Pin_Control_Handler(OBJ_STRUCT *obj)
-{
-	if(this_obj(IND_obj_PIN0PWM)->obj_state == 1){
-		PWM_PIN0_ON;
-	}
-	else{
-		PWM_PIN0_OFF;
-	}
-	
-	if(this_obj(IND_obj_PIN1PWM)->obj_state == 1){
-		PWM_PIN1_ON;
-	}
-	else{
-		PWM_PIN1_OFF;
 	}
 }
 

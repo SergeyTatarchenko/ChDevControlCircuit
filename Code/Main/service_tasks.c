@@ -1,7 +1,7 @@
 /*************************************************
 * File Name          : service_tasks.c
 * Author             : Tatarchenko S.
-* Version            : v 1.0
+* Version            : v 1.1
 * Description        : ---
 **************************************************/
 #include "service_tasks.h"
@@ -57,60 +57,3 @@ void vBlinker (void *pvParameters){
 		vTaskDelay(*BlinkFreq);			
 	}
 }
-
-/*************************************************
-                 USART RX handler 
-*************************************************/
-void vTask_Handler_Data(void *pvParameters){
-	
-	USART_FRAME rx_buffer;
-	/*USART receive complete interrupt on NVIC*/
-	NVIC_EnableIRQ (USART1_IRQn);
-	for(;;){
-		
-		xQueueReceive(usart_receive_buffer,&rx_buffer,portMAX_DELAY);
-		Rx_OBJ_Data(&rx_buffer);
-		//uxQueueMessagesWaiting(usart_receive_buffer);	
-		vTaskDelay(1);
-	}
-}
-/*************************************************
-            USART TX thread 
-*************************************************/
-void vTask_Transfer_Data(void *pvParameters){
-	
-	for(;;){
-		if(board_state.bit.power == 1){
-			FAST_Upd_All_OBJ_USART();
-		}
-	vTaskDelay(50);
-	}
-}
-/*************************************************
-				main tread
-*************************************************/	
-
-void vTask_main(void *pvParameters){
-	
-	volatile int tick = 0,overload = 3600000UL;
-	board_state.bit.mode = USART_MODE;
-	board_state.bit.hwobj = HARDWARE_OBJECT;
-	board_state.bit.debug = DEBUG_MODE;
-	board_pr_init();
-	
-	for(;;){
-		vTaskDelay(1);
-		IWDG_RELOAD;		
-		/*while bit power on (bit state on in obj_STATUS))*/
-		if(board_state.bit.power == 1){
-			board_task(tick);
-			if(tick <= overload ){
-				tick++;
-			}
-			else{
-				tick = 0;
-			}
-		}
-	}
-}
-
