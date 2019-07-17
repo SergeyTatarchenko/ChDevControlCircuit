@@ -32,6 +32,7 @@ void obj_model_setup()
 	obj_state_off(IND_obj_PWM_FREQ);
 	obj_state_off(IND_obj_PWM_ON);
 	
+	filter_enable();
 	/*adc init*/
 	ADC1_On
 	/*usart interrupt enable*/
@@ -44,12 +45,11 @@ void obj_model_task(int tick)
 {
 	IWDG_RELOAD;
 	if(board_power){
-	adc_calc_value();
 	OBJ_Event(IND_obj_ADC_CONV);
 	
 	if(tick%1000 == 0){
 		OBJ_Event(IND_obj_TICK_1S);
-		}
+		}		
 	}
 }
 
@@ -60,6 +60,23 @@ void filter_enable(void){
 	/*DMA transfer complete interrupt on NVIC*/
 	NVIC_EnableIRQ (DMA1_Channel1_IRQn);
 
+}
+
+void vTask_PID_regulator(void *pvParameters)
+{
+	//		/*one init or handler*/
+	pid_current_out.Kp = 0.8;
+	pid_current_out.Kp = 0.001;
+	pid_current_out.Kd = 0.5;
+	
+	for(;;){
+    if(this_obj_state(IND_obj_PID_ON) == 1){
+		/* cycle */
+//		pid_current_out.feedback = ADC_Current;
+//		pwm_val = PID_controller(pid_current_out);
+		}
+		vTaskDelay(10);
+	}
 }
 
 void vTask_ADC_filter(void *pvParameters){
@@ -75,10 +92,7 @@ void vTask_ADC_filter(void *pvParameters){
 		adc_val->adc5_value = adc_moving_average_filter(adc_ch5_buffer,adc_filter_size);
 		adc_val->adc6_value = adc_moving_average_filter(adc_ch6_buffer,adc_filter_size);
 		
-
-		
 		adc_calc_value();
 		vTaskDelay(10);
-		
 	}
 }

@@ -9,11 +9,8 @@
 
 #include "global.h"
 /*----------------------------------------------*/
-#include "FreeRTOS.h"
-#include "task.h"
-#include "queue.h"
-#include "semphr.h"
-
+#include "RTOS.h"
+/*----------------------------------------------*/
 #include "PID.h"
 
 /*-----------local define-----------------------*/
@@ -26,5 +23,7 @@ void board_pr_init(void);
 extern xSemaphoreHandle FilterReady;
 
 void vTask_ADC_filter(void *pvParameters);
+void vTask_PID_regulator(void *pvParameters);
+	
 void filter_enable(void);
 #endif

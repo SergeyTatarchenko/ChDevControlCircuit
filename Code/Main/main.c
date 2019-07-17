@@ -26,10 +26,13 @@ void Init_(){
 		xTaskCreate(vGetIOState,"I/O pool ", system_stack, NULL,system_prior, NULL );
 		
 		/*start obj model*/
-		OBJ_task_init(&task_priority,50);
+		OBJ_task_init(&task_priority,tick_50ms);
 		
+		/*PID regulator*/
+		xTaskCreate(vTask_PID_regulator,"PID", user_stack, NULL,user_prior, NULL );
 		/*filter function*/
-	//	xTaskCreate(vTask_ADC_filter,"filter",system_stack, NULL,board_prior, NULL );
+		xTaskCreate(vTask_ADC_filter,"filter",system_stack, NULL,system_prior, NULL );
+	
 	}else{
 		LED_ON;
 	}

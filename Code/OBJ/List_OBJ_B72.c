@@ -3,6 +3,12 @@
 /************************************************************************************/
 /* 									 OBJ_Handlers									*/
 /************************************************************************************/
+TimerHandle_t TestTimer;
+const unsigned portBASE_TYPE TimerID = 1;
+
+void TimerFunction(){
+	
+}
 
 void board_START(OBJ_STRUCT *obj){
 	/*board start*/
@@ -25,37 +31,63 @@ void board_START(OBJ_STRUCT *obj){
 
 /*показания ацп*/
 void ADC_Handler(OBJ_STRUCT *obj){
-	
+
+#define dvl_1000 50
+#define lac_300  33
 	/*
 	DVL 1000  - 50uA per 1V
 	LAC 300  -  33uA per 1A
 	*/
 	static const int load = 82;	
 	static int indication;
-	
+	/*
+	AIN0 - dvl1000   входное напряжение
+	AIN1 - lac300  	 входной ток 	
+
+	AIN2 - dvl1000   выходное напряжение
+	AIN3 - lac300    выходной ток
+
+	AIN4 - dvl1000   напряжение дросселя
+	AIN5 - lf510     ток дросселя
+	*/
 	indication = (INT_ADC_REF - adc_val->CH1_ADC)*1000/load; //rez in uA
 	if(indication > 0){
-		this_obj(IND_obj_aINV)->obj_value = (uint16_t)(indication/50);	
-	}
-	
+		/*костыль*/
+		if(indication > 700){
+			indication = 0;
+		}
+		this_obj(IND_obj_aINV)->obj_value = (uint16_t)(indication/dvl_1000);	
+	}	
 	indication = (INT_ADC_REF - adc_val->CH2_ADC)*1000/load; //rez in uA
 	if(indication > 0){
-	this_obj(IND_obj_aINC)->obj_value = (uint16_t)(indication/33);
+		/*костыль*/
+		if(indication > 700){
+			indication = 0;
+		}
+	this_obj(IND_obj_aINC)->obj_value = (uint16_t)(indication/lac_300);
 	}
 	
 	indication = (INT_ADC_REF - adc_val->CH3_ADC)*1000/load; //rez in uA
 	if(indication > 0){
-	this_obj(IND_obj_aOUTV)->obj_value = (uint16_t)(indication/50);
+		/*костыль*/
+		if(indication > 700){
+			indication = 0;
+		}
+	this_obj(IND_obj_aOUTV)->obj_value = (uint16_t)(indication/dvl_1000);
 	}
-	
+		
 	indication = (INT_ADC_REF - adc_val->CH4_ADC)*1000/load; //rez in uA
 	if(indication > 0){
-	this_obj(IND_obj_aOUTC)->obj_value = (uint16_t)(indication/33);
+		/*костыль*/
+		if(indication > 700){
+			indication = 0;
+		}
+	this_obj(IND_obj_aOUTC)->obj_value = (uint16_t)(indication/lac_300);
 	}
-	
+//	
 //	indication = (INT_ADC_REF - adc_val->CH5_ADC)*1000/load; //rez in uA
 //	if(indication > 0){
-//	this_obj(IND_obj_aDRV)->obj_value = (uint16_t)(indication/50);
+//	this_obj(IND_obj_aDRV)->obj_value = (uint16_t)(indication/dvl_1000);
 //	}
 //	
 //	indication = (INT_ADC_REF - adc_val->CH6_ADC)*1000/load; //rez in uA
@@ -188,5 +220,22 @@ void PWM_Control_Handler(OBJ_STRUCT *obj){
 		PWM_OFF;
 		PWMSetValue(CH3,0);
 		PWMSetValue(CH4,0);
+	}
+}
+
+/*устатовка констант ПИД регулятора*/
+void PID_COEF_Handler(OBJ_STRUCT *obj){
+	
+	pid_current_out.Kp = ((float)(*((int*)&this_obj(IND_obj_PID1_KP)->obj_data[0])))/1000.0;
+	pid_current_out.Ki = ((float)(*((int*)&this_obj(IND_obj_PID1_KI)->obj_data[0])))/1000.0;
+	pid_current_out.Kd = ((float)(*((int*)&this_obj(IND_obj_PID1_KD)->obj_data[0])))/1000.0;
+}
+
+/*Активация ПИД регулятора (тест)*/
+void PID_Control_Handler(OBJ_STRUCT *obj){
+	if(obj->obj_state == 1){
+		pid_current_out.setpoint_val = obj->obj_value;
+	}else{
+		pid_current_out.setpoint_val = 0;
 	}
 }

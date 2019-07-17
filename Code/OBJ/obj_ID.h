@@ -42,6 +42,8 @@
 
 /*управление режимами преобразователя (тестовое) */
 
-#define IND_obj_BUCK_MODE	  (IND_obj_NULL + 24)
-#define IND_obj_BOOST_MODE	  (IND_obj_NULL + 25)
+#define IND_obj_BUCK_MODE	  (IND_obj_NULL + 24)	//[понижающий режим преобразователя]
+#define IND_obj_BOOST_MODE	  (IND_obj_NULL + 25)	//[повышающий режим пребразователя]
+
+#define IND_obj_PID_ON	 	  (IND_obj_NULL + 26)
 #endif

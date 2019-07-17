@@ -35,11 +35,10 @@ v 0.3
 #define _obj_ADC_CONV_init     IND_obj_ADC_CONV     ,IND_obj_COM  ,obj_soft  ,   NULL   ,ADC_Handler
 
 
-#define _obj_PID1_KP_init      IND_obj_PID1_KP      ,IND_obj_COM  ,obj_soft  ,   NULL   ,NULL
-#define _obj_PID1_KI_init      IND_obj_PID1_KI      ,IND_obj_COM  ,obj_soft  ,   NULL   ,NULL
-#define _obj_PID1_KD_init      IND_obj_PID1_KD      ,IND_obj_COM  ,obj_soft  ,   NULL   ,NULL
-#define _obj_PID1_KP_init      IND_obj_PID1_KP      ,IND_obj_COM  ,obj_soft  ,   NULL   ,NULL
-#define _obj_PID1_SET_VAl_init IND_obj_PID1_SET_VAl ,IND_obj_COM  ,obj_soft  ,   NULL   ,NULL
+#define _obj_PID1_KP_init      IND_obj_PID1_KP      ,IND_obj_COM  ,obj_soft  ,   NULL   ,PID_COEF_Handler
+#define _obj_PID1_KI_init      IND_obj_PID1_KI      ,IND_obj_COM  ,obj_soft  ,   NULL   ,PID_COEF_Handler
+#define _obj_PID1_KD_init      IND_obj_PID1_KD      ,IND_obj_COM  ,obj_soft  ,   NULL   ,PID_COEF_Handler
+#define _obj_PID1_SET_VAl_init IND_obj_PID1_SET_VAl ,IND_obj_COM  ,obj_soft  ,   NULL   ,PID_COEF_Handler
 #define _obj_PID1_FDB_init     IND_obj_PID1_FDB     ,IND_obj_COM  ,obj_soft  ,   NULL   ,NULL
 
 #define _obj_PWM_FRQ_init      IND_obj_PWM_FREQ     ,IND_obj_CAS  ,obj_soft  ,   NULL    ,PWM_freq_config_Handler
@@ -47,6 +46,8 @@ v 0.3
  
 #define _obj_BUCK_init         IND_obj_BUCK_MODE    ,IND_obj_CAS  ,obj_soft  ,   NULL    ,BUCK_Mode_Handler
 #define _obj_BOOST_init        IND_obj_BOOST_MODE   ,IND_obj_CAS  ,obj_soft  ,   NULL    ,BOOST_Mode_Handler
+
+#define _obj_PID_init          IND_obj_PID_ON       ,IND_obj_CAS  ,obj_soft  ,   NULL    ,PID_Control_Handler
 	
 /*---------------------------------------------------------------------------------------------------*/
 #define _obj_ADC0_init	   IND_obj_aINV         ,IND_obj_CAS  ,obj_hard  ,   adc_0   ,NULL
@@ -66,7 +67,8 @@ v 0.3
 					{_obj_PID1_KP_init},{_obj_PID1_KI_init},{_obj_PID1_KD_init},{_obj_PID1_KP_init},{_obj_PID1_SET_VAl_init},{_obj_PID1_FDB_init}, \
 					{_obj_ADC0_init},{_obj_ADC1_init},{_obj_ADC2_init},{_obj_ADC3_init},{_obj_ADC4_init},{_obj_ADC5_init},{_obj_ADC_CONV_init},	\
 					{_obj_OUT6_init},{_obj_OUT7_init},{_obj_PWM1_init},{_obj_PWM2_init},{_obj_PWM_FRQ_init},{_obj_PWM_ON_init}, \
-					{_obj_BUCK_init},{_obj_BOOST_init}
+					{_obj_BUCK_init},{_obj_BOOST_init}, \
+					{_obj_PID_init}
 					
 
 /*--------------------------------------------------------------------------------------*/
@@ -84,6 +86,8 @@ void PWM_freq_config_Handler(OBJ_STRUCT *obj);
 void PWM_Control_Handler(OBJ_STRUCT *obj);
 
 void BUCK_Mode_Handler(OBJ_STRUCT *obj);
-void BOOST_Mode_Handler(OBJ_STRUCT *obj);					
-					
+void BOOST_Mode_Handler(OBJ_STRUCT *obj);
+
+void PID_COEF_Handler(OBJ_STRUCT *obj);
+void PID_Control_Handler(OBJ_STRUCT *obj);
 #endif

@@ -30,8 +30,10 @@ void vBlinker (void *pvParameters);
 void vGetIOState(void *pvParameters);
 /*----------------------------------------------*/
 #define system_prior	(configMAX_PRIORITIES-1)
+#define user_prior		(configMAX_PRIORITIES-4)
 /*----------------------------------------------*/
 #define system_stack	(unsigned short) 128
+#define user_stack		(unsigned short) 256
 /*----------------------------------------------*/
 #endif
 

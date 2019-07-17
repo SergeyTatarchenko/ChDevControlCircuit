@@ -8,10 +8,10 @@ typedef struct K_pid{
 	float Kp;
 	float Ki;
 	float Kd;
-	float setpoint_val;
-	float feedback;
-//	uint16_t setpoint_val;
-//	uint16_t feedback;
+	//float setpoint_val;
+	//float feedback;
+	uint16_t setpoint_val;
+	uint16_t feedback;
 	
     int32_t iSum;
     int32_t last_iSum;
