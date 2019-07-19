@@ -33,7 +33,7 @@ void board_START(OBJ_STRUCT *obj){
 void ADC_Handler(OBJ_STRUCT *obj){
 
 #define dvl_1000 50
-#define lac_300  33
+#define lac_300  330
 	/*
 	DVL 1000  - 50uA per 1V
 	LAC 300  -  33uA per 1A
@@ -50,39 +50,23 @@ void ADC_Handler(OBJ_STRUCT *obj){
 	AIN4 - dvl1000   напряжение дросселя
 	AIN5 - lf510     ток дросселя
 	*/
-	indication = (INT_ADC_REF - adc_val->CH1_ADC)*1000/load; //rez in uA
+	indication = ((INT_ADC_REF - adc_val->CH1_ADC)*1000/load)/50; //rez in uA
 	if(indication > 0){
-		/*костыль*/
-		if(indication > 700){
-			indication = 0;
-		}
-		this_obj(IND_obj_aINV)->obj_value = (uint16_t)(indication/dvl_1000);	
+		this_obj(IND_obj_aINV)->obj_value = (uint16_t)(indication);	
 	}	
-	indication = (INT_ADC_REF - adc_val->CH2_ADC)*1000/load; //rez in uA
+	indication = (((INT_ADC_REF - adc_val->CH2_ADC)*1000/load)*3)/1000 - 1; //magic
 	if(indication > 0){
-		/*костыль*/
-		if(indication > 700){
-			indication = 0;
-		}
-	this_obj(IND_obj_aINC)->obj_value = (uint16_t)(indication/lac_300);
+	this_obj(IND_obj_aINC)->obj_value = (uint16_t)(indication);
 	}
 	
-	indication = (INT_ADC_REF - adc_val->CH3_ADC)*1000/load; //rez in uA
+	indication = ((INT_ADC_REF - adc_val->CH3_ADC)*1000/load)/50; //rez in uA
 	if(indication > 0){
-		/*костыль*/
-		if(indication > 700){
-			indication = 0;
-		}
-	this_obj(IND_obj_aOUTV)->obj_value = (uint16_t)(indication/dvl_1000);
+	this_obj(IND_obj_aOUTV)->obj_value = (uint16_t)(indication);
 	}
-		
-	indication = (INT_ADC_REF - adc_val->CH4_ADC)*1000/load; //rez in uA
+//		
+	indication = (((INT_ADC_REF - adc_val->CH4_ADC)*1000/load)*3)/1000 - 1; //magic
 	if(indication > 0){
-		/*костыль*/
-		if(indication > 700){
-			indication = 0;
-		}
-	this_obj(IND_obj_aOUTC)->obj_value = (uint16_t)(indication/lac_300);
+	this_obj(IND_obj_aOUTC)->obj_value = (uint16_t)(indication);
 	}
 //	
 //	indication = (INT_ADC_REF - adc_val->CH5_ADC)*1000/load; //rez in uA
@@ -103,18 +87,6 @@ void TICK_Handler(OBJ_STRUCT *obj){
 		LED_ON;
 	}else{
 	LED_OFF;
-	}
-}
-
-/*управление светодиодом*/
-void LED_Control_Handler(OBJ_STRUCT *obj){
-	if(obj->obj_state != 0){
-		if(GPIOC->ODR&=GPIO_ODR_ODR13){
-			LED_ON;
-			}
-		else{
-			LED_OFF;
-		}		
 	}
 }
 
