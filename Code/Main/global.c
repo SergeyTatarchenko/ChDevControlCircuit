@@ -41,7 +41,7 @@ void Core_Init(){
 	/*usart init*/
 	usart_init();
 	//test
-	usart_speed(56000);
+	usart_speed(9600);
 	
 	
 	/*external interrupt init (for MCP23017)*/
@@ -216,8 +216,26 @@ void USART1_IRQHandler(){
 		
 		switch(buff){
 			/**/
-			case ID_NETWORK:
+			case START_BYTE_0:
 				if(usart_irq_counter == 0){
+					usart_data_receive_array[usart_irq_counter] = buff;
+					usart_irq_counter++;
+					
+				}else{
+					if((usart_irq_counter < LEN_USART_MSG_OBJ) && (usart_irq_counter > (LEN_HEAD_SIZE -1))){
+						usart_data_receive_array[usart_irq_counter] = buff;
+						if(usart_irq_counter == (LEN_USART_MSG_OBJ)){
+							break;
+						}
+						usart_irq_counter++;
+					}else{
+						usart_irq_counter = 0;
+						LED_ON;
+					}
+				}
+				break;
+			case START_BYTE_1:
+				if(usart_irq_counter == 1){
 					usart_data_receive_array[usart_irq_counter] = buff;
 					usart_irq_counter++;
 				}else{
@@ -230,16 +248,17 @@ void USART1_IRQHandler(){
 						usart_irq_counter++;
 					}else{
 						usart_irq_counter = 0;
+						LED_ON;
 					}
 				}
-				break;
-			/**/	
-			case ID_REMOTE_CNTRL:
-				if(usart_irq_counter == 1){
+				break;	
+			case ID_NETWORK:
+				if(usart_irq_counter == 2){
 					usart_data_receive_array[usart_irq_counter] = buff;
 					usart_irq_counter++;
 				}else{
 					if((usart_irq_counter < LEN_USART_MSG_OBJ) && (usart_irq_counter > (LEN_HEAD_SIZE -1))){
+						/**/
 						usart_data_receive_array[usart_irq_counter] = buff;
 						if(usart_irq_counter == (LEN_USART_MSG_OBJ)){
 							break;
@@ -247,6 +266,26 @@ void USART1_IRQHandler(){
 						usart_irq_counter++;
 					}else{
 						usart_irq_counter = 0;
+						LED_ON;
+					}
+				}
+				break;
+			/**/	
+			case ID_REMOTE_CNTRL:
+				if(usart_irq_counter == 3){
+					usart_data_receive_array[usart_irq_counter] = buff;
+					usart_irq_counter++;
+				}else{
+					if((usart_irq_counter < LEN_USART_MSG_OBJ) && (usart_irq_counter > (LEN_HEAD_SIZE -1))){
+						usart_data_receive_array[usart_irq_counter] = buff;
+						
+						if(usart_irq_counter == (LEN_USART_MSG_OBJ)){
+							break;
+						}
+						usart_irq_counter++;
+					}else{
+						usart_irq_counter = 0;
+						LED_ON;
 					}
 				}
 				break;
@@ -263,10 +302,9 @@ void USART1_IRQHandler(){
 					}
 				break;
 		}
-		
-		if(usart_irq_counter == (LEN_USART_MSG_OBJ)){
-			xQueueSendFromISR(usart_receive_buffer,usart_data_receive_array,0);
-			usart_irq_counter = 0;	
+		if(usart_irq_counter == (LEN_USART_MSG_OBJ-1)){
+			usart_irq_counter = 0;
+			xQueueSendFromISR(usart_receive_buffer,usart_data_receive_array,0);	
 		}	
 	}
 }

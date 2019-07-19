@@ -38,6 +38,14 @@ void obj_model_setup()
 	/*usart interrupt enable*/
 	NVIC_EnableIRQ (USART1_IRQn);
 	
+	//		/*one init or handler*/
+	pid_current_out.Kp = 0.8;
+	pid_current_out.Ki = 0.001;
+	pid_current_out.Kd = 0.5;
+	this_obj(IND_obj_PID1_KP)->dWordL = (uint32_t)(pid_current_out.Kp*10000);
+	this_obj(IND_obj_PID1_KI)->dWordL = (uint32_t)(pid_current_out.Ki*10000);
+	this_obj(IND_obj_PID1_KD)->dWordL = (uint32_t)(pid_current_out.Kd*10000);	
+
 }
 
 /*1 ms loop after setup*/
@@ -45,12 +53,18 @@ void obj_model_task(int tick)
 {
 	IWDG_RELOAD;
 	if(board_power){
-	OBJ_Event(IND_obj_ADC_CONV);
-	
-	if(tick%1000 == 0){
-		OBJ_Event(IND_obj_TICK_1S);
+		OBJ_Event(IND_obj_ADC_CONV);
+		if(this_obj_state(IND_obj_BUCK_MODE)){
+			if(tick%100 == 0){
+				OBJ_Event(IND_obj_TICK_1S);
+			}		
+		}
+		else{
+			if(tick%1000 == 0){
+				OBJ_Event(IND_obj_TICK_1S);
+			}
 		}		
-	}
+	}	
 }
 
 void filter_enable(void){
@@ -63,12 +77,7 @@ void filter_enable(void){
 }
 
 void vTask_PID_regulator(void *pvParameters)
-{
-	//		/*one init or handler*/
-	pid_current_out.Kp = 0.8;
-	pid_current_out.Kp = 0.001;
-	pid_current_out.Kd = 0.5;
-	
+{	
 	for(;;){
     if(this_obj_state(IND_obj_PID_ON) == 1){
 		/* cycle */

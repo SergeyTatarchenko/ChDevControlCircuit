@@ -26,6 +26,7 @@ void board_START(OBJ_STRUCT *obj){
 		
 		obj_state_off(IND_obj_PredZar);
 		obj_state_off(IND_obj_KM1);
+		LED_OFF;
 	}
 }
 
@@ -198,9 +199,9 @@ void PWM_Control_Handler(OBJ_STRUCT *obj){
 /*устатовка констант ПИД регулятора*/
 void PID_COEF_Handler(OBJ_STRUCT *obj){
 	
-	pid_current_out.Kp = ((float)(*((int*)&this_obj(IND_obj_PID1_KP)->obj_data[0])))/1000.0;
-	pid_current_out.Ki = ((float)(*((int*)&this_obj(IND_obj_PID1_KI)->obj_data[0])))/1000.0;
-	pid_current_out.Kd = ((float)(*((int*)&this_obj(IND_obj_PID1_KD)->obj_data[0])))/1000.0;
+	pid_current_out.Kp = (float)(this_obj(IND_obj_PID1_KP)->dWordL)/10000.0;
+	pid_current_out.Ki = (float)(this_obj(IND_obj_PID1_KI)->dWordL)/10000.0;
+	pid_current_out.Kd = (float)(this_obj(IND_obj_PID1_KD)->dWordL)/10000.0;
 }
 
 /*Активация ПИД регулятора (тест)*/
