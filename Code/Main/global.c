@@ -41,7 +41,7 @@ void Core_Init(){
 	/*usart init*/
 	usart_init();
 	//test
-	usart_speed(9600);
+	usart_speed(56000);
 	
 	
 	/*external interrupt init (for MCP23017)*/
@@ -163,20 +163,20 @@ calc adc value, fill struct with mv
 *************************************************/
 void adc_calc_value(){
 	/*uncomment if filter enable*/
-	adc_val->CH1_ADC = (adc_val->adc1_value*(uint16_t)INT_ADC_REF)/(uint16_t)ADC_DEPTH;
-	adc_val->CH2_ADC = (adc_val->adc2_value*(uint16_t)INT_ADC_REF)/(uint16_t)ADC_DEPTH;
-	adc_val->CH3_ADC = (adc_val->adc3_value*(uint16_t)INT_ADC_REF)/(uint16_t)ADC_DEPTH;
-	adc_val->CH4_ADC = (adc_val->adc4_value*(uint16_t)INT_ADC_REF)/(uint16_t)ADC_DEPTH;
-	adc_val->CH5_ADC = (adc_val->adc5_value*(uint16_t)INT_ADC_REF)/(uint16_t)ADC_DEPTH;
-	adc_val->CH6_ADC = (adc_val->adc6_value*(uint16_t)INT_ADC_REF)/(uint16_t)ADC_DEPTH;
+//	adc_val->CH1_ADC = (adc_val->adc1_value*(uint16_t)INT_ADC_REF)/(uint16_t)ADC_DEPTH;
+//	adc_val->CH2_ADC = (adc_val->adc2_value*(uint16_t)INT_ADC_REF)/(uint16_t)ADC_DEPTH;
+//	adc_val->CH3_ADC = (adc_val->adc3_value*(uint16_t)INT_ADC_REF)/(uint16_t)ADC_DEPTH;
+//	adc_val->CH4_ADC = (adc_val->adc4_value*(uint16_t)INT_ADC_REF)/(uint16_t)ADC_DEPTH;
+//	adc_val->CH5_ADC = (adc_val->adc5_value*(uint16_t)INT_ADC_REF)/(uint16_t)ADC_DEPTH;
+//	adc_val->CH6_ADC = (adc_val->adc6_value*(uint16_t)INT_ADC_REF)/(uint16_t)ADC_DEPTH;
 	
 	/*uncomment if no filter enable*/	
-//	adc_val->CH1_ADC = (ADC1_DataArray[0]*(uint16_t)INT_ADC_REF)/(uint16_t)ADC_DEPTH;
-//	adc_val->CH2_ADC = (ADC1_DataArray[1]*(uint16_t)INT_ADC_REF)/(uint16_t)ADC_DEPTH;
-//	adc_val->CH3_ADC = (ADC1_DataArray[2]*(uint16_t)INT_ADC_REF)/(uint16_t)ADC_DEPTH;
-//	adc_val->CH4_ADC = (ADC1_DataArray[3]*(uint16_t)INT_ADC_REF)/(uint16_t)ADC_DEPTH;
-//	adc_val->CH5_ADC = (ADC1_DataArray[4]*(uint16_t)INT_ADC_REF)/(uint16_t)ADC_DEPTH;
-//	adc_val->CH6_ADC = (ADC1_DataArray[5]*(uint16_t)INT_ADC_REF)/(uint16_t)ADC_DEPTH;
+	adc_val->CH1_ADC = (ADC1_DataArray[0]*(uint16_t)INT_ADC_REF)/(uint16_t)ADC_DEPTH;
+	adc_val->CH2_ADC = (ADC1_DataArray[1]*(uint16_t)INT_ADC_REF)/(uint16_t)ADC_DEPTH;
+	adc_val->CH3_ADC = (ADC1_DataArray[2]*(uint16_t)INT_ADC_REF)/(uint16_t)ADC_DEPTH;
+	adc_val->CH4_ADC = (ADC1_DataArray[3]*(uint16_t)INT_ADC_REF)/(uint16_t)ADC_DEPTH;
+	adc_val->CH5_ADC = (ADC1_DataArray[4]*(uint16_t)INT_ADC_REF)/(uint16_t)ADC_DEPTH;
+	adc_val->CH6_ADC = (ADC1_DataArray[5]*(uint16_t)INT_ADC_REF)/(uint16_t)ADC_DEPTH;
 	
 	adc_val->TEMP_SENSOR = (ADC1_DataArray[6]*(uint16_t)INT_ADC_REF)/(uint16_t)ADC_DEPTH;
 	adc_val->TEMP_SENSOR = (uint16_t)((float)(1430 - adc_val->TEMP_SENSOR)/(float)(4.3) +25);

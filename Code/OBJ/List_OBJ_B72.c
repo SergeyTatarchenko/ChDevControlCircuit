@@ -3,12 +3,7 @@
 /************************************************************************************/
 /* 									 OBJ_Handlers									*/
 /************************************************************************************/
-TimerHandle_t TestTimer;
-const unsigned portBASE_TYPE TimerID = 1;
-
-void TimerFunction(){
-	
-}
+#define OPAM_ADC_REF		3000
 
 void board_START(OBJ_STRUCT *obj){
 	/*board start*/
@@ -51,24 +46,29 @@ void ADC_Handler(OBJ_STRUCT *obj){
 	AIN4 - dvl1000   напряжение дросселя
 	AIN5 - lf510     ток дросселя
 	*/
-	indication = ((INT_ADC_REF - adc_val->CH1_ADC)*1000/load)/50; //rez in uA
-	if(indication > 0){
-		this_obj(IND_obj_aINV)->obj_value = (uint16_t)(indication);	
-	}	
-	indication = (((INT_ADC_REF - adc_val->CH2_ADC)*1000/load)*3)/1000 - 1; //magic
-	if(indication > 0){
-	this_obj(IND_obj_aINC)->obj_value = (uint16_t)(indication);
-	}
+	this_obj(IND_obj_aINV)->obj_value = adc_val->CH1_ADC;
+	this_obj(IND_obj_aINC)->obj_value = adc_val->CH2_ADC;
+	this_obj(IND_obj_aOUTC)->obj_value = adc_val->CH3_ADC;
+	this_obj(IND_obj_aOUTC)->obj_value = adc_val->CH4_ADC;
 	
-	indication = ((INT_ADC_REF - adc_val->CH3_ADC)*1000/load)/50; //rez in uA
-	if(indication > 0){
-	this_obj(IND_obj_aOUTV)->obj_value = (uint16_t)(indication);
-	}
-//		
-	indication = (((INT_ADC_REF - adc_val->CH4_ADC)*1000/load)*3)/1000 - 1; //magic
-	if(indication > 0){
-	this_obj(IND_obj_aOUTC)->obj_value = (uint16_t)(indication);
-	}
+//	indication = ((INT_ADC_REF - adc_val->CH1_ADC)*1000/load)/50; //rez in uA
+//	if(indication > 0){
+//		this_obj(IND_obj_aINV)->obj_value = (uint16_t)(indication);	
+//	}	
+//	indication = (((INT_ADC_REF - adc_val->CH2_ADC)*1000/load)*3)/1000 - 1; //magic
+//	if(indication > 0){
+//	this_obj(IND_obj_aINC)->obj_value = (uint16_t)(indication);
+//	}
+//	
+//	indication = ((INT_ADC_REF - adc_val->CH3_ADC)*1000/load)/50; //rez in uA
+//	if(indication > 0){
+//	this_obj(IND_obj_aOUTV)->obj_value = (uint16_t)(indication);
+//	}
+////		
+//	indication = (((INT_ADC_REF - adc_val->CH4_ADC)*1000/load)*3)/1000 - 1; //magic
+//	if(indication > 0){
+//	this_obj(IND_obj_aOUTC)->obj_value = (uint16_t)(indication);
+//	}
 //	
 //	indication = (INT_ADC_REF - adc_val->CH5_ADC)*1000/load; //rez in uA
 //	if(indication > 0){
@@ -210,5 +210,37 @@ void PID_Control_Handler(OBJ_STRUCT *obj){
 		pid_current_out.setpoint_val = obj->obj_value;
 	}else{
 		pid_current_out.setpoint_val = 0;
+	}
+}
+
+void TIM1_Handler(OBJ_STRUCT *obj){
+	/*костыль*/
+	obj = this_obj(IND_obj_TIM1);
+	
+	if(obj->obj_state == 1){
+		obj->obj_value ++;
+		if(GPIOC->ODR&=GPIO_ODR_ODR13){
+			LED_ON;
+		}
+		else{
+			LED_OFF;
+		}
+		OBJ_Event(IND_obj_TIM1);
+	}
+}
+
+void TIM2_Handler(OBJ_STRUCT *obj){
+	obj = this_obj(IND_obj_TIM2);
+	/*костыль*/
+	if(obj->obj_state == 1){
+		obj->obj_value ++;
+		
+		if(GPIOC->ODR&=GPIO_ODR_ODR13){
+			LED_ON;
+		}
+		else{
+			LED_OFF;
+		}
+		OBJ_Event(IND_obj_TIM2);
 	}
 }

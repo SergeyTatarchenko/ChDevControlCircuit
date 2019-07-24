@@ -39,5 +39,8 @@
 #define IND_obj_BUCK_MODE	  (IND_obj_NULL + 20)	//[понижающий режим преобразователя]
 #define IND_obj_BOOST_MODE	  (IND_obj_NULL + 21)	//[повышающий режим пребразователя]
 
+/*тест таймеров*/
+#define IND_obj_TIM1		  (IND_obj_NULL + 22)	//[Таймер 1]
+#define IND_obj_TIM2		  (IND_obj_NULL + 23)	//[Таймер 2]
 
 #endif

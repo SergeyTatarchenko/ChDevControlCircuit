@@ -12,7 +12,6 @@ xSemaphoreHandle FilterReady;
 /*setup before loop*/
 void obj_model_setup()
 {
-	
 	task_priority.system_priority = configMAX_PRIORITIES-1;
 	task_priority.rx_priority     = configMAX_PRIORITIES-2;
 	task_priority.tx_priority     = configMAX_PRIORITIES-3;
@@ -32,7 +31,7 @@ void obj_model_setup()
 	obj_state_off(IND_obj_PWM_FREQ);
 	obj_state_off(IND_obj_PWM_ON);
 	
-	filter_enable();
+	//filter_enable();
 	/*adc init*/
 	ADC1_On
 	/*usart interrupt enable*/
@@ -53,17 +52,8 @@ void obj_model_task(int tick)
 {
 	IWDG_RELOAD;
 	if(board_power){
-		OBJ_Event(IND_obj_ADC_CONV);
-		if(this_obj_state(IND_obj_BUCK_MODE)){
-			if(tick%100 == 0){
-				OBJ_Event(IND_obj_TICK_1S);
-			}		
-		}
-		else{
-			if(tick%1000 == 0){
-				OBJ_Event(IND_obj_TICK_1S);
-			}
-		}		
+		adc_calc_value();
+		OBJ_Event(IND_obj_ADC_CONV);		
 	}	
 }
 
@@ -80,9 +70,13 @@ void vTask_PID_regulator(void *pvParameters)
 {	
 	for(;;){
     if(this_obj_state(IND_obj_PID_ON) == 1){
-		/* cycle */
-//		pid_current_out.feedback = ADC_Current;
-//		pwm_val = PID_controller(pid_current_out);
+		
+		/*обратная связь - датчик тока в нагрузке*/
+		pid_current_out.feedback = this_obj(IND_obj_aOUTC)->obj_value;
+		/*установка значения ШИМ ключей от ПИД регулятора*/
+		this_obj(IND_obj_PWM_ON)->obj_value = PID_controller(&pid_current_out);
+		/*обновление состояния обьекта*/
+		obj_update(IND_obj_PWM_ON);
 		}
 		vTaskDelay(10);
 	}

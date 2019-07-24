@@ -31,7 +31,7 @@ void Init_(){
 		/*PID regulator*/
 		xTaskCreate(vTask_PID_regulator,"PID", user_stack, NULL,user_prior, NULL );
 		/*filter function*/
-		xTaskCreate(vTask_ADC_filter,"filter",system_stack, NULL,system_prior, NULL );
+		//xTaskCreate(vTask_ADC_filter,"filter",system_stack, NULL,system_prior, NULL );
 	
 	}else{
 		LED_ON;
