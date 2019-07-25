@@ -103,6 +103,10 @@ extern _Bool Get_AIn_State(int port);
 /*calc adc value*/
 void adc_calc_value(void);
 
+/**/
+uint16_t get_dvl1000_value(uint16_t adc_voltage);
+uint16_t get_lac300_value(uint16_t adc_voltage);
+
 
 #define adc_filter_size	60
 extern uint16_t adc_moving_average_filter(uint16_t *buff, uint32_t buff_size);
@@ -229,10 +233,9 @@ extern value_ADC_REGISTR *adc_val;
 extern AnalogState_REGISTR AIN_State;
 extern AnalogState_REGISTR *AIN_Pointer;
 
-#define MESSAGE_BUF_SIZE	16
-
-
 #define pU16(val) *((uint16_t*)&val)
+
+#define OPAM_ADC_REF		3300
 
 #endif
 

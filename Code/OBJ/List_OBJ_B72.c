@@ -1,9 +1,9 @@
 
 #include "B72.h"
+#include "global.h"
 /************************************************************************************/
 /* 									 OBJ_Handlers									*/
 /************************************************************************************/
-#define OPAM_ADC_REF		3000
 
 void board_START(OBJ_STRUCT *obj){
 	/*board start*/
@@ -27,15 +27,6 @@ void board_START(OBJ_STRUCT *obj){
 
 /*показания ацп*/
 void ADC_Handler(OBJ_STRUCT *obj){
-
-#define dvl_1000 50
-#define lac_300  330
-	/*
-	DVL 1000  - 50uA per 1V
-	LAC 300  -  33uA per 1A
-	*/
-	static const int load = 82;	
-	static int indication;
 	/*
 	AIN0 - dvl1000   входное напряжение
 	AIN1 - lac300  	 входной ток 	
@@ -46,39 +37,22 @@ void ADC_Handler(OBJ_STRUCT *obj){
 	AIN4 - dvl1000   напряжение дросселя
 	AIN5 - lf510     ток дросселя
 	*/
-	this_obj(IND_obj_aINV)->obj_value = adc_val->CH1_ADC;
-	this_obj(IND_obj_aINC)->obj_value = adc_val->CH2_ADC;
-	this_obj(IND_obj_aOUTC)->obj_value = adc_val->CH3_ADC;
-	this_obj(IND_obj_aOUTC)->obj_value = adc_val->CH4_ADC;
+	this_obj(IND_obj_aINV)->obj_value = get_dvl1000_value(adc_val->CH1_ADC);
+	this_obj(IND_obj_aINC)->obj_value = get_lac300_value(adc_val->CH2_ADC);
 	
-//	indication = ((INT_ADC_REF - adc_val->CH1_ADC)*1000/load)/50; //rez in uA
-//	if(indication > 0){
-//		this_obj(IND_obj_aINV)->obj_value = (uint16_t)(indication);	
-//	}	
-//	indication = (((INT_ADC_REF - adc_val->CH2_ADC)*1000/load)*3)/1000 - 1; //magic
-//	if(indication > 0){
-//	this_obj(IND_obj_aINC)->obj_value = (uint16_t)(indication);
-//	}
-//	
-//	indication = ((INT_ADC_REF - adc_val->CH3_ADC)*1000/load)/50; //rez in uA
-//	if(indication > 0){
-//	this_obj(IND_obj_aOUTV)->obj_value = (uint16_t)(indication);
-//	}
-////		
-//	indication = (((INT_ADC_REF - adc_val->CH4_ADC)*1000/load)*3)/1000 - 1; //magic
-//	if(indication > 0){
-//	this_obj(IND_obj_aOUTC)->obj_value = (uint16_t)(indication);
-//	}
-//	
-//	indication = (INT_ADC_REF - adc_val->CH5_ADC)*1000/load; //rez in uA
-//	if(indication > 0){
-//	this_obj(IND_obj_aDRV)->obj_value = (uint16_t)(indication/dvl_1000);
-//	}
-//	
-//	indication = (INT_ADC_REF - adc_val->CH6_ADC)*1000/load; //rez in uA
-//	if(indication > 0){
-//	this_obj(IND_obj_aDRC)->obj_value = (uint16_t)(indication/33);
-//	}
+	this_obj(IND_obj_aOUTV)->obj_value = get_dvl1000_value(adc_val->CH3_ADC);
+	this_obj(IND_obj_aOUTC)->obj_value = get_lac300_value(adc_val->CH4_ADC);
+	
+	this_obj(IND_obj_aDRV)->obj_value = get_dvl1000_value(adc_val->CH5_ADC);
+	this_obj(IND_obj_aDRC)->obj_value = get_lac300_value(adc_val->CH6_ADC);
+	
+	/* test */
+//	this_obj(IND_obj_aINV)->obj_value = adc_val->CH1_ADC;
+//	this_obj(IND_obj_aINC)->obj_value = adc_val->CH2_ADC;
+//	this_obj(IND_obj_aOUTV)->obj_value = adc_val->CH3_ADC;
+//	this_obj(IND_obj_aOUTC)->obj_value = adc_val->CH4_ADC;
+//	this_obj(IND_obj_aDRC)->obj_value = adc_val->CH5_ADC;
+//	this_obj(IND_obj_aDRV)->obj_value = adc_val->CH6_ADC;
 }
 
 /*тик с каждым ивентом*/
@@ -244,3 +218,4 @@ void TIM2_Handler(OBJ_STRUCT *obj){
 		OBJ_Event(IND_obj_TIM2);
 	}
 }
+
