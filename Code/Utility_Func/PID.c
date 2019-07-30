@@ -5,7 +5,8 @@ K_PID pid_current_out;
 
 uint16_t PID_controller(K_PID *val)
 {
-	float set_ctrl_val = 0.0;
+	//float set_ctrl_val = 0.0;
+	uint16_t set_ctrl_val = 0;
 	int16_t ErrDiff = 0;
 	float P_term = 0.0;
 	float I_term = 0.0;
@@ -45,7 +46,7 @@ uint16_t PID_controller(K_PID *val)
 	/* Calc PID control value */
 	set_ctrl_val = /*last_set_ctrl_val +*/ P_term + I_term + D_term;
 	/* Set limit for  set_ctrl_val*/
-	if(set_ctrl_val >= 65535) set_ctrl_val = 65535;
+	if(set_ctrl_val >= 1000) set_ctrl_val = 1000;
 	if(set_ctrl_val <= 1) set_ctrl_val = 0;
 	
 	val->last_iSum = val->iSum;

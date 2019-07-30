@@ -5,22 +5,17 @@
 /* 									 OBJ_Handlers									*/
 /************************************************************************************/
 
-void board_START(OBJ_STRUCT *obj){
-	/*board start*/
-	if(obj->obj_state == 1){
-		board_state.bit.power = 1;
-	}else{
-		board_state.bit.power = 0;
-		
-		obj_state_off(IND_obj_PWM1);
-		obj_state_off(IND_obj_PWM2);
-		obj_state_off(IND_obj_PWM_FREQ);
-		obj_state_off(IND_obj_PWM_ON);
-		
-		obj_state_off(IND_obj_ADC_CONV);
-		
-		obj_state_off(IND_obj_PredZar);
-		obj_state_off(IND_obj_KM1);
+void board_START(OBJ_STRUCT *obj)
+{
+	if(obj->obj_state == 1)
+	{
+		board_power = 1;
+		OBJ_Event(IND_obj_USART_TX);
+	}
+	else
+	{
+		board_power = 0;
+		set_all_obj_off();
 		LED_OFF;
 	}
 }
@@ -55,13 +50,15 @@ void ADC_Handler(OBJ_STRUCT *obj){
 //	this_obj(IND_obj_aDRV)->obj_value = adc_val->CH6_ADC;
 }
 
-/*тик с каждым ивентом*/
-void TICK_Handler(OBJ_STRUCT *obj){
+/*Отправка через последовательный порт обратной связи об объектах*/
+void USART_Handler(OBJ_STRUCT *obj){
+	
 	obj->obj_value++;
-	if(GPIOC->ODR&=GPIO_ODR_ODR13){
-		LED_ON;
-	}else{
-	LED_OFF;
+	led_invertor();
+	
+	if(board_power == 1){
+		FAST_Upd_All_OBJ_USART();
+		OBJ_Event(IND_obj_USART_TX);
 	}
 }
 
@@ -187,35 +184,4 @@ void PID_Control_Handler(OBJ_STRUCT *obj){
 	}
 }
 
-void TIM1_Handler(OBJ_STRUCT *obj){
-	/*костыль*/
-	obj = this_obj(IND_obj_TIM1);
-	
-	if(obj->obj_state == 1){
-		obj->obj_value ++;
-		if(GPIOC->ODR&=GPIO_ODR_ODR13){
-			LED_ON;
-		}
-		else{
-			LED_OFF;
-		}
-		OBJ_Event(IND_obj_TIM1);
-	}
-}
-
-void TIM2_Handler(OBJ_STRUCT *obj){
-	obj = this_obj(IND_obj_TIM2);
-	/*костыль*/
-	if(obj->obj_state == 1){
-		obj->obj_value ++;
-		
-		if(GPIOC->ODR&=GPIO_ODR_ODR13){
-			LED_ON;
-		}
-		else{
-			LED_OFF;
-		}
-		OBJ_Event(IND_obj_TIM2);
-	}
-}
 

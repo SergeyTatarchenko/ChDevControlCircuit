@@ -21,7 +21,7 @@
 #define IND_obj_PWM1          (IND_obj_NULL + 10)		// [аппаратный ШИМ 1 активен]
 #define IND_obj_PWM2          (IND_obj_NULL + 11)		// [аппаратный ШИМ 2 активен]
 /*-----------------SOFTOBJ-----------------------*/
-#define IND_obj_TICK_1S       (IND_obj_NULL + 12)		// [тик c каждым ивентом]
+#define IND_obj_USART_TX      (IND_obj_NULL + 12)		// [Таймер обновления состояния объектов платы по USART]
 /*-----------------------------------------------*/
 #define IND_obj_ADC_CONV      (IND_obj_NULL + 13)		// [включение обработки датчиков ADC]
 
@@ -38,9 +38,5 @@
 /*ручное управление режимами преобразователя (тестовое) */
 #define IND_obj_BUCK_MODE	  (IND_obj_NULL + 20)	//[понижающий режим преобразователя]
 #define IND_obj_BOOST_MODE	  (IND_obj_NULL + 21)	//[повышающий режим пребразователя]
-
-/*тест таймеров*/
-#define IND_obj_TIM1		  (IND_obj_NULL + 22)	//[Таймер 1]
-#define IND_obj_TIM2		  (IND_obj_NULL + 23)	//[Таймер 2]
 
 #endif

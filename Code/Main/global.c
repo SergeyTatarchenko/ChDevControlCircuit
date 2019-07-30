@@ -218,7 +218,8 @@ uint16_t adc_ch6_buffer[adc_filter_size];
 /*************************************************
  Обработка показания  датчика dvl 1000 
 *************************************************/
-uint16_t get_dvl1000_value(uint16_t adc_voltage){
+uint16_t get_dvl1000_value(uint16_t adc_voltage)
+{
 	
 	const int  sensor_load = 82;
 	const int  sensor_rate = 50;
@@ -234,7 +235,8 @@ uint16_t get_dvl1000_value(uint16_t adc_voltage){
 /*************************************************
  Обработка показания  датчика lac 300  
 *************************************************/
-uint16_t get_lac300_value(uint16_t adc_voltage){
+uint16_t get_lac300_value(uint16_t adc_voltage)
+{
 	
 	const int  sensor_load = 82;
 	const int  sensor_rate = 3; /*3000/1000 mkA to mA*/
@@ -246,6 +248,18 @@ uint16_t get_lac300_value(uint16_t adc_voltage){
 	int current = ((OPAM_ADC_REF - adc_voltage)*1000/sensor_load)*sensor_rate/1000;
 	
 	return (uint16_t)current;
+}
+
+void led_invertor(void)
+{
+	if(GPIOC->ODR &= GPIO_ODR_ODR13)
+	{
+		LED_ON;
+	}
+	else
+	{
+		LED_OFF;
+	}
 }
 /*-----------------------------------------------*/
 void USART1_IRQHandler(){
@@ -271,7 +285,6 @@ void USART1_IRQHandler(){
 						usart_irq_counter++;
 					}else{
 						usart_irq_counter = 0;
-						LED_ON;
 					}
 				}
 				break;
@@ -289,7 +302,6 @@ void USART1_IRQHandler(){
 						usart_irq_counter++;
 					}else{
 						usart_irq_counter = 0;
-						LED_ON;
 					}
 				}
 				break;	
@@ -307,7 +319,6 @@ void USART1_IRQHandler(){
 						usart_irq_counter++;
 					}else{
 						usart_irq_counter = 0;
-						LED_ON;
 					}
 				}
 				break;
@@ -326,7 +337,6 @@ void USART1_IRQHandler(){
 						usart_irq_counter++;
 					}else{
 						usart_irq_counter = 0;
-						LED_ON;
 					}
 				}
 				break;

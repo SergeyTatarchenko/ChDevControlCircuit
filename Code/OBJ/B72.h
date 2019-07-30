@@ -40,7 +40,7 @@ v 0.3
 #define _obj_OUT6_init	       IND_obj_PredZar      ,IND_obj_CAS  ,obj_hard  ,   out_6   ,NULL         ,NULL
 #define _obj_OUT7_init	       IND_obj_KM1          ,IND_obj_CAS  ,obj_hard  ,   out_7   ,NULL         ,NULL
 /*---------------------------------------------------------------------------------------------------*/
-#define _obj_TICK_1S_init      IND_obj_TICK_1S      ,IND_obj_SWC  ,obj_soft  ,   NULL   ,NULL          ,TICK_Handler
+#define _obj_USART_TX_init     IND_obj_USART_TX     ,IND_obj_SWC  ,obj_timer ,   NULL   ,100           ,USART_Handler
 #define _obj_ADC_CONV_init     IND_obj_ADC_CONV     ,IND_obj_CAS  ,obj_soft  ,   NULL   ,NULL          ,ADC_Handler
 
 #define _obj_PID1_KP_init      IND_obj_PID1_KP      ,IND_obj_COM  ,obj_soft  ,   NULL   ,NULL          ,PID_COEF_Handler
@@ -54,24 +54,20 @@ v 0.3
 #define _obj_BUCK_init         IND_obj_BUCK_MODE    ,IND_obj_CAS  ,obj_soft  ,   NULL   ,NULL          ,BUCK_Mode_Handler
 #define _obj_BOOST_init        IND_obj_BOOST_MODE   ,IND_obj_CAS  ,obj_soft  ,   NULL   ,NULL          ,BOOST_Mode_Handler
 
-#define _obj_TIM1_init        IND_obj_TIM1          ,IND_obj_CAS  ,obj_timer  ,   NULL   ,100          ,TIM1_Handler
-#define _obj_TIM2_init        IND_obj_TIM2          ,IND_obj_CAS  ,obj_timer  ,   NULL   ,1000         ,TIM2_Handler
-
-#define _obj_cofig_	{_obj_STATUS_init},{_obj_TICK_1S_init}, \
-					{_obj_PID1_KP_init},{_obj_PID1_KI_init},{_obj_PID1_KD_init},{_obj_PID1_KP_init},{_obj_PID_init}, \
-					{_obj_ADC0_init},{_obj_ADC1_init},{_obj_ADC2_init},{_obj_ADC3_init},{_obj_ADC4_init},{_obj_ADC5_init},{_obj_ADC_CONV_init},	\
-					{_obj_OUT6_init},{_obj_OUT7_init},{_obj_PWM1_init},{_obj_PWM2_init},{_obj_PWM_FRQ_init},{_obj_PWM_ON_init}, \
-					{_obj_BUCK_init},{_obj_BOOST_init}, \
-					{_obj_TIM1_init},{_obj_TIM2_init}
-					
-
+/*init struct for obj model setup*/
+#define _obj_cofig_	\
+{_obj_STATUS_init},{_obj_USART_TX_init}, \
+{_obj_PID1_KP_init},{_obj_PID1_KI_init},{_obj_PID1_KD_init},{_obj_PID1_KP_init},{_obj_PID_init}, \
+{_obj_ADC0_init},{_obj_ADC1_init},{_obj_ADC2_init},{_obj_ADC3_init},{_obj_ADC4_init},{_obj_ADC5_init},{_obj_ADC_CONV_init},	\
+{_obj_OUT6_init},{_obj_OUT7_init},{_obj_PWM1_init},{_obj_PWM2_init},{_obj_PWM_FRQ_init},{_obj_PWM_ON_init}, \
+{_obj_BUCK_init},{_obj_BOOST_init}
 /*--------------------------------------------------------------------------------------*/
 			
 /*-------------------------------------------------*/
 /*obj handlers*/
 void board_START(OBJ_STRUCT *obj);
 void ADC_Handler(OBJ_STRUCT *obj);
-void TICK_Handler(OBJ_STRUCT *obj);
+void USART_Handler(OBJ_STRUCT *obj);
 					
 void PWM1_Handler(OBJ_STRUCT *obj);
 void PWM2_Handler(OBJ_STRUCT *obj);
@@ -84,6 +80,5 @@ void BOOST_Mode_Handler(OBJ_STRUCT *obj);
 void PID_COEF_Handler(OBJ_STRUCT *obj);
 void PID_Control_Handler(OBJ_STRUCT *obj);
 					
-void TIM1_Handler(OBJ_STRUCT *obj);
-void TIM2_Handler(OBJ_STRUCT *obj);
+
 #endif

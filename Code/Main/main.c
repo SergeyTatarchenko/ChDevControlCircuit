@@ -27,9 +27,8 @@ void Init_(){
 		
 		/*start obj model*/
 		OBJ_task_init(&task_priority,tick_50ms);
-		
 		/*PID regulator*/
-		xTaskCreate(vTask_PID_regulator,"PID", user_stack, NULL,user_prior, NULL );
+		xTaskCreate(vTask_regulator,"PID", user_stack, NULL,user_prior, NULL );
 		/*filter function*/
 		//xTaskCreate(vTask_ADC_filter,"filter",system_stack, NULL,system_prior, NULL );
 	

@@ -106,7 +106,8 @@ void adc_calc_value(void);
 /**/
 uint16_t get_dvl1000_value(uint16_t adc_voltage);
 uint16_t get_lac300_value(uint16_t adc_voltage);
-
+/**/
+void led_invertor(void);
 
 #define adc_filter_size	60
 extern uint16_t adc_moving_average_filter(uint16_t *buff, uint32_t buff_size);

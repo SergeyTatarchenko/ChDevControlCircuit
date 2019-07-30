@@ -5,6 +5,8 @@
 * Description        : all code here
 **************************************************/
 #include "user_tasks.h"
+#include "stm32f10x.h"
+#include "math.h"
 /*************************************************/
 
 xSemaphoreHandle FilterReady;
@@ -18,7 +20,7 @@ void obj_model_setup()
 	task_priority.user_priority   = configMAX_PRIORITIES-4;
 	
 	/*256*2 byte block */
-	task_priority.stack_user  = 256; 
+	task_priority.stack_user  = 512; 
 	task_priority.stack_tx_rx = 256;
 	
 	task_priority.tick_update_rate = 50;
@@ -31,27 +33,31 @@ void obj_model_setup()
 	obj_state_off(IND_obj_PWM_FREQ);
 	obj_state_off(IND_obj_PWM_ON);
 	
-	//filter_enable();
 	/*adc init*/
 	ADC1_On
 	/*usart interrupt enable*/
+	
+	/* USART1_IRQ = 37 */
 	NVIC_EnableIRQ (USART1_IRQn);
 	
-	//		/*one init or handler*/
+	
+	/*init coef of regulator*/
 	pid_current_out.Kp = 0.8;
 	pid_current_out.Ki = 0.001;
 	pid_current_out.Kd = 0.5;
+	
 	this_obj(IND_obj_PID1_KP)->dWordL = (uint32_t)(pid_current_out.Kp*10000);
 	this_obj(IND_obj_PID1_KI)->dWordL = (uint32_t)(pid_current_out.Ki*10000);
-	this_obj(IND_obj_PID1_KD)->dWordL = (uint32_t)(pid_current_out.Kd*10000);	
-
+	this_obj(IND_obj_PID1_KD)->dWordL = (uint32_t)(pid_current_out.Kd*10000);
 }
 
 /*1 ms loop after setup*/
 void obj_model_task(int tick)
 {
 	IWDG_RELOAD;
-	if(board_power){
+	/*while power enable adc conversions*/
+	if(board_power)
+	{
 		adc_calc_value();
 		OBJ_Event(IND_obj_ADC_CONV);		
 	}	
@@ -66,20 +72,95 @@ void filter_enable(void){
 
 }
 
-void vTask_PID_regulator(void *pvParameters)
+void vTask_regulator(void *pvParameters)
 {	
 	for(;;){
-    if(this_obj_state(IND_obj_PID_ON) == 1){
-		
+		if(this_obj_state(IND_obj_PID_ON) == 1)
+		{
 		/*обратная связь - датчик тока в нагрузке*/
 		pid_current_out.feedback = this_obj(IND_obj_aOUTC)->obj_value;
+		
+			
 		/*установка значения ШИМ ключей от ПИД регулятора*/
-		this_obj(IND_obj_PWM_ON)->obj_value = PID_controller(&pid_current_out);
-		/*обновление состояния обьекта*/
+		//this_obj(IND_obj_PWM_ON)->obj_value = PID_controller(&pid_current_out);
+		/*установка значения ШИМ ключей от ПД регулятора*/
+		this_obj(IND_obj_PWM_ON)->obj_value = pd_regulator(this_obj(IND_obj_PID_ON)->obj_value,this_obj(IND_obj_aOUTC)->obj_value,5);
+			/*обновление состояния обьекта*/
 		obj_update(IND_obj_PWM_ON);
 		}
+		
 		vTaskDelay(10);
 	}
+}
+
+/*test  P regulator*/
+uint16_t pd_regulator(uint16_t set_value,uint16_t feedback,uint16_t gisteresis)
+{
+	/*
+	F(PWM,feedback value of current) = set value of current
+	*/
+	
+	/*минимальное и максимальное значение скважности зависит от драйвера*/
+	const int max_control_value = 900,min_control_value = 100;
+	/*минимальный инкремент аргумента функции управления*/
+	const int minimal_point = 1;
+	/*приращение значения функции от ее аргумента */
+	int function_increment = 0;
+	/* приращение аргумента функции управления при переходном процессе */
+	static int point = minimal_point;
+	/*значение аргумента функции управления*/
+	static uint16_t control = min_control_value;
+	/*предыдущее значение функции,текущее значение функции*/
+	static uint16_t last_feedback = 0,current_feedback = 0;
+	/*установка текущего значения функции*/
+	current_feedback = feedback;
+	/****************************************************************************** */
+	/*дифференциальное звено, изменение значения функции от приращения ее аргумента */
+	function_increment = (int)fabs((float)current_feedback - (float)last_feedback);
+	
+	/*увеличить значение значение приращения */
+	if((function_increment < gisteresis)&&(point >minimal_point))
+	{
+		point ++;
+	}
+	/*уменьшить значение значение приращения при превышении значения гистерезиса*/
+	if((function_increment > gisteresis)&&(point >minimal_point))
+	{
+		point --;
+	}
+	/*ошибка - переходной процесс не устойчив*/
+	else if(point == minimal_point)
+	{
+	
+	}
+	/*сохранение значения обратной связи для следующей итерации*/
+	last_feedback = current_feedback;
+	/*ошибка ввода прараметра в функцию */
+	if(set_value <= gisteresis){
+		return min_control_value;
+	}
+	/****************************************************************************** */
+	
+	/*пропорциональное звено*/
+	/* feedback is << that set value */
+	if((feedback < (set_value - gisteresis))&&(control <= max_control_value))
+	{
+		control += point;
+		return control;
+	}
+	/* feedback is >> that set value */
+	if((feedback > (set_value + gisteresis))&&(control > min_control_value))
+	{
+		control -= point;
+		return control;
+	}
+	/*working area*/
+	if((feedback > (set_value - gisteresis))&&(feedback < (set_value + gisteresis)))
+	{
+		/*устойчивое значение,добавить алгоритм сужения области в центр гистерезиса*/
+	}
+	/****************************************************************************** */
+	return (uint16_t)min_control_value;
 }
 
 void vTask_ADC_filter(void *pvParameters){
