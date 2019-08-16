@@ -157,6 +157,7 @@ void send_usart_message(uint8_t *message,uint32_t buf_size){
 		DMA_Ch4_Reload(USART_DATA_TYPE2,buf_size);}
 }
 
+#ifdef TARGET
 void HWOBJ_Event(int obj_id){
 
 	OBJ_STRUCT* obj;
@@ -167,6 +168,7 @@ void HWOBJ_Event(int obj_id){
 			Set_IO_State((int)(obj->hardware_adress - out_offset),(int)obj->obj_state);
 	}
 }
+#endif
 /*************************************************
 calc adc value, fill struct with mv 
 *************************************************/

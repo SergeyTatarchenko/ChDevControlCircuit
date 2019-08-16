@@ -40,6 +40,7 @@ void Init_(){
 					Main program 
 *************************************************/
 int main(void){
+	
 	Init_();
 	
 	/*run RTOS*/

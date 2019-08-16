@@ -94,7 +94,7 @@ void DMA1_Channel4_IRQHandler(){
 	}
 	
 }
-
+#ifdef TARGET
 void DMA1_Channel1_IRQHandler(){
 	
 	static uint32_t buffer_counter = 0;
@@ -123,7 +123,7 @@ void DMA1_Channel1_IRQHandler(){
 		}
 	}
 }
-
+#endif
 /*************************************************
 Reload DMA Channel 4 
 *************************************************/
