@@ -263,6 +263,16 @@ void led_invertor(void)
 		LED_OFF;
 	}
 }
+
+int comparator(int plus, int minus)
+{
+	if(plus >= minus){
+		return 1;
+	}else{
+		return 0;
+	}	
+}
+
 /*-----------------------------------------------*/
 void USART1_IRQHandler(){
 	uint8_t buff;

@@ -20,7 +20,7 @@
 	#define USART_DATA_FAST	TRUE
 	#define OBJECT_TIMER	TRUE
 
-	#define	num_of_all_obj		30
+	#define	num_of_all_obj		50
 	#define MES_BUF_SIZE		20
 
 	#if HARDWARE_OBJECT == TRUE

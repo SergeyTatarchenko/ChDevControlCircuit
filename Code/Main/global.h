@@ -119,6 +119,9 @@ extern uint16_t adc_ch4_buffer[adc_filter_size];
 extern uint16_t adc_ch5_buffer[adc_filter_size];
 extern uint16_t adc_ch6_buffer[adc_filter_size];
 
+/**/
+int comparator(int plus, int minus);
+
 /*low priority tasks**********************************************************
 ******************************************************************************/
 /*error handler for internal errors during execution ( MCP23017 error )*/

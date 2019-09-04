@@ -35,8 +35,8 @@ v 0.3
 #define _obj_ADC3_init	       IND_obj_aOUTC        ,IND_obj_SWC  ,obj_hard  ,   adc_3   ,NULL         ,NULL
 #define _obj_ADC4_init	       IND_obj_aDRV         ,IND_obj_SWC  ,obj_hard  ,   adc_4   ,NULL         ,NULL
 #define _obj_ADC5_init	       IND_obj_aDRC         ,IND_obj_SWC  ,obj_hard  ,   adc_5   ,NULL         ,NULL
-#define _obj_PWM1_init	       IND_obj_PWM1         ,IND_obj_CAS  ,obj_hard  ,   pwm_0   ,NULL         ,PWM1_Handler
-#define _obj_PWM2_init	       IND_obj_PWM2         ,IND_obj_CAS  ,obj_hard  ,   pwm_1   ,NULL         ,PWM2_Handler
+#define _obj_PWM1_init	       IND_obj_PWM1         ,IND_obj_SWC  ,obj_hard  ,   pwm_0   ,NULL         ,PWM1_Handler
+#define _obj_PWM2_init	       IND_obj_PWM2         ,IND_obj_SWC  ,obj_hard  ,   pwm_1   ,NULL         ,PWM2_Handler
 #define _obj_OUT6_init	       IND_obj_PredZar      ,IND_obj_CAS  ,obj_hard  ,   out_6   ,NULL         ,NULL
 #define _obj_OUT7_init	       IND_obj_KM1          ,IND_obj_CAS  ,obj_hard  ,   out_7   ,NULL         ,NULL
 /*---------------------------------------------------------------------------------------------------*/
@@ -51,8 +51,19 @@ v 0.3
 #define _obj_PWM_FRQ_init      IND_obj_PWM_FREQ     ,IND_obj_CAS  ,obj_soft  ,   NULL   ,NULL          ,PWM_freq_config_Handler
 #define _obj_PWM_ON_init       IND_obj_PWM_ON       ,IND_obj_CAS  ,obj_soft  ,   NULL   ,NULL          ,PWM_Control_Handler
  
-#define _obj_BUCK_init         IND_obj_BUCK_MODE    ,IND_obj_CAS  ,obj_soft  ,   NULL   ,NULL          ,BUCK_Mode_Handler
-#define _obj_BOOST_init        IND_obj_BOOST_MODE   ,IND_obj_CAS  ,obj_soft  ,   NULL   ,NULL          ,BOOST_Mode_Handler
+#define _obj_BUCK_init         IND_obj_BUCK_MODE    ,IND_obj_SWC  ,obj_soft  ,   NULL   ,NULL          ,BUCK_Mode_Handler
+#define _obj_BOOST_init        IND_obj_BOOST_MODE   ,IND_obj_SWC  ,obj_soft  ,   NULL   ,NULL          ,BOOST_Mode_Handler
+#define _obj_DELAY_init        IND_obj_DELAY_START  ,IND_obj_SWC  ,obj_timer ,   NULL   ,2500          ,DelayStart_Handler
+
+#define _obj_ACUR_C_init       IND_obj_ACUR_C       ,IND_obj_SWC  ,obj_soft  ,   NULL   ,NULL          ,NULL
+#define _obj_ACUR_G_init       IND_obj_ACUR_G       ,IND_obj_SWC  ,obj_soft  ,   NULL   ,NULL          ,NULL
+#define _obj_CUR_C_init        IND_obj_CUR_C        ,IND_obj_SWC  ,obj_soft  ,   NULL   ,NULL          ,NULL
+#define _obj_CUR_G_init        IND_obj_CUR_G        ,IND_obj_SWC  ,obj_soft  ,   NULL   ,NULL          ,NULL
+#define _obj_ECE_init          IND_obj_ECE          ,IND_obj_SWC  ,obj_soft  ,   NULL   ,NULL          ,NULL
+#define _obj_Q_init            IND_obj_Q            ,IND_obj_SWC  ,obj_soft  ,   NULL   ,NULL          ,NULL
+
+#define _obj_ERR_init          IND_obj_ERR_ARRAY    ,IND_obj_SWC  ,obj_soft  ,   NULL   ,NULL          ,NULL
+#define _obj_START_init        IND_obj_START        ,IND_obj_SWC  ,obj_soft  ,   NULL   ,NULL          ,ChDevStart_Handler
 
 /*init struct for obj model setup*/
 #define _obj_cofig_	\
@@ -60,7 +71,8 @@ v 0.3
 {_obj_PID1_KP_init},{_obj_PID1_KI_init},{_obj_PID1_KD_init},{_obj_PID1_KP_init},{_obj_PID_init}, \
 {_obj_ADC0_init},{_obj_ADC1_init},{_obj_ADC2_init},{_obj_ADC3_init},{_obj_ADC4_init},{_obj_ADC5_init},{_obj_ADC_CONV_init},	\
 {_obj_OUT6_init},{_obj_OUT7_init},{_obj_PWM1_init},{_obj_PWM2_init},{_obj_PWM_FRQ_init},{_obj_PWM_ON_init}, \
-{_obj_BUCK_init},{_obj_BOOST_init}
+{_obj_BUCK_init},{_obj_BOOST_init},{_obj_DELAY_init}, \
+{_obj_ACUR_C_init},{_obj_ACUR_G_init},{_obj_CUR_C_init},{_obj_CUR_G_init},{_obj_ECE_init},{_obj_Q_init},{_obj_ERR_init},{_obj_START_init}
 /*--------------------------------------------------------------------------------------*/
 			
 /*-------------------------------------------------*/
@@ -79,6 +91,7 @@ void BOOST_Mode_Handler(OBJ_STRUCT *obj);
 
 void PID_COEF_Handler(OBJ_STRUCT *obj);
 void PID_Control_Handler(OBJ_STRUCT *obj);
-					
 
+void ChDevStart_Handler(OBJ_STRUCT *obj);
+void DelayStart_Handler(OBJ_STRUCT *obj);
 #endif
