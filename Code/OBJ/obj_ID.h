@@ -49,5 +49,6 @@
 #define IND_obj_Q	  			(IND_obj_NULL + 28)		//[коэффициент сглаживания выходного LC фильтра]
 #define IND_obj_ERR_ARRAY	  	(IND_obj_NULL + 29)		//[массив ошибок ЗУ]
 #define IND_obj_START		  	(IND_obj_NULL + 30)		//[команда "ПУСК" ЗУ после включения]
+#define IND_obj_TEST2		  	(IND_obj_NULL + 31)		//[тест режима с двумя каналами одновременно]
 
 #endif

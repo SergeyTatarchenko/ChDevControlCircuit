@@ -36,6 +36,7 @@ void board_START(OBJ_STRUCT *obj)
 
 /*показания ацп*/
 void ADC_Handler(OBJ_STRUCT *obj){
+	
 	/*
 	AIN0 - dvl1000   входное напряжение
 	AIN1 - lac300  	 входной ток 	
@@ -46,16 +47,44 @@ void ADC_Handler(OBJ_STRUCT *obj){
 	AIN4 - dvl1000   напряжение дросселя
 	AIN5 - lf510     ток дросселя
 	*/
-	this_obj(IND_obj_aINV)->obj_value = get_dvl1000_value(adc_val->CH1_ADC);
-	this_obj(IND_obj_aINC)->obj_value = get_lac300_value(adc_val->CH2_ADC);
 	
-	this_obj(IND_obj_aOUTV)->obj_value = get_dvl1000_value(adc_val->CH3_ADC);
-	this_obj(IND_obj_aOUTC)->obj_value = get_lac300_value(adc_val->CH4_ADC);
+	if(this_obj(IND_obj_aINV)->obj_hardware == 1){
+		this_obj(IND_obj_aINV)->obj_value = get_dvl1000_value(adc_val->CH1_ADC);
+	}else{
+		this_obj(IND_obj_aINV)->obj_value = 0;
+	}
 	
-	this_obj(IND_obj_aDRV)->obj_value = get_dvl1000_value(adc_val->CH5_ADC);
-	this_obj(IND_obj_aDRC)->obj_value = get_lac300_value(adc_val->CH6_ADC);
+	if(this_obj(IND_obj_aINC)->obj_hardware == 1){
+		this_obj(IND_obj_aINC)->obj_value = get_lac300_value(adc_val->CH2_ADC);
+	}else{
+		this_obj(IND_obj_aINC)->obj_value = 0;
+	}
 	
-	/* test */
+	if(this_obj(IND_obj_aOUTV)->obj_hardware == 1){
+		this_obj(IND_obj_aOUTV)->obj_value = get_dvl1000_value(adc_val->CH3_ADC);
+	}else{
+		this_obj(IND_obj_aOUTV)->obj_value = 0;
+	}
+	
+	if(this_obj(IND_obj_aOUTC)->obj_hardware == 1){
+		this_obj(IND_obj_aOUTC)->obj_value = get_lac300_value(adc_val->CH4_ADC);
+	}else{
+		this_obj(IND_obj_aOUTC)->obj_value = 0;
+	}
+	
+	if(this_obj(IND_obj_aDRV)->obj_hardware == 1){
+		this_obj(IND_obj_aDRV)->obj_value = get_dvl1000_value(adc_val->CH5_ADC);
+	}else{
+		this_obj(IND_obj_aDRV)->obj_value = 0;
+	}
+	
+	if(this_obj(IND_obj_aDRC)->obj_hardware == 1){
+		this_obj(IND_obj_aDRC)->obj_value = get_lf510_value(adc_val->CH6_ADC);
+	}else{
+		this_obj(IND_obj_aDRC)->obj_value = 0;
+	}
+
+/* test */
 //	this_obj(IND_obj_aINV)->obj_value = adc_val->CH1_ADC;
 //	this_obj(IND_obj_aINC)->obj_value = adc_val->CH2_ADC;
 //	this_obj(IND_obj_aOUTV)->obj_value = adc_val->CH3_ADC;
@@ -98,36 +127,37 @@ void USART_Handler(OBJ_STRUCT *obj){
 		OBJ_Event(IND_obj_USART_TX);
 	}
 }
+
 /**/
 void ChDevStart_Handler(OBJ_STRUCT *obj)
 {
 	static int charger_permission;
 	if(obj->obj_state){
-		/*старт алгоритма ЗУ, проверка входных датчиков*/
+		/*старт алгоритма ЗУ, проверка входных датчиков на нулевые условия*/
 		/*------------------------------------*/
-		charger_permission = comparator(value_of_obj(IND_obj_aINC),set_current_sensor_error);
+		charger_permission = comparator(set_current_sensor_error,value_of_obj(IND_obj_aINC));
 		if(!charger_permission){
 			/*утечка или ошибка датчика входного тока*/
 		}
-		charger_permission &= comparator(value_of_obj(IND_obj_aINV),set_voltage_sensor_error);
+		charger_permission &= comparator(set_voltage_sensor_error,value_of_obj(IND_obj_aINV));
 		if(!charger_permission){
 			/*утечка или ошибка датчика входного напряжения*/
 		}
 		/*------------------------------------*/
-		charger_permission &= comparator(value_of_obj(IND_obj_aOUTC),set_current_sensor_error);
+		charger_permission &= comparator(set_current_sensor_error,value_of_obj(IND_obj_aOUTC));
 		if(!charger_permission){
 			/*утечка или ошибка датчика выходного тока*/
 		}
-		charger_permission &= comparator(value_of_obj(IND_obj_aOUTV),set_voltage_sensor_error);
+		charger_permission &= comparator(set_voltage_sensor_error,value_of_obj(IND_obj_aOUTV));
 		if(!charger_permission){
 			/*утечка или ошибка датчика выходного напряжения*/
 		}
 		/*------------------------------------*/
-		charger_permission &= comparator(value_of_obj(IND_obj_aDRV),set_voltage_sensor_error);
+		charger_permission &= comparator(set_voltage_sensor_error,value_of_obj(IND_obj_aDRV));
 		if(!charger_permission){
 			/*утечка или ошибка датчика напряжения дросселя*/
 		}
-		charger_permission &= comparator(value_of_obj(IND_obj_aDRC),set_current_sensor_error);
+		charger_permission &= comparator(set_current_sensor_error,value_of_obj(IND_obj_aDRC));
 		if(!charger_permission){
 			/*утечка или ошибка датчика тока дросселя*/
 		}
@@ -175,6 +205,9 @@ void DelayStart_Handler(OBJ_STRUCT *obj)
 void BUCK_Mode_Handler(OBJ_STRUCT *obj)
 {
 	if(obj->obj_state == 1){
+		
+		/*вкл контактор*/
+		obj_state_on(IND_obj_KM1);
 		/*включение ШИМ канала для верхнего транзистора, нижний транзистор закрыт*/
 		obj_state_on(IND_obj_PWM2);	
 		/*установка частоты 2 кГц*/
@@ -222,7 +255,27 @@ void BOOST_Mode_Handler(OBJ_STRUCT *obj)
 
 	}
 }
-
+void Test_Handler(OBJ_STRUCT *obj)
+{
+	if(obj->obj_state)
+	{
+		/*вкл контактор*/
+		obj_state_on(IND_obj_KM1);
+		/*включение ШИМ канала для всех транзисторов*/
+		PWMSetActiveChannel(ALL_CH_ON);	
+		/*установка частоты 2 кГц*/
+		this_obj(IND_obj_PWM_FREQ)->obj_value = 2000;
+		obj_state_on(IND_obj_PWM_FREQ);
+		/*Включение ШИМ  - скважность 50%*/
+		this_obj(IND_obj_PWM_ON)->obj_value = 500;
+		obj_state_on(IND_obj_PWM_ON);
+	}
+	else
+	{	
+		obj_state_off(IND_obj_PWM_ON);
+		obj_state_off(IND_obj_KM1);
+	}
+}
 
 /*контроль частоты ШИМ*/
 void PWM_freq_config_Handler(OBJ_STRUCT *obj){
@@ -255,6 +308,11 @@ void PWM_Control_Handler(OBJ_STRUCT *obj)
 			PWMSetValue(CH4,obj->obj_value);
 			PWM_ON;
 		}
+		/*TEST mode*/
+		if(state_of_obj(IND_obj_TEST2) == 1){
+			PWMSetValue(ALL_CH_ON,obj->obj_value);
+			PWM_ON;
+		}
 	}else{
 		PWM_OFF;
 		PWMSetValue(CH3,0);
@@ -273,10 +331,36 @@ void PID_COEF_Handler(OBJ_STRUCT *obj){
 /*Активация ПИД регулятора (тест)*/
 void PID_Control_Handler(OBJ_STRUCT *obj){
 	if(obj->obj_state == 1){
-		pid_current_out.setpoint_val = obj->obj_value;
+		pid_current_out.setpoint_val =(uint16_t)obj->obj_value;
 	}else{
 		pid_current_out.setpoint_val = 0;
 	}
 }
 
+void obj_hw_input(OBJ_STRUCT *obj,int input)
+{
+	if(obj->obj_hardware){
+		if(input != obj->obj_state)
+		{
+			/*event to SOM*/
+			if(!obj->obj_event)
+			{
+				obj->obj_state = input;
+			}
+			obj_update(obj->idof_obj);
+		}
+	}
+}
 
+void obj_hw_adc(OBJ_STRUCT *obj,uint16_t value)
+{
+	if(obj->obj_hardware)
+	{
+		/*update value from ADC DR*/
+		if(value != obj->obj_value)
+		{
+			obj->obj_value = value;
+			obj_update(obj->idof_obj);
+		}
+	}
+}

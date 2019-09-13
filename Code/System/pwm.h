@@ -34,7 +34,8 @@ typedef enum{
 
 	CH3 = 3,
 	CH4 = 4,	
-	ALL_CH_OFF = 99
+	ALL_CH_OFF = 99,
+	ALL_CH_ON = 100 /*WARNING - short circuit possible!!!*/
 	
 }PWM_CHANNEL;
 

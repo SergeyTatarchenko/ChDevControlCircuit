@@ -106,6 +106,7 @@ void adc_calc_value(void);
 /**/
 uint16_t get_dvl1000_value(uint16_t adc_voltage);
 uint16_t get_lac300_value(uint16_t adc_voltage);
+uint16_t get_lf510_value(uint16_t adc_voltage);
 /**/
 void led_invertor(void);
 

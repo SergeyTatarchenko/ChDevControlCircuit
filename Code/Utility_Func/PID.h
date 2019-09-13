@@ -13,10 +13,14 @@ typedef struct K_pid{
 	uint16_t setpoint_val;
 	uint16_t feedback;
 	
+	/* Range value out*/
+	int16_t out_Max;
+	int16_t out_Min;
+	
     int32_t iSum;
     int32_t last_iSum;
 	
-	int32_t last_err;	// init last_err = ErrDiff
+	int16_t last_err;	// init last_err = ErrDiff
 	float last_set_ctrl_val;
 	
 }K_PID;
@@ -25,6 +29,6 @@ extern K_PID pid_inductance;
 extern K_PID pid_current_out;
 
 
-uint16_t PID_controller(K_PID *val);	
+int16_t PID_controller(K_PID *val);	
 
 #endif

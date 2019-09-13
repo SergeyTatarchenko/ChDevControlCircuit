@@ -48,7 +48,13 @@ void PWMSetActiveChannel(PWM_CHANNEL channel){
 				TIM3->CCER &= ~(TIM_CCER_CC3E | TIM_CCER_CC3P|
 								TIM_CCER_CC4E | TIM_CCER_CC4P);
 			break;
+		case ALL_CH_ON:
+			TIM3->CCER |= (TIM_CCER_CC3E);
+			TIM3->CCER |= (TIM_CCER_CC4E);
+			break;
 		default:
+			TIM3->CCER &= ~(TIM_CCER_CC3E | TIM_CCER_CC3P|
+							TIM_CCER_CC4E | TIM_CCER_CC4P);
 			break;
 	}
 }
@@ -78,6 +84,10 @@ void PWMSetValue(PWM_CHANNEL channel,uint16_t value){
 		if(channel == CH4){
 			TIM3->CCR4 = (uint16_t)setup_value;
 			return;
+		}
+		if(channel == ALL_CH_ON){
+			TIM3->CCR3 = (uint16_t)setup_value;
+			TIM3->CCR4 = (uint16_t)setup_value;
 		}
 	}else{
 		TIM3->CCR4 = 0;

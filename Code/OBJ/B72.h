@@ -12,7 +12,6 @@
 enum obj_hw{adc_0 = 0,adc_1 = 1,adc_2 = 2,adc_3 = 3,adc_4 = 4,adc_5 = 5,in_0 = 6,in_1 = 7,in_2 = 8,in_3 = 9,
 			out_0 = 10,out_1 = 11,out_2 = 12,out_3 = 13,out_4 = 14,out_5 = 15,out_6 = 16,out_7 = 17,
 			pwm_0=18,pwm_1=19};
-
 #define out_offset	out_0
 #define pwm_offset	pwm_0
 #define adc_offset	adc_0
@@ -29,12 +28,12 @@ v 0.3
 \-----------------------------------------------------------------------------------------------------------------------*/ 
 #define _obj_STATUS_init       obj_STATUS           ,IND_obj_CAS  ,obj_soft  ,   NULL     ,NULL        ,board_START
 /*--------------------------------------------------------------------------------------------------------------------*/
-#define _obj_ADC0_init	       IND_obj_aINV         ,IND_obj_SWC  ,obj_hard  ,   adc_0   ,NULL         ,NULL
-#define _obj_ADC1_init	       IND_obj_aINC         ,IND_obj_SWC  ,obj_hard  ,   adc_1   ,NULL         ,NULL
-#define _obj_ADC2_init	       IND_obj_aOUTV        ,IND_obj_SWC  ,obj_hard  ,   adc_2   ,NULL         ,NULL
-#define _obj_ADC3_init	       IND_obj_aOUTC        ,IND_obj_SWC  ,obj_hard  ,   adc_3   ,NULL         ,NULL
-#define _obj_ADC4_init	       IND_obj_aDRV         ,IND_obj_SWC  ,obj_hard  ,   adc_4   ,NULL         ,NULL
-#define _obj_ADC5_init	       IND_obj_aDRC         ,IND_obj_SWC  ,obj_hard  ,   adc_5   ,NULL         ,NULL
+#define _obj_ADC0_init	       IND_obj_aINV         ,IND_obj_CAS  ,obj_hard  ,   adc_0   ,NULL         ,NULL
+#define _obj_ADC1_init	       IND_obj_aINC         ,IND_obj_CAS  ,obj_hard  ,   adc_1   ,NULL         ,NULL
+#define _obj_ADC2_init	       IND_obj_aOUTV        ,IND_obj_CAS  ,obj_hard  ,   adc_2   ,NULL         ,NULL
+#define _obj_ADC3_init	       IND_obj_aOUTC        ,IND_obj_CAS  ,obj_hard  ,   adc_3   ,NULL         ,NULL
+#define _obj_ADC4_init	       IND_obj_aDRV         ,IND_obj_CAS  ,obj_hard  ,   adc_4   ,NULL         ,NULL
+#define _obj_ADC5_init	       IND_obj_aDRC         ,IND_obj_CAS  ,obj_hard  ,   adc_5   ,NULL         ,NULL
 #define _obj_PWM1_init	       IND_obj_PWM1         ,IND_obj_SWC  ,obj_hard  ,   pwm_0   ,NULL         ,PWM1_Handler
 #define _obj_PWM2_init	       IND_obj_PWM2         ,IND_obj_SWC  ,obj_hard  ,   pwm_1   ,NULL         ,PWM2_Handler
 #define _obj_OUT6_init	       IND_obj_PredZar      ,IND_obj_CAS  ,obj_hard  ,   out_6   ,NULL         ,NULL
@@ -51,7 +50,7 @@ v 0.3
 #define _obj_PWM_FRQ_init      IND_obj_PWM_FREQ     ,IND_obj_CAS  ,obj_soft  ,   NULL   ,NULL          ,PWM_freq_config_Handler
 #define _obj_PWM_ON_init       IND_obj_PWM_ON       ,IND_obj_CAS  ,obj_soft  ,   NULL   ,NULL          ,PWM_Control_Handler
  
-#define _obj_BUCK_init         IND_obj_BUCK_MODE    ,IND_obj_SWC  ,obj_soft  ,   NULL   ,NULL          ,BUCK_Mode_Handler
+#define _obj_BUCK_init         IND_obj_BUCK_MODE    ,IND_obj_CAS  ,obj_soft  ,   NULL   ,NULL          ,BUCK_Mode_Handler
 #define _obj_BOOST_init        IND_obj_BOOST_MODE   ,IND_obj_SWC  ,obj_soft  ,   NULL   ,NULL          ,BOOST_Mode_Handler
 #define _obj_DELAY_init        IND_obj_DELAY_START  ,IND_obj_SWC  ,obj_timer ,   NULL   ,2500          ,DelayStart_Handler
 
@@ -63,7 +62,8 @@ v 0.3
 #define _obj_Q_init            IND_obj_Q            ,IND_obj_SWC  ,obj_soft  ,   NULL   ,NULL          ,NULL
 
 #define _obj_ERR_init          IND_obj_ERR_ARRAY    ,IND_obj_SWC  ,obj_soft  ,   NULL   ,NULL          ,NULL
-#define _obj_START_init        IND_obj_START        ,IND_obj_SWC  ,obj_soft  ,   NULL   ,NULL          ,ChDevStart_Handler
+#define _obj_START_init        IND_obj_START        ,IND_obj_CAS  ,obj_soft  ,   NULL   ,NULL          ,ChDevStart_Handler
+#define _obj_TEST_init         IND_obj_TEST2        ,IND_obj_CAS  ,obj_soft  ,   NULL   ,NULL          ,Test_Handler
 
 /*init struct for obj model setup*/
 #define _obj_cofig_	\
@@ -94,4 +94,5 @@ void PID_Control_Handler(OBJ_STRUCT *obj);
 
 void ChDevStart_Handler(OBJ_STRUCT *obj);
 void DelayStart_Handler(OBJ_STRUCT *obj);
+void Test_Handler(OBJ_STRUCT *obj);
 #endif

@@ -51,7 +51,7 @@ void MCP23x17_Init(void){
 	/* config PortA,  pins 0-7 config as output,
 	   not inverted output, disable interrupt,
 	   enable pull up resistor on pins 0-7;	 
-		 */
+	*/
 	PortConfig->IODIR   = 0x00;
 	PortConfig->IPOL    = 0x00;
 	PortConfig->GPINTEN = 0x00;
@@ -67,7 +67,7 @@ void MCP23x17_Init(void){
 	/* config PortB, pins 0-3 is input
 	   not inverted input, enable interrupts,pins compare
 	   against previous value, pull up enable 
-	     */
+	*/
 	PortConfig->IODIR   = 0x0F;
 	PortConfig->IPOL    = 0x00;
 	PortConfig->GPINTEN = 0x0F;

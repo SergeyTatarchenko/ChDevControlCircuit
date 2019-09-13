@@ -46,6 +46,9 @@ void obj_model_setup()
 	pid_current_out.Ki = 0.001;
 	pid_current_out.Kd = 0.5;
 	
+	pid_current_out.out_Max = 1000; 
+	pid_current_out.out_Min = 0;
+	
 	this_obj(IND_obj_PID1_KP)->dWordL = (uint32_t)(pid_current_out.Kp*10000);
 	this_obj(IND_obj_PID1_KI)->dWordL = (uint32_t)(pid_current_out.Ki*10000);
 	this_obj(IND_obj_PID1_KD)->dWordL = (uint32_t)(pid_current_out.Kd*10000);
@@ -58,8 +61,10 @@ void obj_model_task(int tick)
 	/*while power enable adc conversions*/
 	if(board_power)
 	{
+		/*get voltage from adc channels, fast execution*/
 		adc_calc_value();
-		OBJ_Event(IND_obj_ADC_CONV);		
+		/*get sensors values, obj model mode */
+		OBJ_Event(IND_obj_ADC_CONV);
 	}	
 }
 
@@ -78,7 +83,7 @@ void vTask_regulator(void *pvParameters)
 		if(this_obj_state(IND_obj_PID_ON) == 1)
 		{
 		/*обратная связь - датчик тока в нагрузке*/
-		pid_current_out.feedback = this_obj(IND_obj_aOUTC)->obj_value;
+		pid_current_out.feedback = (uint16_t)this_obj(IND_obj_aOUTC)->obj_value;
 		
 			
 		/*установка значения ШИМ ключей от ПИД регулятора*/

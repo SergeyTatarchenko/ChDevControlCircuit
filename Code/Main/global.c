@@ -159,14 +159,14 @@ void send_usart_message(uint8_t *message,uint32_t buf_size){
 
 #ifdef TARGET
 void HWOBJ_Event(int obj_id){
-
-	OBJ_STRUCT* obj;
-	obj = objDefault + obj_id;
-
+	
+	OBJ_STRUCT* obj = objDefault + obj_id;
+	
 	/*output event*/
 	if((obj->hardware_adress >= out_0)&&((obj->hardware_adress <= out_7))){
 			Set_IO_State((int)(obj->hardware_adress - out_offset),(int)obj->obj_state);
 	}
+	
 }
 #endif
 /*************************************************
@@ -223,7 +223,8 @@ uint16_t adc_ch6_buffer[adc_filter_size];
 uint16_t get_dvl1000_value(uint16_t adc_voltage)
 {
 	
-	const int  sensor_load = 82;
+	//const int  sensor_load = 82;
+	const int  sensor_load = 62;
 	const int  sensor_rate = 50;
 	/*
 	DVL 1000  - 50uA per 1V;
@@ -240,10 +241,29 @@ uint16_t get_dvl1000_value(uint16_t adc_voltage)
 uint16_t get_lac300_value(uint16_t adc_voltage)
 {
 	
-	const int  sensor_load = 82;
+	//const int  sensor_load = 82;
+	const int  sensor_load = 62;
 	const int  sensor_rate = 3; /*3000/1000 mkA to mA*/
 	/*
-	DVL 1000  - 50uA per 1V;
+	DVL 1000  - 33uA per 1A;
+	sensor load  - 82 Omh;
+	*/
+	/*              get inverted value in mkV       get current      sensor value*/
+	int current = ((OPAM_ADC_REF - adc_voltage)*1000/sensor_load)*sensor_rate/1000;
+	
+	return (uint16_t)current;
+}
+/*************************************************
+ Обработка показания  датчика lf510  
+*************************************************/
+uint16_t get_lf510_value(uint16_t adc_voltage)
+{
+	
+	//const int  sensor_load = 82;
+	const int  sensor_load = 62;
+	const int  sensor_rate = 2; /*2000/1000 mkA to mA*/
+	/*
+	LF 510-S  - 20uA per 1A;
 	sensor load  - 82 Omh;
 	*/
 	/*              get inverted value in mkV       get current      sensor value*/
