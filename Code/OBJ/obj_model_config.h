@@ -6,6 +6,7 @@
 
 #define RTOS_USAGE	TRUE
 #define SOM_MODE	APP_MODE
+#define REVISION	1
 /*-----------------------------------------------
 ************communication channels***************
 -----------------------------------------------*/
@@ -24,7 +25,7 @@
 	#define MES_BUF_SIZE		20
 
 	#if HARDWARE_OBJECT == TRUE
-		#define NUM_OF_HWOBJ    20
+		#define NUM_OF_HWOBJ    50
 	#endif
 	#if OBJECT_TIMER == TRUE
 		#define NUM_OF_TIMER    20

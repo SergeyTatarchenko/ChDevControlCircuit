@@ -34,64 +34,54 @@ void board_START(OBJ_STRUCT *obj)
 	}
 }
 
-/*показания ацп*/
-void ADC_Handler(OBJ_STRUCT *obj){
-	
-	/*
-	AIN0 - dvl1000   входное напряжение
-	AIN1 - lac300  	 входной ток 	
-
-	AIN2 - dvl1000   выходное напряжение
-	AIN3 - lac300    выходной ток
-
-	AIN4 - dvl1000   напряжение дросселя
-	AIN5 - lf510     ток дросселя
-	*/
-	
-	if(this_obj(IND_obj_aINV)->obj_hardware == 1){
-		this_obj(IND_obj_aINV)->obj_value = get_dvl1000_value(adc_val->CH1_ADC);
-	}else{
-		this_obj(IND_obj_aINV)->obj_value = 0;
-	}
-	
-	if(this_obj(IND_obj_aINC)->obj_hardware == 1){
-		this_obj(IND_obj_aINC)->obj_value = get_lac300_value(adc_val->CH2_ADC);
-	}else{
-		this_obj(IND_obj_aINC)->obj_value = 0;
-	}
-	
-	if(this_obj(IND_obj_aOUTV)->obj_hardware == 1){
-		this_obj(IND_obj_aOUTV)->obj_value = get_dvl1000_value(adc_val->CH3_ADC);
-	}else{
-		this_obj(IND_obj_aOUTV)->obj_value = 0;
-	}
-	
-	if(this_obj(IND_obj_aOUTC)->obj_hardware == 1){
-		this_obj(IND_obj_aOUTC)->obj_value = get_lac300_value(adc_val->CH4_ADC);
-	}else{
-		this_obj(IND_obj_aOUTC)->obj_value = 0;
-	}
-	
-	if(this_obj(IND_obj_aDRV)->obj_hardware == 1){
-		this_obj(IND_obj_aDRV)->obj_value = get_dvl1000_value(adc_val->CH5_ADC);
-	}else{
-		this_obj(IND_obj_aDRV)->obj_value = 0;
-	}
-	
-	if(this_obj(IND_obj_aDRC)->obj_hardware == 1){
-		this_obj(IND_obj_aDRC)->obj_value = get_lf510_value(adc_val->CH6_ADC);
-	}else{
-		this_obj(IND_obj_aDRC)->obj_value = 0;
-	}
-
-/* test */
-//	this_obj(IND_obj_aINV)->obj_value = adc_val->CH1_ADC;
-//	this_obj(IND_obj_aINC)->obj_value = adc_val->CH2_ADC;
-//	this_obj(IND_obj_aOUTV)->obj_value = adc_val->CH3_ADC;
-//	this_obj(IND_obj_aOUTC)->obj_value = adc_val->CH4_ADC;
-//	this_obj(IND_obj_aDRC)->obj_value = adc_val->CH5_ADC;
-//	this_obj(IND_obj_aDRV)->obj_value = adc_val->CH6_ADC;
+void ADC0_Handler(OBJ_STRUCT *obj)
+{
+	/*AIN0 - dvl1000   входное напряжение*/
+	uint16_t value = obj->obj_value;
+	value = (value*(uint16_t)INT_ADC_REF)/(uint16_t)ADC_DEPTH;
+	this_obj(IND_obj_aINV)->obj_value = get_dvl1000_value(value);
 }
+
+void ADC1_Handler(OBJ_STRUCT *obj)
+{
+	/*	AIN1 - lac300  	 входной ток */
+	uint16_t value = obj->obj_value;
+	value = (value*(uint16_t)INT_ADC_REF)/(uint16_t)ADC_DEPTH;
+	this_obj(IND_obj_aINC)->obj_value = get_lac300_value(value);
+}
+
+void ADC2_Handler(OBJ_STRUCT *obj)
+{
+	/*AIN2 - dvl1000   выходное напряжение*/
+	uint16_t value = obj->obj_value;
+	value = (value*(uint16_t)INT_ADC_REF)/(uint16_t)ADC_DEPTH;
+	this_obj(IND_obj_aOUTV)->obj_value = get_dvl1000_value(value);
+}
+
+void ADC3_Handler(OBJ_STRUCT *obj)
+{
+	/*AIN3 - lac300    выходной ток*/
+	uint16_t value = obj->obj_value;
+	value = (value*(uint16_t)INT_ADC_REF)/(uint16_t)ADC_DEPTH;
+	this_obj(IND_obj_aOUTC)->obj_value = get_lac300_value(value);	
+}
+
+void ADC4_Handler(OBJ_STRUCT *obj)
+{
+	/*AIN4 - dvl1000   напряжение дросселя*/
+	uint16_t value = obj->obj_value;
+	value = (value*(uint16_t)INT_ADC_REF)/(uint16_t)ADC_DEPTH;
+	this_obj(IND_obj_aDRV)->obj_value = get_dvl1000_value(value);	
+}
+
+void ADC5_Handler(OBJ_STRUCT *obj)
+{
+	/*AIN5 - lf510     ток дросселя*/
+	uint16_t value = obj->obj_value;
+	value = (value*(uint16_t)INT_ADC_REF)/(uint16_t)ADC_DEPTH;
+	this_obj(IND_obj_aDRC)->obj_value = get_lf510_value(value);		
+}
+
 
 /*контроль канала ШИМ 1*/
 void PWM1_Handler(OBJ_STRUCT *obj){
@@ -334,33 +324,5 @@ void PID_Control_Handler(OBJ_STRUCT *obj){
 		pid_current_out.setpoint_val =(uint16_t)obj->obj_value;
 	}else{
 		pid_current_out.setpoint_val = 0;
-	}
-}
-
-void obj_hw_input(OBJ_STRUCT *obj,int input)
-{
-	if(obj->obj_hardware){
-		if(input != obj->obj_state)
-		{
-			/*event to SOM*/
-			if(!obj->obj_event)
-			{
-				obj->obj_state = input;
-			}
-			obj_update(obj->idof_obj);
-		}
-	}
-}
-
-void obj_hw_adc(OBJ_STRUCT *obj,uint16_t value)
-{
-	if(obj->obj_hardware)
-	{
-		/*update value from ADC DR*/
-		if(value != obj->obj_value)
-		{
-			obj->obj_value = value;
-			obj_update(obj->idof_obj);
-		}
 	}
 }

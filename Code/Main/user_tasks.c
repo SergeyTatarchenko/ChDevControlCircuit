@@ -25,7 +25,6 @@ void obj_model_setup()
 	
 	task_priority.tick_update_rate = 50;
 	
-	obj_state_on(IND_obj_ADC_CONV);
 	obj_state_off(IND_obj_PredZar);
 	obj_state_off(IND_obj_KM1);
 	obj_state_off(IND_obj_PWM1);
@@ -48,7 +47,6 @@ void obj_model_setup()
 	
 	pid_current_out.out_Max = 1000; 
 	pid_current_out.out_Min = 0;
-	
 	this_obj(IND_obj_PID1_KP)->dWordL = (uint32_t)(pid_current_out.Kp*10000);
 	this_obj(IND_obj_PID1_KI)->dWordL = (uint32_t)(pid_current_out.Ki*10000);
 	this_obj(IND_obj_PID1_KD)->dWordL = (uint32_t)(pid_current_out.Kd*10000);
@@ -61,10 +59,7 @@ void obj_model_task(int tick)
 	/*while power enable adc conversions*/
 	if(board_power)
 	{
-		/*get voltage from adc channels, fast execution*/
-		adc_calc_value();
-		/*get sensors values, obj model mode */
-		OBJ_Event(IND_obj_ADC_CONV);
+	obj_adc_driver(ADC1_DataArray);	
 	}	
 }
 
