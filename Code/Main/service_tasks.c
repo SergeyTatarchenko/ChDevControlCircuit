@@ -31,6 +31,8 @@ void vGetIOState(void *pvParameters){
 		if(!Get_IO_State()){
 			// internal circuit error (add handler)
 		}
+		
+		obj_input_driver(&(IO_Pointer->INPUTS),1);
 		xSemaphoreGive(xMutex_BUS_BUSY);
 			
 		SemaphoreCount = uxSemaphoreGetCount(InputEvent);	
