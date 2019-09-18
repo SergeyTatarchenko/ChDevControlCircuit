@@ -26,10 +26,18 @@ v 0.3
 #define _obj_ADC3_init	       IND_obj_aADC3        ,IND_obj_CAS  ,obj_hard  ,   adc_3   ,NULL         ,ADC3_Handler
 #define _obj_ADC4_init	       IND_obj_aADC4        ,IND_obj_CAS  ,obj_hard  ,   adc_4   ,NULL         ,ADC4_Handler
 #define _obj_ADC5_init	       IND_obj_aADC5        ,IND_obj_CAS  ,obj_hard  ,   adc_5   ,NULL         ,ADC5_Handler
-#define _obj_PWM1_init	       IND_obj_PWM1         ,IND_obj_SWC  ,obj_hard  ,   pwm_0   ,NULL         ,PWM1_Handler
-#define _obj_PWM2_init	       IND_obj_PWM2         ,IND_obj_SWC  ,obj_hard  ,   pwm_1   ,NULL         ,PWM2_Handler
+
+/*---------------------------------------------------------------------------------------------------*/
+#define _obj_IN0_init	       IND_obj_iInput0      ,IND_obj_SWC  ,obj_hard  ,   in_0   ,NULL         ,NULL
+#define _obj_IN1_init	       IND_obj_iInput1      ,IND_obj_SWC  ,obj_hard  ,   in_1   ,NULL         ,NULL
+#define _obj_IN2_init	       IND_obj_iInput2      ,IND_obj_SWC  ,obj_hard  ,   in_2   ,NULL         ,NULL
+#define _obj_IN3_init	       IND_obj_iInput3      ,IND_obj_SWC  ,obj_hard  ,   in_3   ,NULL         ,NULL
+/*---------------------------------------------------------------------------------------------------*/
 #define _obj_OUT6_init	       IND_obj_PredZar      ,IND_obj_CAS  ,obj_hard  ,   out_6   ,NULL         ,NULL
 #define _obj_OUT7_init	       IND_obj_KM1          ,IND_obj_CAS  ,obj_hard  ,   out_7   ,NULL         ,NULL
+
+#define _obj_PWM1_init	       IND_obj_PWM1         ,IND_obj_SWC  ,obj_hard  ,   pwm_0   ,NULL         ,PWM1_Handler
+#define _obj_PWM2_init	       IND_obj_PWM2         ,IND_obj_SWC  ,obj_hard  ,   pwm_1   ,NULL         ,PWM2_Handler
 /*---------------------------------------------------------------------------------------------------*/
 #define _obj_USART_TX_init     IND_obj_USART_TX     ,IND_obj_SWC  ,obj_timer ,   NULL   ,100           ,USART_Handler
 
@@ -66,6 +74,7 @@ v 0.3
 /*init struct for obj model setup*/
 #define _obj_cofig_	\
 {_obj_STATUS_init},{_obj_USART_TX_init}, \
+{_obj_IN0_init},{_obj_IN1_init},{_obj_IN2_init},{_obj_IN3_init}, \
 {obj_aINV_init},{obj_aINC_init},{obj_aOUTV_init},{obj_aOUTC_init},{obj_aDRV_init},{obj_aDRC_init}, \
 {_obj_PID1_KP_init},{_obj_PID1_KI_init},{_obj_PID1_KD_init},{_obj_PID1_KP_init},{_obj_PID_init}, \
 {_obj_ADC0_init},{_obj_ADC1_init},{_obj_ADC2_init},{_obj_ADC3_init},{_obj_ADC4_init},{_obj_ADC5_init},	\
