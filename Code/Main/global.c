@@ -24,6 +24,8 @@ AnalogState_REGISTR *AIN_Pointer;
  
 /*data array for adc*/
 uint16_t ADC1_DataArray[ADC1_BUF_SIZE];
+
+ChargerErrors_TypeDef ChargerErrors;
 /*************************************************
 init all system core drivers
 *************************************************/

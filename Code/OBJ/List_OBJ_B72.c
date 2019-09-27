@@ -128,28 +128,34 @@ void ChDevStart_Handler(OBJ_STRUCT *obj)
 		charger_permission = comparator(set_current_sensor_error,value_of_obj(IND_obj_aINC));
 		if(!charger_permission){
 			/*утечка или ошибка датчика входного тока*/
+			ChargerErrors.value.bit.input_current_sensor_error = 1;
 		}
 		charger_permission &= comparator(set_voltage_sensor_error,value_of_obj(IND_obj_aINV));
 		if(!charger_permission){
 			/*утечка или ошибка датчика входного напряжения*/
+			ChargerErrors.value.bit.input_voltage_sensor_error = 1;
 		}
 		/*------------------------------------*/
 		charger_permission &= comparator(set_current_sensor_error,value_of_obj(IND_obj_aOUTC));
 		if(!charger_permission){
 			/*утечка или ошибка датчика выходного тока*/
+			ChargerErrors.value.bit.output_current_sensor_error = 1;
 		}
 		charger_permission &= comparator(set_voltage_sensor_error,value_of_obj(IND_obj_aOUTV));
 		if(!charger_permission){
 			/*утечка или ошибка датчика выходного напряжения*/
+			ChargerErrors.value.bit.output_voltage_sensor_error = 1;
 		}
 		/*------------------------------------*/
 		charger_permission &= comparator(set_voltage_sensor_error,value_of_obj(IND_obj_aDRV));
 		if(!charger_permission){
 			/*утечка или ошибка датчика напряжения дросселя*/
+			ChargerErrors.value.bit.throttle_voltage_sensor_error = 1;
 		}
 		charger_permission &= comparator(set_current_sensor_error,value_of_obj(IND_obj_aDRC));
 		if(!charger_permission){
 			/*утечка или ошибка датчика тока дросселя*/
+			ChargerErrors.value.bit.throttle_current_sensor_error = 1;
 		}
 		/*в новой ревизии платы добавить проверку датчиков температуры ключей и радиатора + проверка обратной связи контактора*/
 		
@@ -159,6 +165,9 @@ void ChDevStart_Handler(OBJ_STRUCT *obj)
 			obj_state_on(IND_obj_PredZar);
 			/*запуск таймера задержки старта*/
 			OBJ_Event(IND_obj_DELAY_START);
+		}else{
+			value_of_obj(IND_obj_ERR_ARRAY)= ChargerErrors.value.value;
+			OBJ_Event(IND_obj_ERR_ARRAY);
 		}
 	}	
 }

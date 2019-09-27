@@ -28,10 +28,10 @@ v 0.3
 #define _obj_ADC5_init	       IND_obj_aADC5        ,IND_obj_CAS  ,obj_hard  ,   adc_5   ,NULL         ,ADC5_Handler
 
 /*---------------------------------------------------------------------------------------------------*/
-#define _obj_IN0_init	       IND_obj_iInput0      ,IND_obj_SWC  ,obj_hard  ,   in_0   ,NULL         ,NULL
-#define _obj_IN1_init	       IND_obj_iInput1      ,IND_obj_SWC  ,obj_hard  ,   in_1   ,NULL         ,NULL
-#define _obj_IN2_init	       IND_obj_iInput2      ,IND_obj_SWC  ,obj_hard  ,   in_2   ,NULL         ,NULL
-#define _obj_IN3_init	       IND_obj_iInput3      ,IND_obj_SWC  ,obj_hard  ,   in_3   ,NULL         ,NULL
+#define _obj_IN0_init	       IND_obj_iInput0      ,IND_obj_CAS  ,obj_hard  ,   in_0   ,NULL         ,NULL
+#define _obj_IN1_init	       IND_obj_iInput1      ,IND_obj_CAS  ,obj_hard  ,   in_1   ,NULL         ,NULL
+#define _obj_IN2_init	       IND_obj_iInput2      ,IND_obj_CAS  ,obj_hard  ,   in_2   ,NULL         ,NULL
+#define _obj_IN3_init	       IND_obj_iInput3      ,IND_obj_CAS  ,obj_hard  ,   in_3   ,NULL         ,NULL
 /*---------------------------------------------------------------------------------------------------*/
 #define _obj_OUT6_init	       IND_obj_PredZar      ,IND_obj_CAS  ,obj_hard  ,   out_6   ,NULL         ,NULL
 #define _obj_OUT7_init	       IND_obj_KM1          ,IND_obj_CAS  ,obj_hard  ,   out_7   ,NULL         ,NULL

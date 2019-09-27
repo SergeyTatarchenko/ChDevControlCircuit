@@ -32,14 +32,17 @@ void obj_model_setup()
 	obj_state_off(IND_obj_PWM_FREQ);
 	obj_state_off(IND_obj_PWM_ON);
 	
+	LED_OFF;
 	/*adc init*/
 	ADC1_On
 	/*usart interrupt enable*/
 	
 	/* USART1_IRQ = 37 */
 	NVIC_EnableIRQ (USART1_IRQn);
-	
-	
+//	
+//	board_power = 1;
+//	OBJ_Event(IND_obj_USART_TX);
+//	
 	/*init coef of regulator*/
 	pid_current_out.Kp = 0.8;
 	pid_current_out.Ki = 0.001;
@@ -59,7 +62,8 @@ void obj_model_task(int tick)
 	/*while power enable adc conversions*/
 	if(board_power)
 	{
-	obj_adc_driver(ADC1_DataArray);	
+	obj_adc_driver(ADC1_DataArray);
+		
 	}	
 }
 

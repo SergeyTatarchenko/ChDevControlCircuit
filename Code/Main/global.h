@@ -72,7 +72,60 @@
 #define MCP23017_RESET 	(GPIOB->BSRR = GPIO_BSRR_BS5);
 #define MCP23017_START 	(GPIOB->BSRR = GPIO_BSRR_BR5);
 
+#pragma pack(push,1)
+typedef struct{
+	union{
+		uint16_t value;
+		struct{
+			/*ошибка в драйвере верхнего ключа*/
+			unsigned power_buck_driver_error:1;
+			/*ошибка в драйвере нижнего  ключа*/
+			unsigned power_boost_driver_error:1;
+			/*ошибка датчика входного напряжения*/
+			unsigned input_voltage_sensor_error:1;
+			/*ошибка датчика входного тока*/
+			unsigned input_current_sensor_error:1;
+			/*ошибка датчика выходного напряжения*/
+			unsigned output_voltage_sensor_error:1;
+			/*ошибка датчика выходного тока*/
+			unsigned output_current_sensor_error:1;
+			/*ошибка датчика напряжения дросселя*/
+			unsigned throttle_voltage_sensor_error:1;
+			/*ошибка датчика тока дросселя*/
+			unsigned throttle_current_sensor_error:1;
+			/*Внутренняя ошибка платы управления*/
+			unsigned internal_circuit_error:1;
+			/*Неисправность платы предзаряда*/
+			unsigned precharge_circuit_error:1; 
+			/*перегрев ключа верхнего транзистора*/
+			unsigned buck_switch_overheat:1;
+			/*перегрев ключа нижнего транзистора*/
+			unsigned boost_switch_overheat:1;
+			/*отказ управления в понижающем режиме*/
+			unsigned buck_algorithm_error:1;
+			/*отказ управления в повышающем режиме*/
+			unsigned boost_algorithm_error:1;
+			/*залипание или отказ контактора КМ1*/
+			unsigned main_contactor_error:1;		
+		}bit;
+	}value;
+}ChargerErrors_TypeDef;
+#pragma pack(pop)
 
+#pragma pack(push,1)
+typedef struct{
+	
+	uint16_t PrechargeMinVoltage;
+	uint16_t PrechargeMaxVoltage;
+	uint8_t  PermissibleCurrentSensorError;
+	uint8_t  PermissibleVoltageSensorError;
+	uint16_t MinDutyCycleBuck;
+	uint16_t MaxDutyCycleBuck;
+	uint16_t MinDutyCycleBoost;
+	uint16_t MaxDutyCycleBoost;
+	
+}ChargerConfig_TypeDef;
+#pragma pack(pop)
 /*-----------local function prototypes----------*/
 /*init different IO pins*/
 void DifPinInit(void);
@@ -122,6 +175,9 @@ extern uint16_t adc_ch6_buffer[adc_filter_size];
 
 /**/
 int comparator(int plus, int minus);
+
+extern ChargerErrors_TypeDef ChargerErrors;
+extern ChargerConfig_TypeDef ChargerConfig;
 
 /*low priority tasks**********************************************************
 ******************************************************************************/
