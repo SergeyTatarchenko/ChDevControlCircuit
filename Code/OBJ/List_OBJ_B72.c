@@ -14,7 +14,9 @@
 #define set_voltage_sensor_error	10	
 
 #define buck_min_value			400	
-#define buck_max_value  		800
+#define buck_max_value  		950
+
+
 
 #define charger_buck_mode		1
 #define charger_boost_mode		2
@@ -44,10 +46,10 @@ void ADC0_Handler(OBJ_STRUCT *obj)
 
 void ADC1_Handler(OBJ_STRUCT *obj)
 {
-	/*	AIN1 - lac300  	 входной ток */
+	/*	AIN1 - lac300  	 выходной ток */
 	uint16_t value = obj->obj_value;
 	value = (value*(uint16_t)INT_ADC_REF)/(uint16_t)ADC_DEPTH;
-	this_obj(IND_obj_aINC)->obj_value = get_lac300_value(value);
+	this_obj(IND_obj_aOUTC)->obj_value = get_lac300_value(value);
 }
 
 void ADC2_Handler(OBJ_STRUCT *obj)
@@ -60,10 +62,10 @@ void ADC2_Handler(OBJ_STRUCT *obj)
 
 void ADC3_Handler(OBJ_STRUCT *obj)
 {
-	/*AIN3 - lac300    выходной ток*/
+	/*AIN3 - lac300    входной ток*/
 	uint16_t value = obj->obj_value;
 	value = (value*(uint16_t)INT_ADC_REF)/(uint16_t)ADC_DEPTH;
-	this_obj(IND_obj_aOUTC)->obj_value = get_lac300_value(value);	
+	this_obj(IND_obj_aINC)->obj_value = get_lac300_value(value);	
 }
 
 void ADC4_Handler(OBJ_STRUCT *obj)
@@ -118,10 +120,10 @@ void USART_Handler(OBJ_STRUCT *obj){
 	}
 }
 
-/**/
+/*проверка датчиков после включения ЗУ */
 void ChDevStart_Handler(OBJ_STRUCT *obj)
 {
-	static int charger_permission;
+	static int charger_permission = 0;
 	if(obj->obj_state){
 		/*старт алгоритма ЗУ, проверка входных датчиков на нулевые условия*/
 		/*------------------------------------*/
@@ -158,18 +160,9 @@ void ChDevStart_Handler(OBJ_STRUCT *obj)
 			ChargerErrors.value.bit.throttle_current_sensor_error = 1;
 		}
 		/*в новой ревизии платы добавить проверку датчиков температуры ключей и радиатора + проверка обратной связи контактора*/
-		
-		/*в случае отсутствия ошибок - пуск преобразователя (режим работы закладывается в поле value)*/
-		if(charger_permission){
-			/*включение платы предзаряда*/
-			obj_state_on(IND_obj_PredZar);
-			/*запуск таймера задержки старта*/
-			OBJ_Event(IND_obj_DELAY_START);
-		}else{
-			value_of_obj(IND_obj_ERR_ARRAY)= ChargerErrors.value.value;
-			OBJ_Event(IND_obj_ERR_ARRAY);
-		}
-	}	
+		value_of_obj(IND_obj_ERR_ARRAY)= ChargerErrors.value.value;
+		obj_update(IND_obj_ERR_ARRAY);
+	}
 }
 
 /**/
@@ -189,15 +182,6 @@ void DelayStart_Handler(OBJ_STRUCT *obj)
 	if(!charger_permission){
 		/*высокое входное напряжение*/
 	}
-	if(charger_permission){
-		/*включение контактора КМ1*/
-		obj_state_on(IND_obj_KM1);
-		/*добавить проверку на залипание контактора*/
-		
-		/*ТЕСТ понижающий режим*/
-		obj_state_on(IND_obj_BUCK_MODE);
-		
-	}	
 }
 
 /*включение режима понижающего преобразователя*/
@@ -208,11 +192,7 @@ void BUCK_Mode_Handler(OBJ_STRUCT *obj)
 		/*вкл контактор*/
 		obj_state_on(IND_obj_KM1);
 		/*включение ШИМ канала для верхнего транзистора, нижний транзистор закрыт*/
-		obj_state_on(IND_obj_PWM2);	
-		/*установка частоты 2 кГц*/
-		this_obj(IND_obj_PWM_FREQ)->obj_value = 2000;
-		obj_state_on(IND_obj_PWM_FREQ);
-	
+		obj_state_on(IND_obj_PWM2);		
 		/*Включение ШИМ  - скважность 50%*/
 		this_obj(IND_obj_PWM_ON)->obj_value = 500;
 		obj_state_on(IND_obj_PWM_ON);	
@@ -234,11 +214,7 @@ void BOOST_Mode_Handler(OBJ_STRUCT *obj)
 		obj_state_on(IND_obj_KM1);
 		
 		/*включение ШИМ канала для нижнего транзистора, верхний транзистор открыт*/
-		obj_state_on(IND_obj_PWM1);	
-		/*установка частоты 2 кГц*/
-		this_obj(IND_obj_PWM_FREQ)->obj_value = 2000;
-		obj_state_on(IND_obj_PWM_FREQ);
-	
+		obj_state_on(IND_obj_PWM1);		
 		/*Включение ШИМ  - скважность 50%*/
 		this_obj(IND_obj_PWM_ON)->obj_value = 500;
 		obj_state_on(IND_obj_PWM_ON);
@@ -262,9 +238,6 @@ void Test_Handler(OBJ_STRUCT *obj)
 		obj_state_on(IND_obj_KM1);
 		/*включение ШИМ канала для всех транзисторов*/
 		PWMSetActiveChannel(ALL_CH_ON);	
-		/*установка частоты 2 кГц*/
-		this_obj(IND_obj_PWM_FREQ)->obj_value = 2000;
-		obj_state_on(IND_obj_PWM_FREQ);
 		/*Включение ШИМ  - скважность 50%*/
 		this_obj(IND_obj_PWM_ON)->obj_value = 500;
 		obj_state_on(IND_obj_PWM_ON);

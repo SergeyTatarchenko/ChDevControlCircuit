@@ -26,16 +26,27 @@ v 0.3
 #define _obj_ADC3_init	       IND_obj_aADC3        ,IND_obj_CAS  ,obj_hard  ,   adc_3   ,NULL         ,ADC3_Handler
 #define _obj_ADC4_init	       IND_obj_aADC4        ,IND_obj_CAS  ,obj_hard  ,   adc_4   ,NULL         ,ADC4_Handler
 #define _obj_ADC5_init	       IND_obj_aADC5        ,IND_obj_CAS  ,obj_hard  ,   adc_5   ,NULL         ,ADC5_Handler
-
+#define _obj_ADC6_init	       IND_obj_aADC6        ,IND_obj_CAS  ,obj_hard  ,   adc_6   ,NULL         ,NULL
+#define _obj_ADC7_init	       IND_obj_aADC7        ,IND_obj_CAS  ,obj_hard  ,   adc_7   ,NULL         ,NULL
 /*---------------------------------------------------------------------------------------------------*/
 #define _obj_IN0_init	       IND_obj_iInput0      ,IND_obj_CAS  ,obj_hard  ,   in_0   ,NULL         ,NULL
 #define _obj_IN1_init	       IND_obj_iInput1      ,IND_obj_CAS  ,obj_hard  ,   in_1   ,NULL         ,NULL
 #define _obj_IN2_init	       IND_obj_iInput2      ,IND_obj_CAS  ,obj_hard  ,   in_2   ,NULL         ,NULL
 #define _obj_IN3_init	       IND_obj_iInput3      ,IND_obj_CAS  ,obj_hard  ,   in_3   ,NULL         ,NULL
+#define _obj_IN4_init	       IND_obj_iInput4      ,IND_obj_CAS  ,obj_hard  ,   in_4   ,NULL         ,NULL
+#define _obj_IN5_init	       IND_obj_iInput5      ,IND_obj_CAS  ,obj_hard  ,   in_5   ,NULL         ,NULL
+#define _obj_IN6_init	       IND_obj_iInput6      ,IND_obj_CAS  ,obj_hard  ,   in_6   ,NULL         ,NULL
+#define _obj_IN7_init	       IND_obj_iInput7      ,IND_obj_CAS  ,obj_hard  ,   in_7   ,NULL         ,NULL
 /*---------------------------------------------------------------------------------------------------*/
+#define _obj_OUT0_init         IND_obj_oOUT0        ,IND_obj_CAS  ,obj_hard  ,   out_0   ,NULL         ,NULL
+#define _obj_OUT1_init	       IND_obj_oOUT1        ,IND_obj_CAS  ,obj_hard  ,   out_1   ,NULL         ,NULL
+#define _obj_OUT2_init	       IND_obj_oOUT2        ,IND_obj_CAS  ,obj_hard  ,   out_2   ,NULL         ,NULL
+#define _obj_OUT3_init	       IND_obj_oOUT3        ,IND_obj_CAS  ,obj_hard  ,   out_3   ,NULL         ,NULL
+#define _obj_OUT4_init	       IND_obj_oOUT4        ,IND_obj_CAS  ,obj_hard  ,   out_4   ,NULL         ,NULL
+#define _obj_OUT5_init	       IND_obj_oOUT5        ,IND_obj_CAS  ,obj_hard  ,   out_5   ,NULL         ,NULL
 #define _obj_OUT6_init	       IND_obj_PredZar      ,IND_obj_CAS  ,obj_hard  ,   out_6   ,NULL         ,NULL
 #define _obj_OUT7_init	       IND_obj_KM1          ,IND_obj_CAS  ,obj_hard  ,   out_7   ,NULL         ,NULL
-
+/*---------------------------------------------------------------------------------------------------*/
 #define _obj_PWM1_init	       IND_obj_PWM1         ,IND_obj_SWC  ,obj_hard  ,   pwm_0   ,NULL         ,PWM1_Handler
 #define _obj_PWM2_init	       IND_obj_PWM2         ,IND_obj_SWC  ,obj_hard  ,   pwm_1   ,NULL         ,PWM2_Handler
 /*---------------------------------------------------------------------------------------------------*/
@@ -57,7 +68,7 @@ v 0.3
 #define _obj_PWM_ON_init       IND_obj_PWM_ON       ,IND_obj_CAS  ,obj_soft  ,   NULL   ,NULL          ,PWM_Control_Handler
  
 #define _obj_BUCK_init         IND_obj_BUCK_MODE    ,IND_obj_CAS  ,obj_soft  ,   NULL   ,NULL          ,BUCK_Mode_Handler
-#define _obj_BOOST_init        IND_obj_BOOST_MODE   ,IND_obj_SWC  ,obj_soft  ,   NULL   ,NULL          ,BOOST_Mode_Handler
+#define _obj_BOOST_init        IND_obj_BOOST_MODE   ,IND_obj_CAS  ,obj_soft  ,   NULL   ,NULL          ,BOOST_Mode_Handler
 #define _obj_DELAY_init        IND_obj_DELAY_START  ,IND_obj_SWC  ,obj_timer ,   NULL   ,2500          ,DelayStart_Handler
 
 #define _obj_ACUR_C_init       IND_obj_ACUR_C       ,IND_obj_SWC  ,obj_soft  ,   NULL   ,NULL          ,NULL
@@ -73,12 +84,13 @@ v 0.3
 
 /*init struct for obj model setup*/
 #define _obj_cofig_	\
-{_obj_STATUS_init},{_obj_USART_TX_init}, \
-{_obj_IN0_init},{_obj_IN1_init},{_obj_IN2_init},{_obj_IN3_init}, \
+{_obj_STATUS_init},{_obj_USART_TX_init},{_obj_TEST_init}, \
+{_obj_ADC0_init},{_obj_ADC1_init},{_obj_ADC2_init},{_obj_ADC3_init},{_obj_ADC4_init},{_obj_ADC5_init},{_obj_ADC6_init},{_obj_ADC7_init}, \
+{_obj_IN0_init},{_obj_IN1_init},{_obj_IN2_init},{_obj_IN3_init},{_obj_IN4_init},{_obj_IN5_init},{_obj_IN6_init},{_obj_IN7_init}, \
+{_obj_OUT0_init},{_obj_OUT1_init},{_obj_OUT2_init},{_obj_OUT3_init},{_obj_OUT4_init},{_obj_OUT5_init},{_obj_OUT6_init},{_obj_OUT7_init}, \
 {obj_aINV_init},{obj_aINC_init},{obj_aOUTV_init},{obj_aOUTC_init},{obj_aDRV_init},{obj_aDRC_init}, \
 {_obj_PID1_KP_init},{_obj_PID1_KI_init},{_obj_PID1_KD_init},{_obj_PID1_KP_init},{_obj_PID_init}, \
-{_obj_ADC0_init},{_obj_ADC1_init},{_obj_ADC2_init},{_obj_ADC3_init},{_obj_ADC4_init},{_obj_ADC5_init},	\
-{_obj_OUT6_init},{_obj_OUT7_init},{_obj_PWM1_init},{_obj_PWM2_init},{_obj_PWM_FRQ_init},{_obj_PWM_ON_init}, \
+{_obj_PWM1_init},{_obj_PWM2_init},{_obj_PWM_FRQ_init},{_obj_PWM_ON_init}, \
 {_obj_BUCK_init},{_obj_BOOST_init},{_obj_DELAY_init}, \
 {_obj_ACUR_C_init},{_obj_ACUR_G_init},{_obj_CUR_C_init},{_obj_CUR_G_init},{_obj_ECE_init},{_obj_Q_init},{_obj_ERR_init},{_obj_START_init}
 /*--------------------------------------------------------------------------------------*/

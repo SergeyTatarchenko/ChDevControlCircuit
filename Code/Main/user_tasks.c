@@ -22,16 +22,9 @@ void obj_model_setup()
 	/*256*2 byte block */
 	task_priority.stack_user  = 512; 
 	task_priority.stack_tx_rx = 256;
-	
 	task_priority.tick_update_rate = 50;
-	
-	obj_state_off(IND_obj_PredZar);
-	obj_state_off(IND_obj_KM1);
-	obj_state_off(IND_obj_PWM1);
-	obj_state_off(IND_obj_PWM2);
-	obj_state_off(IND_obj_PWM_FREQ);
-	obj_state_off(IND_obj_PWM_ON);
-	
+	/*heavy function!!!*/
+//	set_all_obj_off();
 	LED_OFF;
 	/*adc init*/
 	ADC1_On
@@ -39,11 +32,8 @@ void obj_model_setup()
 	
 	/* USART1_IRQ = 37 */
 	NVIC_EnableIRQ (USART1_IRQn);
-//	
-//	board_power = 1;
-//	OBJ_Event(IND_obj_USART_TX);
-//	
-	/*init coef of regulator*/
+		
+/*init coef of regulator*/
 	pid_current_out.Kp = 0.8;
 	pid_current_out.Ki = 0.001;
 	pid_current_out.Kd = 0.5;
@@ -63,7 +53,6 @@ void obj_model_task(int tick)
 	if(board_power)
 	{
 	obj_adc_driver(ADC1_DataArray);
-		
 	}	
 }
 
