@@ -29,11 +29,12 @@ void obj_model_setup()
 	/*adc init*/
 	ADC1_On
 	/*usart interrupt enable*/
-	
+	//board_power = 1;
+	//OBJ_Event(IND_obj_USART_TX);
 	/* USART1_IRQ = 37 */
 	NVIC_EnableIRQ (USART1_IRQn);
 		
-/*init coef of regulator*/
+	/*init coef of regulator*/
 	pid_current_out.Kp = 0.8;
 	pid_current_out.Ki = 0.001;
 	pid_current_out.Kd = 0.5;

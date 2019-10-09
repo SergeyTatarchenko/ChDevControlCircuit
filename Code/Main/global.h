@@ -56,21 +56,11 @@
 	
 #endif
 
-#ifdef	ADG729_ADRESS
-	
-	#define AIN1	AnalogValue1.Value
-	#define AIN2	AnalogValue2.Value
-	#define AIN3	AnalogValue3.Value
-	#define AIN4	AnalogValue4.Value
-	
-#endif
+#define MCP23017_RESET 	(GPIOB->BSRR = GPIO_BSRR_BS5);
+#define MCP23017_START 	(GPIOB->BSRR = GPIO_BSRR_BR5);
 
 #define LED_OFF 		(GPIOC->BSRR |= GPIO_BSRR_BS13);
 #define LED_ON 			(GPIOC->BSRR |= GPIO_BSRR_BR13);
-
-
-#define MCP23017_RESET 	(GPIOB->BSRR = GPIO_BSRR_BS5);
-#define MCP23017_START 	(GPIOB->BSRR = GPIO_BSRR_BR5);
 
 #pragma pack(push,1)
 typedef struct{
@@ -131,11 +121,11 @@ typedef struct{
 void DifPinInit(void);
 /*init all peripherals and external circuits*/
 void Core_Init(void);
+/*control led on the board*/
+void led_invertor(void);
+/*comparator function*/
+int comparator(int plus, int minus);
 /*----------- global function prototypes---------*/
-/*Тут прототипы готовых функций для работы с ядром и периферийными устройствами */
-
-/*run only in high priority tasks*********************************************
-******************************************************************************/
 
 /*get state of all available IO ports and puts it in the appropriate structure,
   return true if success*/
@@ -155,30 +145,15 @@ extern _Bool Get_AIn_State(int port);
 
 /*calc adc value*/
 void adc_calc_value(void);
-
-/**/
+/*-----adc functions for external sensors--------*/
 uint16_t get_dvl1000_value(uint16_t adc_voltage);
 uint16_t get_lac300_value(uint16_t adc_voltage);
 uint16_t get_lf510_value(uint16_t adc_voltage);
-/**/
-void led_invertor(void);
-
+/*-----------------------------------------------*/
+/*--------------filter block(debug mode)---------*/
 #define adc_filter_size	60
 extern uint16_t adc_moving_average_filter(uint16_t *buff, uint32_t buff_size);
-
-extern uint16_t adc_ch1_buffer[adc_filter_size];
-extern uint16_t adc_ch2_buffer[adc_filter_size];
-extern uint16_t adc_ch3_buffer[adc_filter_size];
-extern uint16_t adc_ch4_buffer[adc_filter_size];
-extern uint16_t adc_ch5_buffer[adc_filter_size];
-extern uint16_t adc_ch6_buffer[adc_filter_size];
-
-/**/
-int comparator(int plus, int minus);
-
-extern ChargerErrors_TypeDef ChargerErrors;
-extern ChargerConfig_TypeDef ChargerConfig;
-
+/*-----------------------------------------------*/
 /*low priority tasks**********************************************************
 ******************************************************************************/
 /*error handler for internal errors during execution ( MCP23017 error )*/
@@ -239,49 +214,9 @@ typedef struct{
 	uint16_t TEMP_SENSOR;
 	
 }value_ADC_REGISTR;
-
 #pragma pack(pop)
-/*value in mV(voltage) of avaliable analog inputs */
-#pragma pack(push,1)
-typedef struct{
-	/**/
-	union{
-		uint16_t Value;
-		struct{
-			uint8_t HHalf;
-			uint8_t LHalf;
-		}byte;
-	}AnalogValue1;
-	/**/
-	union{
-		uint16_t Value;
-		struct{
-			uint8_t HHalf;
-			uint8_t LHalf;
-		}byte;
-	}AnalogValue2;
-	/**/
-	union{
-		uint16_t Value;
-		struct{
-			uint8_t HHalf;
-			uint8_t LHalf;
-		}byte;
-	}AnalogValue3;
-	/**/
-	union{
-		uint16_t Value;
-		struct{
-			uint8_t HHalf;
-			uint8_t LHalf;
-		}byte;
-	}AnalogValue4;	
-}AnalogState_REGISTR;
-#pragma pack(pop)
-
 /*----------- global variables-------------------*/
 #define ADC1_BUF_SIZE	7
-
 extern uint16_t ADC1_DataArray[ADC1_BUF_SIZE];
 
 extern PortState_REGISTR IO_STATE;
@@ -290,12 +225,17 @@ extern PortState_REGISTR *IO_Pointer;
 extern value_ADC_REGISTR value_ADC;
 extern value_ADC_REGISTR *adc_val;
 
-/**/
-extern AnalogState_REGISTR AIN_State;
-extern AnalogState_REGISTR *AIN_Pointer;
+extern uint16_t adc_ch1_buffer[adc_filter_size];
+extern uint16_t adc_ch2_buffer[adc_filter_size];
+extern uint16_t adc_ch3_buffer[adc_filter_size];
+extern uint16_t adc_ch4_buffer[adc_filter_size];
+extern uint16_t adc_ch5_buffer[adc_filter_size];
+extern uint16_t adc_ch6_buffer[adc_filter_size];
+
+extern ChargerErrors_TypeDef ChargerErrors;
+extern ChargerConfig_TypeDef ChargerConfig;
 
 #define pU16(val) *((uint16_t*)&val)
-
 #define OPAM_ADC_REF		3300
 
 #endif

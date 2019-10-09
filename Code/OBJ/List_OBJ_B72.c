@@ -13,8 +13,8 @@
 #define set_current_sensor_error	2
 #define set_voltage_sensor_error	10	
 
-#define buck_min_value			400	
-#define buck_max_value  		950
+#define buck_min_value	50	
+#define buck_max_value	950
 
 
 

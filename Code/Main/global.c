@@ -1,11 +1,10 @@
 /*************************************************
 * File Name          : global.h
 * Author             : Tatarchenko S.
-* Version            : v 1.0
+* Version            : v 1.1
 * Description        : Global parameters,functions
   and sending messages of charging device 		
 *************************************************/
-
 #include "global.h"
 
 /************************************************/
@@ -17,13 +16,16 @@ PortState_REGISTR *IO_Pointer;
 
 value_ADC_REGISTR value_ADC;
 value_ADC_REGISTR *adc_val;
-
-/* declared global extern struct for analog port state */
-AnalogState_REGISTR AIN_State;
-AnalogState_REGISTR *AIN_Pointer;
  
 /*data array for adc*/
 uint16_t ADC1_DataArray[ADC1_BUF_SIZE];
+
+uint16_t adc_ch1_buffer[adc_filter_size];
+uint16_t adc_ch2_buffer[adc_filter_size];
+uint16_t adc_ch3_buffer[adc_filter_size];
+uint16_t adc_ch4_buffer[adc_filter_size];
+uint16_t adc_ch5_buffer[adc_filter_size];
+uint16_t adc_ch6_buffer[adc_filter_size];
 
 ChargerErrors_TypeDef ChargerErrors;
 /*************************************************
@@ -42,7 +44,6 @@ void Core_Init(){
 	I2CInit();
 	/*usart init*/
 	usart_init();
-	//test
 	usart_speed(56000);
 	
 	
@@ -59,16 +60,10 @@ void Core_Init(){
 	MCP23017_START;
 	
 	/*test*/
-//	CAN_init();
-/*not used */
+	//	CAN_init();
 	
-	/*external multiplexor init*/
-	//ADG72X_Init();
 	/*get adress, start IO model*/
-	IO_Pointer =&IO_STATE;
-	AIN_Pointer =&AIN_State;
-	
-
+	IO_Pointer =&IO_STATE;	
 	adc_val = &value_ADC;
 
 }
@@ -111,10 +106,9 @@ _Bool Set_IO_State(int pin,int pin_state){
 /*************************************************
 internal error handler 
 *************************************************/
-void ResetIO_Model(){
-	
+void ResetIO_Model()
+{
 	MCP23017_RESET;
-	
 }
 
 /*************************************************
@@ -159,6 +153,7 @@ void send_usart_message(uint8_t *message,uint32_t buf_size){
 		DMA_Ch4_Reload(USART_DATA_TYPE2,buf_size);}
 }
 
+/*implement of SOM function*/
 #ifdef TARGET
 void HWOBJ_Event(int obj_id){
 	
@@ -174,16 +169,8 @@ void HWOBJ_Event(int obj_id){
 /*************************************************
 calc adc value, fill struct with mv 
 *************************************************/
-void adc_calc_value(){
-	/*uncomment if filter enable*/
-//	adc_val->CH1_ADC = (adc_val->adc1_value*(uint16_t)INT_ADC_REF)/(uint16_t)ADC_DEPTH;
-//	adc_val->CH2_ADC = (adc_val->adc2_value*(uint16_t)INT_ADC_REF)/(uint16_t)ADC_DEPTH;
-//	adc_val->CH3_ADC = (adc_val->adc3_value*(uint16_t)INT_ADC_REF)/(uint16_t)ADC_DEPTH;
-//	adc_val->CH4_ADC = (adc_val->adc4_value*(uint16_t)INT_ADC_REF)/(uint16_t)ADC_DEPTH;
-//	adc_val->CH5_ADC = (adc_val->adc5_value*(uint16_t)INT_ADC_REF)/(uint16_t)ADC_DEPTH;
-//	adc_val->CH6_ADC = (adc_val->adc6_value*(uint16_t)INT_ADC_REF)/(uint16_t)ADC_DEPTH;
-	
-	/*uncomment if no filter enable*/	
+void adc_calc_value()
+{
 	adc_val->CH1_ADC = (ADC1_DataArray[0]*(uint16_t)INT_ADC_REF)/(uint16_t)ADC_DEPTH;
 	adc_val->CH2_ADC = (ADC1_DataArray[1]*(uint16_t)INT_ADC_REF)/(uint16_t)ADC_DEPTH;
 	adc_val->CH3_ADC = (ADC1_DataArray[2]*(uint16_t)INT_ADC_REF)/(uint16_t)ADC_DEPTH;
@@ -211,14 +198,6 @@ uint16_t adc_moving_average_filter(uint16_t *buff, uint32_t buff_size)
 	ExpectedValue = ExpectedValue/buff_size;
 	return (uint16_t)ExpectedValue;
 }
-
-uint16_t adc_ch1_buffer[adc_filter_size];
-uint16_t adc_ch2_buffer[adc_filter_size];
-uint16_t adc_ch3_buffer[adc_filter_size];
-uint16_t adc_ch4_buffer[adc_filter_size];
-uint16_t adc_ch5_buffer[adc_filter_size];
-uint16_t adc_ch6_buffer[adc_filter_size];
-
 /*************************************************
  Обработка показания  датчика dvl 1000 
 *************************************************/
