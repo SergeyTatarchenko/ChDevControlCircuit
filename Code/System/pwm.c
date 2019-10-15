@@ -1,7 +1,7 @@
 /*************************************************
 * File Name          : pwm.c
 * Author             : Tatarchenko S.
-* Version            : v 1.1
+* Version            : v 1.2
 * Description        : PWM module 2 channels
 *************************************************/
 #include "pwm.h"
@@ -93,4 +93,17 @@ void PWMSetValue(PWM_CHANNEL channel,uint16_t value){
 		TIM3->CCR4 = 0;
 		TIM3->CCR3 = 0;
 	}
+}
+
+extern uint16_t GetDutyCycle(PWM_CHANNEL channel)
+{
+	if(channel == CH3)
+	{
+		return TIM3->CCR3;
+	}
+	if(channel == CH4)
+	{
+		return TIM3->CCR4;
+	}
+	return 0;
 }

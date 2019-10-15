@@ -1,7 +1,7 @@
 /*************************************************
 * File Name          : pwm.h
 * Author             : Tatarchenko S.
-* Version            : v 1.1
+* Version            : v 1.2
 * Description        : pwm.c header
 *************************************************/
 #ifndef PWM_H
@@ -45,5 +45,6 @@ extern void PWM_Init(void);
 extern void PWMSetValue(PWM_CHANNEL channel,uint16_t value); 
 extern void PWMSetActiveChannel(PWM_CHANNEL channel);
 extern void PWMSetFrequency(int frequency);
+extern uint16_t GetDutyCycle(PWM_CHANNEL channel);
 
 #endif

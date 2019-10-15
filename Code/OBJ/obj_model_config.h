@@ -38,6 +38,7 @@ typedef enum
 -----------------------------------------------*/
 
 #if SOM_MODE == APP_MODE
+	
 	#define HARDWARE_OBJECT TRUE
 	#define USART_DATA_FAST	TRUE
 	#define OBJECT_TIMER	TRUE

@@ -26,8 +26,6 @@ uint16_t adc_ch3_buffer[adc_filter_size];
 uint16_t adc_ch4_buffer[adc_filter_size];
 uint16_t adc_ch5_buffer[adc_filter_size];
 uint16_t adc_ch6_buffer[adc_filter_size];
-
-ChargerErrors_TypeDef ChargerErrors;
 /*************************************************
 init all system core drivers
 *************************************************/

@@ -909,6 +909,11 @@
               <FileType>5</FileType>
               <FilePath>.\Code\OBJ\obj_model_config.h</FilePath>
             </File>
+            <File>
+              <FileName>AlgorithmCD.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\Code\OBJ\AlgorithmCD.c</FilePath>
+            </File>
           </Files>
         </Group>
       </Groups>
@@ -1815,6 +1820,11 @@
               <FileName>obj_model_config.h</FileName>
               <FileType>5</FileType>
               <FilePath>.\Code\OBJ\obj_model_config.h</FilePath>
+            </File>
+            <File>
+              <FileName>AlgorithmCD.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\Code\OBJ\AlgorithmCD.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -2822,6 +2832,11 @@
               <FileName>obj_model_config.h</FileName>
               <FileType>5</FileType>
               <FilePath>.\Code\OBJ\obj_model_config.h</FilePath>
+            </File>
+            <File>
+              <FileName>AlgorithmCD.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\Code\OBJ\AlgorithmCD.c</FilePath>
             </File>
           </Files>
         </Group>
