@@ -17,7 +17,7 @@ void Init_(){
 	Core_Init();	
 	if(Get_IO_State()){
 		
-		LED_OFF;
+		SYNC_LED_OFF;
 		Set_IO_Byte(0x00);
 		InputEvent = xSemaphoreCreateCounting(3,0);
 		FilterReady = xSemaphoreCreateBinary();
@@ -33,7 +33,7 @@ void Init_(){
 		//xTaskCreate(vTask_ADC_filter,"filter",system_stack, NULL,system_prior, NULL );
 	
 	}else{
-		LED_ON;
+		SYNC_LED_ON;
 	}
 }
 /*************************************************

@@ -124,12 +124,23 @@ Init different MCU pins
 *************************************************/
 void DifPinInit(){
 	
-	/* config  LED on PC13*/
+	/* config  SYNC LED on PC13*/
 	RCC->APB2ENR |= RCC_APB2ENR_IOPCEN;
 	GPIOC->CRH &= ~(GPIO_CRH_MODE13|GPIO_CRH_CNF13);	
 	GPIOC->CRH |= (GPIO_CRH_MODE13_0  | GPIO_CRH_MODE13_1);	
+	SYNC_LED_OFF;
 	
-	LED_OFF;
+	/* config  FAULT LED on PB13*/
+	RCC->APB2ENR |= RCC_APB2ENR_IOPBEN;
+	GPIOB->CRH &= ~(GPIO_CRH_MODE13|GPIO_CRH_CNF13);	
+	GPIOB->CRH |= (GPIO_CRH_MODE13_0  | GPIO_CRH_MODE13_1);	
+	FAULT_LED_OFF;
+	
+	/* config  STATE LED on PB14*/
+	RCC->APB2ENR |= RCC_APB2ENR_IOPBEN;
+	GPIOB->CRH &= ~(GPIO_CRH_MODE14|GPIO_CRH_CNF14);	
+	GPIOB->CRH |= (GPIO_CRH_MODE14_0  | GPIO_CRH_MODE14_1);	
+	STATE_LED_OFF;
 	
 	/*config MCP23017 Reset pin*/
 	RCC->APB2ENR |= RCC_APB2ENR_IOPBEN;
@@ -255,11 +266,11 @@ void led_invertor(void)
 {
 	if(GPIOC->ODR &= GPIO_ODR_ODR13)
 	{
-		LED_ON;
+		SYNC_LED_ON;
 	}
 	else
 	{
-		LED_OFF;
+		SYNC_LED_OFF;
 	}
 }
 

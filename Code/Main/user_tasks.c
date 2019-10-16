@@ -25,7 +25,7 @@ void obj_model_setup()
 	task_priority.tick_update_rate = 50;
 	/*heavy function!!!*/
 //	set_all_obj_off();
-	LED_OFF;
+	SYNC_LED_OFF;
 	/*adc init*/
 	ADC1_On
 	/*usart interrupt enable*/

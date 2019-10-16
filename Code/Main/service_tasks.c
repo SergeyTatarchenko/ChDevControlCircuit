@@ -52,9 +52,9 @@ void vBlinker (void *pvParameters){
 	BlinkFreq =(TickType_t*)pvParameters;
 	
 	for(;;){	
-		LED_ON;
+		SYNC_LED_ON;
 		vTaskDelay((*BlinkFreq)/4);			
-		LED_OFF;
+		SYNC_LED_OFF;
 		vTaskDelay(3*(*BlinkFreq)/4);
 		vTaskDelay(*BlinkFreq);			
 	}

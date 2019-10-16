@@ -29,7 +29,10 @@ void flash_erase_page(uint32_t adress)
 	FLASH->AR = adress;
 	FLASH->CR |= FLASH_CR_STRT;
 	
-	while (!(FLASH->SR & FLASH_SR_EOP));
+	while (!(FLASH->SR & FLASH_SR_EOP))
+	{
+		IWDG_RELOAD;
+	}
 	FLASH->SR = FLASH_SR_EOP;
 	FLASH->CR &= ~FLASH_CR_PER;
 }
@@ -53,6 +56,8 @@ int flash_write_page(uint8_t* data, uint32_t address, uint32_t count)
 	{
 		/*write word*/
 		*(volatile uint16_t*)(address) = *((uint16_t *)buff);
+		while (FLASH->SR & FLASH_SR_EOP);
+		
 		/* check for errors */ 
 		if (FLASH->SR  & (FLASH_SR_PGERR | FLASH_SR_PGERR))
 		{

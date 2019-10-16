@@ -9,6 +9,7 @@
 ChargerErrors_TypeDef ChargerErrors;
 ChargerConfig_TypeDef ChargerConfig; 
 /*-----------------------------------------------*/
+/*load configuration from flash memory*/
 int load_configuration(ChargerConfig_TypeDef* configuration)
 {
 	configuration->Frequency = 8000;
@@ -17,6 +18,17 @@ int load_configuration(ChargerConfig_TypeDef* configuration)
 	configuration->PermissibleVoltageSensorError = 20;
 	configuration->PermissibleCurrentSensorError = 2;
 	return 1;
+}
+
+int write_configuration(ChargerConfig_TypeDef* configuration)
+{
+	uint8_t array[sizeof(ChargerConfig_TypeDef)];
+	flash_unlock();
+	memcpy(array,&ChargerConfig,sizeof(array));
+	flash_erase_page((uint32_t)GONFIG_ADRESS);
+	flash_write_page(array,(uint32_t)GONFIG_ADRESS,sizeof(array));
+	flash_lock();
+	return 0;
 }
 
 int PowerBoardInit(ChargerErrors_TypeDef* errors,ChargerConfig_TypeDef* configuration,

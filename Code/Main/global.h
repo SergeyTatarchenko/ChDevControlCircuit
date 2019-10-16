@@ -57,11 +57,18 @@
 	
 #endif
 
-#define MCP23017_RESET 	(GPIOB->BSRR = GPIO_BSRR_BS5);
-#define MCP23017_START 	(GPIOB->BSRR = GPIO_BSRR_BR5);
+#define MCP23017_RESET 		(GPIOB->BSRR = GPIO_BSRR_BS5);
+#define MCP23017_START 		(GPIOB->BSRR = GPIO_BSRR_BR5);
 
-#define LED_OFF 		(GPIOC->BSRR |= GPIO_BSRR_BS13);
-#define LED_ON 			(GPIOC->BSRR |= GPIO_BSRR_BR13);
+#define SYNC_LED_OFF 		(GPIOC->BSRR |= GPIO_BSRR_BS13);
+#define SYNC_LED_ON 		(GPIOC->BSRR |= GPIO_BSRR_BR13);
+
+#define STATE_LED_OFF 		(GPIOB->BSRR |= GPIO_BSRR_BS14);
+#define STATE_LED_ON 		(GPIOB->BSRR |= GPIO_BSRR_BR14);
+
+#define FAULT_LED_OFF 		(GPIOB->BSRR |= GPIO_BSRR_BS13);
+#define FAULT_LED_ON 		(GPIOB->BSRR |= GPIO_BSRR_BR13);
+
 /*-----------local function prototypes----------*/
 /*init different IO pins*/
 void DifPinInit(void);

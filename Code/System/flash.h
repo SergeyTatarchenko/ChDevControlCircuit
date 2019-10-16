@@ -11,6 +11,7 @@
 
 #ifdef STM32F1
 #include <stm32f10x.h>
+#include "system_stm32f10x.h"
 #endif
 
 #define FLASH_ACCESS_WORD0	(uint32_t)0x45670123

@@ -18,7 +18,7 @@ void board_START(OBJ_STRUCT *obj)
 	{
 		board_power = 0;
 		set_all_obj_off();
-		LED_OFF;
+		SYNC_LED_OFF;
 	}
 }
 
@@ -81,17 +81,22 @@ void USART_Handler(OBJ_STRUCT *obj){
 		OBJ_Event(IND_obj_USART_TX);
 	}
 }
-/**/
+/*таймер отключения контактора */
 void KM_Off_Handler(OBJ_STRUCT *obj)
 {
 	if(value_of_obj(IND_obj_aOUTC)<= ChargerConfig.PermissibleCurrentSensorError)
 	{
-		/*откл контактор*/
 		obj_state_off(IND_obj_KM1);
+		obj->obj_value = 0;
 	}
 	else
 	{
 		obj->obj_value++;
+		if(obj->obj_value > 5)
+		{
+			ChargerErrors.value.bit.main_contactor_error = 1;
+			ChargerErrors.value.bit.internal_circuit_error = 1;
+		}
 		OBJ_Event(IND_obj_tKM_Off);
 	}
 }
@@ -179,5 +184,27 @@ void PID_Control_Handler(OBJ_STRUCT *obj){
 		pid_current_out.setpoint_val =(uint16_t)obj->obj_value;
 	}else{
 		pid_current_out.setpoint_val = 0;
+	}
+}
+
+/*запись конфигурации в flash память МК*/
+void Write_config_Handler(OBJ_STRUCT *obj)
+{
+	ChargerConfig.PrechargeMinVoltage = value_of_obj(IND_obj_cPMinV);
+	ChargerConfig.PrechargeMaxVoltage = value_of_obj(IND_obj_cPMaxV);
+	
+	ChargerConfig.PermissibleVoltageSensorError = value_of_obj(IND_obj_cSVError);
+	ChargerConfig.PermissibleCurrentSensorError = value_of_obj(IND_obj_cSCError);
+	
+	ChargerConfig.MaxDutyCycle = value_of_obj(IND_obj_cMaxDutyC);
+	ChargerConfig.MinDutyCycle = value_of_obj(IND_obj_cMinDutyC);
+	
+	ChargerConfig.MaxCurrrent = value_of_obj(IND_obj_cMaxTemp);
+	ChargerConfig.Frequency = value_of_obj(IND_obj_cFreq);
+	ChargerConfig.VoltageGysteresisMode = value_of_obj(IND_obj_cFreq);
+	
+	if(obj->obj_state == 1){
+		/*!!! stop executing main program*/
+		write_configuration(&ChargerConfig);
 	}
 }

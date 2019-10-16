@@ -71,7 +71,7 @@ v 0.3
 #define obj_cMaxTemp_init      IND_obj_cMaxTemp     ,IND_obj_CWS  ,obj_soft  ,   NULL   ,NULL          ,NULL
 #define obj_cFreq_init         IND_obj_cFreq        ,IND_obj_CWS  ,obj_soft  ,   NULL   ,NULL          ,NULL
 #define obj_cGysteresis_init   IND_obj_cGysteresis  ,IND_obj_CWS  ,obj_soft  ,   NULL   ,NULL          ,NULL
-#define obj_cSync_init         IND_obj_cSync        ,IND_obj_CWS  ,obj_soft  ,   NULL   ,NULL          ,NULL
+#define obj_cSync_init         IND_obj_cSync        ,IND_obj_CWS  ,obj_soft  ,   NULL   ,NULL          ,Write_config_Handler
 /*---------------------------------------------------------------------------------------------------*/
 #define _obj_ACUR_C_init       IND_obj_ACUR_C       ,IND_obj_SWC  ,obj_soft  ,   NULL   ,NULL          ,NULL
 #define _obj_ACUR_G_init       IND_obj_ACUR_G       ,IND_obj_SWC  ,obj_soft  ,   NULL   ,NULL          ,NULL
@@ -113,11 +113,12 @@ void ADC5_Handler(OBJ_STRUCT *obj);
 /*-------------------------------------------------*/
 void USART_Handler(OBJ_STRUCT *obj);
 /*-------------------------------------------------*/
+void Write_config_Handler(OBJ_STRUCT *obj);
+/*-------------------------------------------------*/
 void PWM_freq_config_Handler(OBJ_STRUCT *obj);
 void PWM_Control_Handler(OBJ_STRUCT *obj);
 void BUCK_Mode_Handler(OBJ_STRUCT *obj);
 void BOOST_Mode_Handler(OBJ_STRUCT *obj);
-/*-------------------------------------------------*/
 void PID_COEF_Handler(OBJ_STRUCT *obj);
 void PID_Control_Handler(OBJ_STRUCT *obj);
 void KM_Off_Handler(OBJ_STRUCT *obj);

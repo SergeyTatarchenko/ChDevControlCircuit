@@ -52,6 +52,9 @@ typedef struct{
 }ChargerConfig_TypeDef;
 #pragma pack(pop)
 /*-----------------------------------------------*/
+#define GONFIG_PAGE	127
+#define GONFIG_ADRESS	(FLASH_START_ADRESS+(FLASH_PAGE_SIZE*GONFIG_PAGE)+GONFIG_PAGE)
+/*-----------------------------------------------*/
 extern ChargerErrors_TypeDef ChargerErrors;
 extern ChargerConfig_TypeDef ChargerConfig;
 /*-----------------------------------------------*/

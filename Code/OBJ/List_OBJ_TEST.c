@@ -22,8 +22,8 @@ void TICK_Handler(OBJ_STRUCT *obj){
 void LED_Control_Handler(OBJ_STRUCT *obj){
 	
 		if(GPIOC->ODR&=GPIO_ODR_ODR13){
-				LED_ON;
+				SYNC_LED_ON;
 			}else{
-				LED_OFF;
+				SYNC_LED_OFF;
 			}
 }
