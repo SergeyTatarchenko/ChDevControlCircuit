@@ -13,7 +13,7 @@ ChargerConfig_TypeDef ChargerConfig;
 int load_configuration(ChargerConfig_TypeDef* configuration)
 {
 	configuration->Frequency = 8000;
-	configuration->MaxDutyCycle = 800;
+	configuration->MaxDutyCycle = 900;
 	configuration->MinDutyCycle = 200;
 	configuration->PermissibleVoltageSensorError = 20;
 	configuration->PermissibleCurrentSensorError = 2;

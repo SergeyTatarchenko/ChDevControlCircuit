@@ -20,8 +20,10 @@ void Init_(){
 		SYNC_LED_OFF;
 		Set_IO_Byte(0x00);
 		InputEvent = xSemaphoreCreateCounting(3,0);
+	
 		FilterReady = xSemaphoreCreateBinary();
 		xMutex_BUS_BUSY = xSemaphoreCreateMutex();
+		xMutex_CAN_BUSY = xSemaphoreCreateMutex();
 		/*run with higher priority (use I2C)*/
 		xTaskCreate(vGetIOState,"I/O pool ", system_stack, NULL,system_prior, NULL );
 		

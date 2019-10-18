@@ -96,6 +96,7 @@ void KM_Off_Handler(OBJ_STRUCT *obj)
 		{
 			ChargerErrors.value.bit.main_contactor_error = 1;
 			ChargerErrors.value.bit.internal_circuit_error = 1;
+			obj_state_off(IND_obj_KM1);
 		}
 		OBJ_Event(IND_obj_tKM_Off);
 	}

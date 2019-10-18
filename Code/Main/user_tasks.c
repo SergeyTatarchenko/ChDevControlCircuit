@@ -9,7 +9,11 @@
 #include "math.h"
 /*************************************************/
 
+
 xSemaphoreHandle FilterReady;
+
+/*mutex for CAN transmittion*/
+xSemaphoreHandle xMutex_CAN_BUSY;
 
 /*setup before loop*/
 void obj_model_setup()
@@ -95,7 +99,7 @@ uint16_t pd_regulator(uint16_t set_value,uint16_t feedback,uint16_t gisteresis)
 	*/
 	
 	/*минимальное и максимальное значение скважности зависит от драйвера*/
-	const int max_control_value = 900,min_control_value = 100;
+	const int max_control_value = 900,min_control_value =200;
 	/*минимальный инкремент аргумента функции управления*/
 	const int minimal_point = 1;
 	/*приращение значения функции от ее аргумента */
