@@ -57,7 +57,7 @@ void obj_model_task(int tick)
 	/*while power enable adc conversions*/
 	if(board_power)
 	{
-	obj_adc_driver(ADC1_DataArray);
+		obj_adc_driver(ADC1_DataArray);
 	}	
 }
 

@@ -5,7 +5,7 @@
 #define	IND_obj_NULL			0x00
 #define	IND_obj_END				0xFF
 
-
+#define SW_VERSION	"board revision <1.0> software version<0.10a> SOM version <1.6>"
 /*-----------------------------------------------*/
 #define obj_STATUS				(IND_obj_NULL + 1)	
 /*---------------------HWOBJ---------------------*/

@@ -4,6 +4,10 @@
 /************************************************************************************/
 /* 									 OBJ_Handlers									*/
 /************************************************************************************/
+
+OBJ_TEXT_typeDef test_text_block[] = {"This is a text"};
+
+
 /*first obj*/
 void board_START(OBJ_STRUCT *obj)
 {
@@ -78,6 +82,7 @@ void USART_Handler(OBJ_STRUCT *obj){
 	
 	if(board_power == 1){
 		FAST_Upd_All_OBJ_USART();
+		extended_value_update();	
 		OBJ_Event(IND_obj_USART_TX);
 	}
 }
