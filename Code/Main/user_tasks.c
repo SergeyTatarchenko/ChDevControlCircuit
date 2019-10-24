@@ -9,11 +9,7 @@
 #include "math.h"
 /*************************************************/
 
-
 xSemaphoreHandle FilterReady;
-
-/*mutex for CAN transmittion*/
-xSemaphoreHandle xMutex_CAN_BUSY;
 
 /*setup before loop*/
 void obj_model_setup()
@@ -57,7 +53,7 @@ void obj_model_task(int tick)
 	/*while power enable adc conversions*/
 	if(board_power)
 	{
-		obj_adc_driver(ADC1_DataArray);
+	obj_adc_driver(ADC1_DataArray);
 	}	
 }
 
@@ -82,7 +78,7 @@ void vTask_regulator(void *pvParameters)
 		/*установка значения ШИМ ключей от ПИД регулятора*/
 		//this_obj(IND_obj_PWM_ON)->obj_value = PID_controller(&pid_current_out);
 		/*установка значения ШИМ ключей от ПД регулятора*/
-		this_obj(IND_obj_PWM_ON)->obj_value = pd_regulator(this_obj(IND_obj_PID_ON)->obj_value,this_obj(IND_obj_aOUTC)->obj_value,5);
+		this_obj(IND_obj_PWM_ON)->obj_value = pd_regulator(this_obj(IND_obj_PID_ON)->obj_value,this_obj(IND_obj_aOUTC)->obj_value,2);
 			/*обновление состояния обьекта*/
 		obj_update(IND_obj_PWM_ON);
 		}
@@ -99,7 +95,7 @@ uint16_t pd_regulator(uint16_t set_value,uint16_t feedback,uint16_t gisteresis)
 	*/
 	
 	/*минимальное и максимальное значение скважности зависит от драйвера*/
-	const int max_control_value = 900,min_control_value =200;
+	const int max_control_value = 900,min_control_value = 100;
 	/*минимальный инкремент аргумента функции управления*/
 	const int minimal_point = 1;
 	/*приращение значения функции от ее аргумента */

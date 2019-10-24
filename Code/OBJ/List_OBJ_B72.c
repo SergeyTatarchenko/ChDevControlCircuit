@@ -4,10 +4,6 @@
 /************************************************************************************/
 /* 									 OBJ_Handlers									*/
 /************************************************************************************/
-
-OBJ_TEXT_typeDef test_text_block[] = {"This is a text"};
-
-
 /*first obj*/
 void board_START(OBJ_STRUCT *obj)
 {
@@ -82,7 +78,6 @@ void USART_Handler(OBJ_STRUCT *obj){
 	
 	if(board_power == 1){
 		FAST_Upd_All_OBJ_USART();
-		extended_value_update();	
 		OBJ_Event(IND_obj_USART_TX);
 	}
 }
@@ -101,7 +96,6 @@ void KM_Off_Handler(OBJ_STRUCT *obj)
 		{
 			ChargerErrors.value.bit.main_contactor_error = 1;
 			ChargerErrors.value.bit.internal_circuit_error = 1;
-			obj_state_off(IND_obj_KM1);
 		}
 		OBJ_Event(IND_obj_tKM_Off);
 	}

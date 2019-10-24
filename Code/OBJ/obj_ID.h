@@ -5,7 +5,7 @@
 #define	IND_obj_NULL			0x00
 #define	IND_obj_END				0xFF
 
-#define SW_VERSION	"board revision <1.0> software version<0.10a> SOM version <1.6>"
+
 /*-----------------------------------------------*/
 #define obj_STATUS				(IND_obj_NULL + 1)	
 /*---------------------HWOBJ---------------------*/
@@ -27,16 +27,17 @@
 #define IND_obj_iInput5			(IND_obj_NULL + 15)		// !аппаратный вход 5 
 #define IND_obj_iInput6			(IND_obj_NULL + 16)		// !аппаратный вход 6 
 #define IND_obj_iInput7			(IND_obj_NULL + 17)		// !аппаратный вход 7 
+#define IND_obj_iInput8			(IND_obj_NULL + 18)		// !аппаратный вход 8 
 /*-----------------------------------------------*/
 /*outputs*/
-#define IND_obj_oOUT0			(IND_obj_NULL + 18)		// !аппаратный выход 0 
-#define IND_obj_oOUT1			(IND_obj_NULL + 19)		// !аппаратный выход 1 
-#define IND_obj_oOUT2			(IND_obj_NULL + 20)		// !аппаратный выход 2
-#define IND_obj_oOUT3			(IND_obj_NULL + 21)		// !аппаратный выход 3
-#define IND_obj_oOUT4			(IND_obj_NULL + 22)		// !аппаратный выход 4
-#define IND_obj_oOUT5			(IND_obj_NULL + 23)		// !аппаратный выход 5
-#define IND_obj_PredZar			(IND_obj_NULL + 24)		// !аппаратный выход 6 [вкл. плату предзаряда]
-#define IND_obj_KM1 			(IND_obj_NULL + 25)		// !аппаратный выход 7 [вкл. контактор КМ1] 
+#define IND_obj_oOUT0			(IND_obj_NULL + 19)		// !аппаратный выход 0 
+#define IND_obj_oOUT1			(IND_obj_NULL + 20)		// !аппаратный выход 1 
+#define IND_obj_oOUT2			(IND_obj_NULL + 21)		// !аппаратный выход 2
+#define IND_obj_oOUT3			(IND_obj_NULL + 22)		// !аппаратный выход 3
+#define IND_obj_oOUT4			(IND_obj_NULL + 23)		// !аппаратный выход 4
+#define IND_obj_oOUT5			(IND_obj_NULL + 24)		// !аппаратный выход 5
+#define IND_obj_PredZar			(IND_obj_NULL + 25)		// !аппаратный выход 6 [вкл. плату предзаряда]
+#define IND_obj_KM1 			(IND_obj_NULL + 26)		// !аппаратный выход 7 [вкл. контактор КМ1] 
 /*-----------------SOFTOBJ-----------------------*/
 #define IND_obj_USART_TX		(IND_obj_NULL + 30)		// [!Таймер обновления состояния объектов платы по USART]
 /*-----------------------------------------------*/

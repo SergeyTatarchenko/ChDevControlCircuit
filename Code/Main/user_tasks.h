@@ -21,7 +21,6 @@ void board_task(int task_tick);
 void board_pr_init(void);
 
 extern xSemaphoreHandle FilterReady;
-extern xSemaphoreHandle xMutex_CAN_BUSY;
 
 void vTask_ADC_filter(void *pvParameters);
 void vTask_regulator(void *pvParameters);

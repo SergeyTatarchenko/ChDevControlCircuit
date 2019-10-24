@@ -12,8 +12,8 @@ ChargerConfig_TypeDef ChargerConfig;
 /*load configuration from flash memory*/
 int load_configuration(ChargerConfig_TypeDef* configuration)
 {
-	configuration->Frequency = 8000;
-	configuration->MaxDutyCycle = 900;
+	configuration->Frequency = 10000;
+	configuration->MaxDutyCycle = 800;
 	configuration->MinDutyCycle = 200;
 	configuration->PermissibleVoltageSensorError = 20;
 	configuration->PermissibleCurrentSensorError = 2;
