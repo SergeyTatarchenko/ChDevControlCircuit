@@ -48,7 +48,7 @@ typedef struct{
 	uint16_t MaxTemperature;
 	uint16_t Frequency;
 	uint16_t VoltageGysteresisMode;
-	
+	uint16_t CurrentAvaliableError;
 }ChargerConfig_TypeDef;
 #pragma pack(pop)
 /*-----------------------------------------------*/

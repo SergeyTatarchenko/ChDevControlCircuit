@@ -129,7 +129,7 @@ void BOOST_Mode_Handler(OBJ_STRUCT *obj)
 		/*вкл контактор*/
 		obj_state_on(IND_obj_KM1);
 		pwm_module_init(ChargerConfig.Frequency,BOOST_MODE);
-		pwm_control(BOOST_MODE,NULL,500,&ChargerConfig);	
+		pwm_control(BOOST_MODE,NULL,ChargerConfig.MinDutyCycle,&ChargerConfig);	
 		PWM_ON;
 	}
 	else

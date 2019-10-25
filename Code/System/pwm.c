@@ -1,7 +1,7 @@
 /*************************************************
 * File Name          : pwm.c
 * Author             : Tatarchenko S.
-* Version            : v 1.2
+* Version            : v 1.3
 * Description        : PWM module 2 channels
 *************************************************/
 #include "pwm.h"
@@ -106,4 +106,34 @@ extern uint16_t GetDutyCycle(PWM_CHANNEL channel)
 		return TIM3->CCR4;
 	}
 	return 0;
+}
+
+extern void pwm_pin_reconfig(PIN_MODE mode,int pin)
+{
+	switch(pin){
+		case PWM_PIN_0:
+			switch(mode){
+				case PWM:
+					GPIOB->CRL &=~(GPIO_CRL_MODE0|GPIO_CRL_CNF0);
+					GPIOB->CRL |=(GPIO_CRL_CNF0_1|GPIO_CRL_MODE0);	//PB0 AF PP
+					break;
+				case PP:
+					GPIOB->CRL &=~(GPIO_CRL_MODE0|GPIO_CRL_CNF0);
+					GPIOB->CRL |= GPIO_CRL_MODE0;	//PB0 GP PP
+					break;
+			}
+			break;
+		case PWM_PIN_1:
+			switch(mode){
+				case PWM:
+					GPIOB->CRL &=~(GPIO_CRL_MODE1|GPIO_CRL_CNF1);
+					GPIOB->CRL |=(GPIO_CRL_CNF1_1|GPIO_CRL_MODE1);	//PB1 AF PP
+				break;
+				case PP:
+					GPIOB->CRL &=~(GPIO_CRL_MODE1|GPIO_CRL_CNF1);
+					GPIOB->CRL |= GPIO_CRL_MODE1;	//PB1 GP PP
+					break;
+			}
+			break;
+	}
 }

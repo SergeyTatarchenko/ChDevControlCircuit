@@ -77,5 +77,8 @@
 #define IND_obj_M_BUCK_MODE		(IND_obj_NULL + 62)		// [понижающий режим преобразователя]
 #define IND_obj_M_BOOST_MODE	(IND_obj_NULL + 63)		// [повышающий режим пребразователя]
 #define IND_obj_tKM_Off			(IND_obj_NULL + 64)		// [Таймер отключения контактора КМ1]
+#define IND_obj_tChDevOff		(IND_obj_NULL + 65)		// [Отключение преобразователя ]
+#define IND_obj_BuckPWMValue	(IND_obj_NULL + 66)		// [Значение D верхнего ключа]
+#define IND_obj_BoostPWMValue	(IND_obj_NULL + 67)		// [Значение D нижнего ключа]
 /*-----------------------------------------------*/
 #endif

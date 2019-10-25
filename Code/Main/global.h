@@ -76,8 +76,13 @@ void DifPinInit(void);
 void Core_Init(void);
 /*control led on the board*/
 void led_invertor(void);
+
+/*-----------------------------------------------
+math
+-----------------------------------------------*/
 /*comparator function*/
 int comparator(int plus, int minus);
+uint32_t fabs_function(int a, int b);
 /*----------- global function prototypes---------*/
 
 /*get state of all available IO ports and puts it in the appropriate structure,

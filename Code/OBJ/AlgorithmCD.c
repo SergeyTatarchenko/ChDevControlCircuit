@@ -17,6 +17,7 @@ int load_configuration(ChargerConfig_TypeDef* configuration)
 	configuration->MinDutyCycle = 200;
 	configuration->PermissibleVoltageSensorError = 20;
 	configuration->PermissibleCurrentSensorError = 2;
+	
 	return 1;
 }
 

@@ -6,7 +6,6 @@
 **************************************************/
 #include "user_tasks.h"
 #include "stm32f10x.h"
-#include "math.h"
 /*************************************************/
 
 xSemaphoreHandle FilterReady;
@@ -68,21 +67,24 @@ void filter_enable(void){
 
 void vTask_regulator(void *pvParameters)
 {	
+	static int regulator_time_out_counter = 0;
+	
 	for(;;){
 		if(this_obj_state(IND_obj_PID_ON) == 1)
 		{
-		/*обратная связь - датчик тока в нагрузке*/
-		pid_current_out.feedback = (uint16_t)this_obj(IND_obj_aOUTC)->obj_value;
-		
+			/*обратная связь - датчик тока в нагрузке*/
+			pid_current_out.feedback = (uint16_t)this_obj(IND_obj_aOUTC)->obj_value;
 			
-		/*установка значения ШИМ ключей от ПИД регулятора*/
-		//this_obj(IND_obj_PWM_ON)->obj_value = PID_controller(&pid_current_out);
-		/*установка значения ШИМ ключей от ПД регулятора*/
-		this_obj(IND_obj_PWM_ON)->obj_value = pd_regulator(this_obj(IND_obj_PID_ON)->obj_value,this_obj(IND_obj_aOUTC)->obj_value,2);
-			/*обновление состояния обьекта*/
-		obj_update(IND_obj_PWM_ON);
+			/*установка значения ШИМ ключей от ПИД регулятора*/
+			//this_obj(IND_obj_PWM_ON)->obj_value = PID_controller(&pid_current_out);
+			/*установка значения ШИМ ключей от регулятора и обновления состояния объекта*/
+			this_obj(IND_obj_PWM_ON)->obj_value = pd_regulator(this_obj(IND_obj_PID_ON)->obj_value,this_obj(IND_obj_aOUTC)->obj_value,2);
+			obj_update(IND_obj_PWM_ON);
+//			if(fabs_function(value_of_obj(IND_obj_PID_ON),value_of_obj(IND_obj_aOUTC))>2)
+//			{
+//				regulator_time_out_counter++;
+//			}
 		}
-		
 		vTaskDelay(10);
 	}
 }
@@ -90,7 +92,7 @@ void vTask_regulator(void *pvParameters)
 /*test  P regulator*/
 uint16_t pd_regulator(uint16_t set_value,uint16_t feedback,uint16_t gisteresis)
 {
-	/*
+/*
 	F(PWM,feedback value of current) = set value of current
 	*/
 	
@@ -98,19 +100,19 @@ uint16_t pd_regulator(uint16_t set_value,uint16_t feedback,uint16_t gisteresis)
 	const int max_control_value = 900,min_control_value = 100;
 	/*минимальный инкремент аргумента функции управления*/
 	const int minimal_point = 1;
-	/*приращение значения функции от ее аргумента */
-	int function_increment = 0;
 	/* приращение аргумента функции управления при переходном процессе */
 	static int point = minimal_point;
 	/*значение аргумента функции управления*/
 	static uint16_t control = min_control_value;
 	/*предыдущее значение функции,текущее значение функции*/
 	static uint16_t last_feedback = 0,current_feedback = 0;
+	/*приращение значения функции от ее аргумента */
+	int function_increment = 0;
 	/*установка текущего значения функции*/
 	current_feedback = feedback;
 	/****************************************************************************** */
 	/*дифференциальное звено, изменение значения функции от приращения ее аргумента */
-	function_increment = (int)fabs((float)current_feedback - (float)last_feedback);
+	function_increment = fabs_function(current_feedback,last_feedback);
 	
 	/*увеличить значение значение приращения */
 	if((function_increment < gisteresis)&&(point >minimal_point))
@@ -151,10 +153,12 @@ uint16_t pd_regulator(uint16_t set_value,uint16_t feedback,uint16_t gisteresis)
 	/*working area*/
 	if((feedback > (set_value - gisteresis))&&(feedback < (set_value + gisteresis)))
 	{
+		return control;
 		/*устойчивое значение,добавить алгоритм сужения области в центр гистерезиса*/
 	}
 	/****************************************************************************** */
-	return (uint16_t)min_control_value;
+	//return (uint16_t)min_control_value;
+	return control;
 }
 
 void vTask_ADC_filter(void *pvParameters){

@@ -1,7 +1,7 @@
 /*************************************************
 * File Name          : pwm.h
 * Author             : Tatarchenko S.
-* Version            : v 1.2
+* Version            : v 1.3
 * Description        : pwm.c header
 *************************************************/
 #ifndef PWM_H
@@ -14,6 +14,10 @@
 #define	TIM3_CLK	APB2_FREQ
 #define	TIM3_PSC	TIM3_CLK/1000000UL	// get 1 MHz timer freq
 #define PWM_MAX_VALUE	1000
+
+
+#define		PWM_PIN_0	0
+#define		PWM_PIN_1	1
 
 /*добавить PERIOD_PWM как глобальную переменную-параметр 
   зарядного устройства. */
@@ -39,6 +43,10 @@ typedef enum{
 	
 }PWM_CHANNEL;
 
+typedef enum{
+PP,
+PWM
+}PIN_MODE;
 /*-----------global function prototypes---------*/
 
 extern void PWM_Init(void);
@@ -46,5 +54,4 @@ extern void PWMSetValue(PWM_CHANNEL channel,uint16_t value);
 extern void PWMSetActiveChannel(PWM_CHANNEL channel);
 extern void PWMSetFrequency(int frequency);
 extern uint16_t GetDutyCycle(PWM_CHANNEL channel);
-
 #endif
