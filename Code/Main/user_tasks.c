@@ -123,6 +123,8 @@ void vTask_regulator(void *pvParameters)
 				this_obj(IND_obj_PWM_ON)->obj_value = pd_regulator(this_obj(IND_obj_PID_ON)->obj_value,this_obj(IND_obj_aOUTC)->obj_value,1,1);
 				obj_update(IND_obj_PWM_ON);
 			}
+		}else{
+			this_obj(IND_obj_PWM_ON)->obj_value = 0;
 		}
 		vTaskDelay(10);
 	}
@@ -136,7 +138,7 @@ uint16_t pd_regulator(uint16_t set_value,uint16_t feedback,uint16_t gisteresis,u
 	*/
 	
 	/*минимальное и максимальное значение скважности зависит от драйвера*/
-	const int max_control_value = PWM_MAX_VALUE,min_control_value = 0;
+	const int max_control_value = (PWM_MAX_VALUE - PWM_MAX_VALUE/10),min_control_value = PWM_MAX_VALUE/10;
 	/*минимальный инкремент аргумента функции управления*/
 	const int minimal_point = 1;
 	/* приращение аргумента функции управления при переходном процессе */

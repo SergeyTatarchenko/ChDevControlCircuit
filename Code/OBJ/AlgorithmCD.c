@@ -17,8 +17,8 @@ int load_configuration(ChargerConfig_TypeDef* configuration)
 	//configuration->Frequency = 15000;
 	configuration->Frequency = 10000;
 	//configuration->Frequency = 5000;
-	configuration->MaxDutyCycle = PWM_MAX_VALUE/10;  // 10 %
-	configuration->MinDutyCycle = PWM_MAX_VALUE - PWM_MAX_VALUE/10;	// 10 %
+	configuration->MinDutyCycle = PWM_MAX_VALUE/10;  // 10 %
+	configuration->MaxDutyCycle = PWM_MAX_VALUE - PWM_MAX_VALUE/10;	// 90 %
 	configuration->PermissibleVoltageSensorError = 20;
 	configuration->PermissibleCurrentSensorError = 2;
 	

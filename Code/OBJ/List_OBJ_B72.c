@@ -174,7 +174,7 @@ void BUCK_Mode_Handler(OBJ_STRUCT *obj)
 	if((obj->obj_state == 1) &&(current_limit_trigger == 0))
 	{
 		/*вкл контактор*/
-		pwm_module_init(ChargerConfig.Frequency,BUCK_MODE);
+		pwm_module_init(value_of_obj(IND_obj_PWM_FREQ),BUCK_MODE);
 		obj_state_on(IND_obj_KM1);
 		value_of_obj(IND_obj_PWM_ON)= ChargerConfig.MinDutyCycle;
 		obj_state_on(IND_obj_PWM_ON);
@@ -182,8 +182,7 @@ void BUCK_Mode_Handler(OBJ_STRUCT *obj)
 	}
 	else
 	{	
-		PWM_OFF;
-		pwm_control(OFF,NULL,NULL,&ChargerConfig);	
+		obj_state_off(IND_obj_PWM_ON);
 		/*выкл контактор*/
 		OBJ_Event(IND_obj_tKM_Off);
 	}
