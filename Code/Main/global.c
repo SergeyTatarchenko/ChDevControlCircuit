@@ -221,7 +221,7 @@ uint16_t get_dvl1000_value(uint16_t adc_voltage)
 	sensor load  - 82 Omh;
 	*/
 	/*              get inverted value in mkV       get current   sensor value*/
-	int voltage = ((OPAM_ADC_REF - adc_voltage)*1000/sensor_load)/sensor_rate;
+	int voltage = ((adc_voltage)*1000/sensor_load)/sensor_rate;
 	
 	return (uint16_t)voltage;
 }
@@ -239,7 +239,7 @@ uint16_t get_lac300_value(uint16_t adc_voltage)
 	sensor load  - 82 Omh;
 	*/
 	/*              get inverted value in mkV       get current      sensor value*/
-	int current = ((OPAM_ADC_REF - adc_voltage)*1000/sensor_load)*sensor_rate/1000;
+	int current = ((adc_voltage)*1000/sensor_load)*sensor_rate/1000;
 	
 	return (uint16_t)current;
 }
@@ -257,7 +257,7 @@ uint16_t get_lf510_value(uint16_t adc_voltage)
 	sensor load  - 82 Omh;
 	*/
 	/*              get inverted value in mkV       get current      sensor value*/
-	int current = ((OPAM_ADC_REF - adc_voltage)*1000/sensor_load)*sensor_rate/1000;
+	int current = ((adc_voltage)*1000/sensor_load)*sensor_rate/1000;
 	
 	return (uint16_t)current;
 }

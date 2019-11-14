@@ -48,7 +48,7 @@ v 0.3
 #define _obj_OUT6_init	       IND_obj_PredZar      ,IND_obj_CAS  ,obj_hard  ,   out_6   ,NULL         ,NULL
 #define _obj_OUT7_init	       IND_obj_KM1          ,IND_obj_CAS  ,obj_hard  ,   out_7   ,NULL         ,NULL
 /*---------------------------------------------------------------------------------------------------*/
-#define _obj_USART_TX_init     IND_obj_USART_TX     ,IND_obj_SWC  ,obj_timer ,   NULL   ,100           ,USART_Handler
+#define _obj_USART_TX_init     IND_obj_USART_TX     ,IND_obj_SWC  ,obj_timer ,   NULL   ,100          ,USART_Handler
 /*---------------------------------------------------------------------------------------------------*/
 #define obj_aINV_init	       IND_obj_aINV         ,IND_obj_SWC  ,obj_soft  ,   NULL ,NULL         ,NULL
 #define obj_aINC_init	       IND_obj_aINC         ,IND_obj_SWC  ,obj_soft  ,   NULL ,NULL         ,NULL

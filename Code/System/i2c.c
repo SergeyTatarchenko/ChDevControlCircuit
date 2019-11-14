@@ -21,20 +21,23 @@ void I2CInit(){
 	GPIOB->CRH |= GPIO_CRH_CNF11;		
 	GPIOB->CRH |= (GPIO_CRH_MODE11_1|GPIO_CRH_MODE11_0);
 	
+	GPIOB->BSRR |= GPIO_BSRR_BR10;
+	GPIOB->BSRR |= GPIO_BSRR_BR11;
+	
 	I2C_MODULE->CR1 &= I2C_CR1_SWRST;
 	I2C_MODULE->CR1 = (uint32_t)0x00;
 	
 	/*ack enabled*/
 	I2C_MODULE->CR1 = I2C_CR1_ACK;
 	
-	I2C_MODULE->CR2 |= APB1_FREQ/1000000UL;		
+	I2C_MODULE->CR2 |= 36;		
 	I2C_MODULE->CCR &=~I2C_CCR_CCR;
 	
 	/*Fm mode, duty cycle*/
-	I2C_MODULE->CCR |= (I2C_CCR_FS|I2C_CCR_DUTY);
+	I2C_MODULE->CCR |= (I2C_CCR_FS);
 	
-	I2C_MODULE->CCR |= 6;		// магическое число 1
-	I2C_MODULE->TRISE = 19; 	// магическое число 2
+	I2C_MODULE->CCR |= 30;		// магическое число 1
+	I2C_MODULE->TRISE = 10; 	// магическое число 2
 	I2C_MODULE->CR1 |= I2C_CR1_PE; 
 }
 /*************************************************

@@ -7,7 +7,7 @@
 #include "stm32f10x.h"
 /*-----------local define-----------------------*/
 
-#define PLL_FREQ 60000000UL
+#define PLL_FREQ 72000000UL
 
 #define APB1_FREQ (PLL_FREQ/2)
 #define APB2_FREQ PLL_FREQ

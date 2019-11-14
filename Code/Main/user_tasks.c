@@ -24,12 +24,13 @@ void obj_model_setup()
 	task_priority.tick_update_rate = 50;
 	/*heavy function!!!*/
 //	set_all_obj_off();
-	SYNC_LED_OFF;
+
 	/*adc init*/
 	ADC1_On
 	/*usart interrupt enable*/
-	//board_power = 1;
-	//OBJ_Event(IND_obj_USART_TX);
+//	board_power = 1;
+//	OBJ_Event(IND_obj_USART_TX);
+	//obj_state_on(IND_obj_KM1);
 	/* USART1_IRQ = 37 */
 	NVIC_EnableIRQ (USART1_IRQn);
 		
@@ -67,7 +68,7 @@ void filter_enable(void){
 
 void vTask_regulator(void *pvParameters)
 {	
-	static int regulator_time_out_counter = 0;
+//	static int regulator_time_out_counter = 0;
 	
 	for(;;){
 		if(this_obj_state(IND_obj_PID_ON) == 1)
