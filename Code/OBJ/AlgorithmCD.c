@@ -8,6 +8,8 @@
 /*-----------------------------------------------*/
 ChargerErrors_TypeDef ChargerErrors;
 ChargerConfig_TypeDef ChargerConfig; 
+
+CD_STATE device_state = IDLE;
 /*-----------------------------------------------*/
 /*load configuration from flash memory*/
 int load_configuration(ChargerConfig_TypeDef* configuration)

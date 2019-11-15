@@ -24,7 +24,8 @@ extern xSemaphoreHandle FilterReady;
 
 void vTask_ADC_filter(void *pvParameters);
 void vTask_regulator(void *pvParameters);
-	
+void vTask_led_driver(void *pvParameters);
+
 void filter_enable(void);
 
 uint16_t pd_regulator(uint16_t set_value,uint16_t feedback,uint16_t gisteresis); 

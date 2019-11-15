@@ -30,7 +30,7 @@ v 0.3
 #define _obj_ADC6_init	       IND_obj_aADC6        ,IND_obj_CAS  ,obj_hard  ,   adc_6   ,NULL         ,NULL
 #define _obj_ADC7_init	       IND_obj_aADC7        ,IND_obj_CAS  ,obj_hard  ,   adc_7   ,NULL         ,NULL
 /*---------------------------------------------------------------------------------------------------*/
-#define _obj_IN0_init	       IND_obj_iInput0      ,IND_obj_CAS  ,obj_hard  ,   in_0   ,NULL         ,NULL
+#define _obj_IN0_init	       IND_obj_iInput0      ,IND_obj_CAS  ,obj_hard  ,   in_0   ,NULL         ,key_on
 #define _obj_IN1_init	       IND_obj_iInput1      ,IND_obj_CAS  ,obj_hard  ,   in_1   ,NULL         ,NULL
 #define _obj_IN2_init	       IND_obj_iInput2      ,IND_obj_CAS  ,obj_hard  ,   in_2   ,NULL         ,NULL
 #define _obj_IN3_init	       IND_obj_iInput3      ,IND_obj_CAS  ,obj_hard  ,   in_3   ,NULL         ,NULL
@@ -122,4 +122,5 @@ void BOOST_Mode_Handler(OBJ_STRUCT *obj);
 void PID_COEF_Handler(OBJ_STRUCT *obj);
 void PID_Control_Handler(OBJ_STRUCT *obj);
 void KM_Off_Handler(OBJ_STRUCT *obj);
+void key_on(OBJ_STRUCT *obj);
 #endif

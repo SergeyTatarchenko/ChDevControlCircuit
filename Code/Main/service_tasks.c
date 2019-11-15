@@ -31,10 +31,9 @@ void vGetIOState(void *pvParameters){
 		if(!Get_IO_State()){
 			// internal circuit error (add handler)
 		}
-		
-		obj_input_driver(&(IO_Pointer->INPUTS),1);
-		xSemaphoreGive(xMutex_BUS_BUSY);
-			
+		IO_Pointer->INPUTS = ~IO_Pointer->INPUTS;
+		obj_input_driver(&(IO_STATE.INPUTS),1,8,in_0);
+		xSemaphoreGive(xMutex_BUS_BUSY);	
 		SemaphoreCount = uxSemaphoreGetCount(InputEvent);	
 		if(SemaphoreCount > 1){
 			//error overclocking IO port(add handler)

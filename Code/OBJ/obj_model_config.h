@@ -26,7 +26,7 @@ typedef enum
 	out_0 = out_offset,out_1,out_2,out_3,out_4,out_5,out_6,out_7,
 	adc_0 = adc_offset,adc_1,adc_2,adc_3,adc_4,adc_5,adc_6,adc_7,
 	pwm_0 = pwm_offset,pwm_1
-}obj_hw;
+}OBJ_HW;
 /*</hw snap>*/
 /*-----------------------------------------------
 ************communication channels***************

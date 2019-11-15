@@ -22,15 +22,11 @@ void obj_model_setup()
 	task_priority.stack_user  = 512; 
 	task_priority.stack_tx_rx = 256;
 	task_priority.tick_update_rate = 50;
-	/*heavy function!!!*/
-//	set_all_obj_off();
-
+	
 	/*adc init*/
 	ADC1_On
 	/*usart interrupt enable*/
-//	board_power = 1;
-//	OBJ_Event(IND_obj_USART_TX);
-	//obj_state_on(IND_obj_KM1);
+	obj_state_on(IND_obj_KM1);
 	/* USART1_IRQ = 37 */
 	NVIC_EnableIRQ (USART1_IRQn);
 		
@@ -53,6 +49,7 @@ void obj_model_task(int tick)
 	/*while power enable adc conversions*/
 	if(board_power)
 	{
+	obj_input_driver(&(IO_STATE.INPUTS),1,8,in_0);
 	obj_adc_driver(ADC1_DataArray);
 	}	
 }
@@ -66,6 +63,49 @@ void filter_enable(void){
 
 }
 
+void vTask_led_driver(void *pvParameters)
+{
+static int tick = 0, tick_reload = 1000000;
+	
+	for(;;)
+	{
+		switch(device_state)
+		{
+			case IDLE:
+				FAULT_LED_OFF;
+				if(tick%1000 == 0)
+				{
+				state_led_invertor();
+				}
+			break;				
+			case CHARGING:
+				STATE_LED_ON;
+				FAULT_LED_ON;
+				break;
+			case FAULT:
+				STATE_LED_OFF;
+				FAULT_LED_ON;	
+				break;
+			case PROGRAMMING:
+				if(tick%100 == 0)
+				{
+					state_led_invertor();
+					fault_led_invertor();
+				}
+				break;
+		}
+		/*tick update*/
+		if(tick <= tick_reload)
+		{
+			tick++;
+		}
+		else
+		{
+			tick = 0;
+		}	
+		vTaskDelay(1);
+	}
+}
 void vTask_regulator(void *pvParameters)
 {	
 //	static int regulator_time_out_counter = 0;

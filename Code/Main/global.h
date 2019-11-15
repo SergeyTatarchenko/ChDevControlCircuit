@@ -75,8 +75,9 @@ void DifPinInit(void);
 /*init all peripherals and external circuits*/
 void Core_Init(void);
 /*control led on the board*/
-void led_invertor(void);
-
+void sync_led_invertor(void);
+void state_led_invertor(void);
+void fault_led_invertor(void);
 /*-----------------------------------------------
 math
 -----------------------------------------------*/

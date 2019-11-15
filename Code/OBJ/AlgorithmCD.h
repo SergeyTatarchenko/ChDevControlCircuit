@@ -62,8 +62,10 @@ typedef enum{
 	BUCK_MODE = 1, BOOST_MODE = 2, BUCK_BOOST_MODE = 3, OFF = 4
 }CD_MODE;
 typedef enum{
-	ILDE = 1, CHARGING = 2, FAULT = 3
+	IDLE = 1, CHARGING = 2, FAULT = 3,PROGRAMMING = 4
 }CD_STATE;
+
+extern CD_STATE device_state;
 /*-----------------------------------------------*/
 /*Checking the initial state of the charging device*/
 int PowerBoardInit(ChargerErrors_TypeDef* errors,ChargerConfig_TypeDef* configuration,

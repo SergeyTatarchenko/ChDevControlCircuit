@@ -22,6 +22,14 @@ void board_START(OBJ_STRUCT *obj)
 	}
 }
 
+void key_on(OBJ_STRUCT *obj)
+{
+		load_configuration(&ChargerConfig);
+		value_of_obj(IND_obj_PWM_FREQ) = ChargerConfig.Frequency; 
+		board_power = 1;
+		OBJ_Event(IND_obj_USART_TX);
+
+}
 void ADC0_Handler(OBJ_STRUCT *obj)
 {
 	/*AIN0 - dvl1000   входное напряжение*/
@@ -73,12 +81,30 @@ void ADC5_Handler(OBJ_STRUCT *obj)
 /*Отправка через последовательный порт обратной связи об объектах*/
 void USART_Handler(OBJ_STRUCT *obj){
 	
+//	CanTxMsg Mes;
+//	Mes.ExtId = 0x1BE93A52;
+//	Mes.IDE = CAN_Id_Extended;
+//	Mes.RTR = CAN_RTR_Data;
+//	Mes.DLC = 8;
+//	Mes.Data[0] = 1;
+//	Mes.Data[1] = 2;
+//	Mes.Data[2] = 3;
+//	Mes.Data[3] = 4;
+//	Mes.Data[4] = 5;
+//	Mes.Data[5] = 6;
+//	Mes.Data[6] = 7;
+//	Mes.Data[7] = 8;
+//	
+//	CAN_Send(&Mes);
+	
 	obj->obj_value++;
-	led_invertor();
+	sync_led_invertor();
 	
 	if(board_power == 1){
 		FAST_Upd_All_OBJ_USART();
 		OBJ_Event(IND_obj_USART_TX);
+		
+		
 	}
 }
 /*таймер отключения контактора */

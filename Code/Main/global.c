@@ -57,8 +57,8 @@ void Core_Init(){
 	/*disable reset pin on MCP23017*/
 	MCP23017_START;
 	
-	/*test*/
-	//	CAN_init();
+	/*bxCAN module config*/
+	CAN_init();
 	
 	/*get adress, start IO model*/
 	IO_Pointer =&IO_STATE;	
@@ -172,7 +172,6 @@ void HWOBJ_Event(int obj_id){
 	if((obj->hardware_adress >= out_0)&&((obj->hardware_adress <= out_7))){
 			Set_IO_State((int)(obj->hardware_adress - out_offset),(int)obj->obj_state);
 	}
-	
 }
 #endif
 /*************************************************
@@ -262,15 +261,45 @@ uint16_t get_lf510_value(uint16_t adc_voltage)
 	return (uint16_t)current;
 }
 
-void led_invertor(void)
+void sync_led_invertor(void)
 {
-	if(GPIOC->ODR &= GPIO_ODR_ODR13)
+	static int state = 0;
+	state = ~state;
+	if(state)
 	{
 		SYNC_LED_ON;
 	}
 	else
 	{
 		SYNC_LED_OFF;
+	}
+}
+
+void state_led_invertor(void)
+{
+	static int state = 0;
+	state = ~state;
+	if(state)
+	{
+		STATE_LED_ON;
+	}
+	else
+	{
+		STATE_LED_OFF;
+	}
+}
+
+void fault_led_invertor(void)
+{
+	static int state = 0;
+	state = ~state;
+	if(state)
+	{
+		FAULT_LED_ON;
+	}
+	else
+	{
+		FAULT_LED_OFF;
 	}
 }
 
