@@ -34,8 +34,8 @@
 #define IND_obj_oOUT1			(IND_obj_NULL + 20)		// !аппаратный выход 1 
 #define IND_obj_oOUT2			(IND_obj_NULL + 21)		// !аппаратный выход 2
 #define IND_obj_oOUT3			(IND_obj_NULL + 22)		// !аппаратный выход 3
-#define IND_obj_oOUT4			(IND_obj_NULL + 23)		// !аппаратный выход 4
-#define IND_obj_oOUT5			(IND_obj_NULL + 24)		// !аппаратный выход 5
+#define IND_obj_Vent			(IND_obj_NULL + 23)		// !аппаратный выход 4 [вкл. вентиллятор обдува]
+#define IND_obj_DrOn			(IND_obj_NULL + 24)		// !аппаратный выход 5 [вкл. питание платы драйверов]
 #define IND_obj_PredZar			(IND_obj_NULL + 25)		// !аппаратный выход 6 [вкл. плату предзаряда]
 #define IND_obj_KM1 			(IND_obj_NULL + 26)		// !аппаратный выход 7 [вкл. контактор КМ1] 
 /*-----------------SOFTOBJ-----------------------*/

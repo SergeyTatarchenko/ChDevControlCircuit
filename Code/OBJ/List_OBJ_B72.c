@@ -22,41 +22,33 @@ void board_START(OBJ_STRUCT *obj)
 	}
 }
 
-void key_on(OBJ_STRUCT *obj)
-{
-		load_configuration(&ChargerConfig);
-		value_of_obj(IND_obj_PWM_FREQ) = ChargerConfig.Frequency; 
-		board_power = 1;
-		OBJ_Event(IND_obj_USART_TX);
-
-}
 void ADC0_Handler(OBJ_STRUCT *obj)
 {
-	/*AIN0 - dvl1000   входное напряжение*/
-	uint16_t value = obj->obj_value;
-	value = (value*(uint16_t)INT_ADC_REF)/(uint16_t)ADC_DEPTH;
-	this_obj(IND_obj_aINV)->obj_value = get_dvl1000_value(value);
-}
-
-void ADC1_Handler(OBJ_STRUCT *obj)
-{
-	/*	AIN1 - lac300  	 выходной ток */
-	uint16_t value = obj->obj_value;
-	value = (value*(uint16_t)INT_ADC_REF)/(uint16_t)ADC_DEPTH;
-	this_obj(IND_obj_aOUTC)->obj_value = get_lac300_value(value);
-}
-
-void ADC2_Handler(OBJ_STRUCT *obj)
-{
-	/*AIN2 - dvl1000   выходное напряжение*/
+	/*	AIN0 - dvl1000 выходное напряжение */
 	uint16_t value = obj->obj_value;
 	value = (value*(uint16_t)INT_ADC_REF)/(uint16_t)ADC_DEPTH;
 	this_obj(IND_obj_aOUTV)->obj_value = get_dvl1000_value(value);
 }
 
+void ADC1_Handler(OBJ_STRUCT *obj)
+{
+	/*AIN1 - lac300 выходной ток*/
+	uint16_t value = obj->obj_value;
+	value = (value*(uint16_t)INT_ADC_REF)/(uint16_t)ADC_DEPTH;
+	this_obj(IND_obj_aOUTC)->obj_value = get_dvl1000_value(value);
+}
+
+void ADC2_Handler(OBJ_STRUCT *obj)
+{
+	/*AIN2 - dvl1000 входное напряжение*/
+	uint16_t value = obj->obj_value;
+	value = (value*(uint16_t)INT_ADC_REF)/(uint16_t)ADC_DEPTH;
+	this_obj(IND_obj_aINV)->obj_value = get_dvl1000_value(value);
+}
+
 void ADC3_Handler(OBJ_STRUCT *obj)
 {
-	/*AIN3 - lac300    входной ток*/
+	/*AIN3 - lac300 входной ток*/
 	uint16_t value = obj->obj_value;
 	value = (value*(uint16_t)INT_ADC_REF)/(uint16_t)ADC_DEPTH;
 	this_obj(IND_obj_aINC)->obj_value = get_lac300_value(value);	
@@ -72,40 +64,30 @@ void ADC4_Handler(OBJ_STRUCT *obj)
 
 void ADC5_Handler(OBJ_STRUCT *obj)
 {
-	/*AIN5 - lf510     ток дросселя*/
+	/*AIN5 - lf510   ток дросселя*/
 	uint16_t value = obj->obj_value;
 	value = (value*(uint16_t)INT_ADC_REF)/(uint16_t)ADC_DEPTH;
 	this_obj(IND_obj_aDRC)->obj_value = get_lf510_value(value);		
 }
 
-/*Отправка через последовательный порт обратной связи об объектах*/
+/*Отправка через последовательный порт обратной связи об объектах (загрузка таблицы в приложение)*/
 void USART_Handler(OBJ_STRUCT *obj){
-	
-//	CanTxMsg Mes;
-//	Mes.ExtId = 0x1BE93A52;
-//	Mes.IDE = CAN_Id_Extended;
-//	Mes.RTR = CAN_RTR_Data;
-//	Mes.DLC = 8;
-//	Mes.Data[0] = 1;
-//	Mes.Data[1] = 2;
-//	Mes.Data[2] = 3;
-//	Mes.Data[3] = 4;
-//	Mes.Data[4] = 5;
-//	Mes.Data[5] = 6;
-//	Mes.Data[6] = 7;
-//	Mes.Data[7] = 8;
-//	
-//	CAN_Send(&Mes);
-	
 	obj->obj_value++;
 	sync_led_invertor();
 	
 	if(board_power == 1){
 		FAST_Upd_All_OBJ_USART();
-		OBJ_Event(IND_obj_USART_TX);
-		
-		
+		OBJ_Event(IND_obj_USART_TX);		
+	}else{
+		SYNC_LED_OFF;
+		obj->obj_value = 0;
 	}
+}
+/**/
+void _Diagnostic_(OBJ_STRUCT *obj)
+{
+	static int diagnostic_array[] = {_diagnostic_};
+	
 }
 /*таймер отключения контактора */
 void KM_Off_Handler(OBJ_STRUCT *obj)

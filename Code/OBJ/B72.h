@@ -30,7 +30,7 @@ v 0.3
 #define _obj_ADC6_init	       IND_obj_aADC6        ,IND_obj_CAS  ,obj_hard  ,   adc_6   ,NULL         ,NULL
 #define _obj_ADC7_init	       IND_obj_aADC7        ,IND_obj_CAS  ,obj_hard  ,   adc_7   ,NULL         ,NULL
 /*---------------------------------------------------------------------------------------------------*/
-#define _obj_IN0_init	       IND_obj_iInput0      ,IND_obj_CAS  ,obj_hard  ,   in_0   ,NULL         ,key_on
+#define _obj_IN0_init	       IND_obj_iInput0      ,IND_obj_CAS  ,obj_hard  ,   in_0   ,NULL         ,NULL
 #define _obj_IN1_init	       IND_obj_iInput1      ,IND_obj_CAS  ,obj_hard  ,   in_1   ,NULL         ,NULL
 #define _obj_IN2_init	       IND_obj_iInput2      ,IND_obj_CAS  ,obj_hard  ,   in_2   ,NULL         ,NULL
 #define _obj_IN3_init	       IND_obj_iInput3      ,IND_obj_CAS  ,obj_hard  ,   in_3   ,NULL         ,NULL
@@ -43,12 +43,13 @@ v 0.3
 #define _obj_OUT1_init	       IND_obj_oOUT1        ,IND_obj_CAS  ,obj_hard  ,   out_1   ,NULL         ,NULL
 #define _obj_OUT2_init	       IND_obj_oOUT2        ,IND_obj_CAS  ,obj_hard  ,   out_2   ,NULL         ,NULL
 #define _obj_OUT3_init	       IND_obj_oOUT3        ,IND_obj_CAS  ,obj_hard  ,   out_3   ,NULL         ,NULL
-#define _obj_OUT4_init	       IND_obj_oOUT4        ,IND_obj_CAS  ,obj_hard  ,   out_4   ,NULL         ,NULL
-#define _obj_OUT5_init	       IND_obj_oOUT5        ,IND_obj_CAS  ,obj_hard  ,   out_5   ,NULL         ,NULL
-#define _obj_OUT6_init	       IND_obj_PredZar      ,IND_obj_CAS  ,obj_hard  ,   out_6   ,NULL         ,NULL
-#define _obj_OUT7_init	       IND_obj_KM1          ,IND_obj_CAS  ,obj_hard  ,   out_7   ,NULL         ,NULL
+#define _obj_OUT4_init	       IND_obj_Vent         ,IND_obj_CAS  ,obj_hard  ,   out_7   ,NULL         ,NULL
+#define _obj_OUT5_init	       IND_obj_DrOn         ,IND_obj_CAS  ,obj_hard  ,   out_6   ,NULL         ,NULL
+#define _obj_OUT6_init	       IND_obj_PredZar      ,IND_obj_CAS  ,obj_hard  ,   out_5   ,NULL         ,NULL
+#define _obj_OUT7_init	       IND_obj_KM1          ,IND_obj_CAS  ,obj_hard  ,   out_4   ,NULL         ,NULL
 /*---------------------------------------------------------------------------------------------------*/
-#define _obj_USART_TX_init     IND_obj_USART_TX     ,IND_obj_SWC  ,obj_timer ,   NULL   ,100          ,USART_Handler
+#define _obj_USART_TX_init     IND_obj_USART_TX     ,IND_obj_SWC  ,obj_timer ,   NULL    ,200          ,USART_Handler
+#define _obj_tKM_Off_init      IND_obj_tKM_Off      ,IND_obj_SWC  ,obj_timer ,   NULL    ,200          ,KM_Off_Handler
 /*---------------------------------------------------------------------------------------------------*/
 #define obj_aINV_init	       IND_obj_aINV         ,IND_obj_SWC  ,obj_soft  ,   NULL ,NULL         ,NULL
 #define obj_aINC_init	       IND_obj_aINC         ,IND_obj_SWC  ,obj_soft  ,   NULL ,NULL         ,NULL
@@ -85,7 +86,6 @@ v 0.3
 #define _obj_PWM_ON_init       IND_obj_PWM_ON       ,IND_obj_CAS  ,obj_soft  ,   NULL   ,NULL          ,PWM_Control_Handler 
 #define _obj_BUCK_init         IND_obj_M_BUCK_MODE  ,IND_obj_CAS  ,obj_soft  ,   NULL   ,NULL          ,BUCK_Mode_Handler
 #define _obj_BOOST_init        IND_obj_M_BOOST_MODE ,IND_obj_CAS  ,obj_soft  ,   NULL   ,NULL          ,BOOST_Mode_Handler
-#define _obj_tKM_Off_init      IND_obj_tKM_Off      ,IND_obj_SWC  ,obj_timer ,   NULL   ,200           ,KM_Off_Handler
 
 /*init struct for obj model setup*/
 #define _obj_cofig_	\
@@ -100,6 +100,8 @@ v 0.3
 {_obj_ACUR_C_init},{_obj_ACUR_G_init},{_obj_CUR_C_init},{_obj_CUR_G_init},{_obj_ECE_init},{_obj_Q_init},{_obj_ERR_init}, \
 {_obj_PWM_FRQ_init},{_obj_PWM_ON_init},{_obj_BUCK_init},{_obj_BOOST_init},{_obj_tKM_Off_init}
 
+
+#define _diagnostic_	IND_obj_aINV,IND_obj_aINC,IND_obj_aOUTV,IND_obj_aOUTC,IND_obj_aDRV,IND_obj_aDRC
 /*--------------------------------------------------------------------------------------*/
 /*obj handlers*/
 void board_START(OBJ_STRUCT *obj);

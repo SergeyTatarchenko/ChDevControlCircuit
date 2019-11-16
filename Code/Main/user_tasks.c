@@ -26,7 +26,6 @@ void obj_model_setup()
 	/*adc init*/
 	ADC1_On
 	/*usart interrupt enable*/
-	obj_state_on(IND_obj_KM1);
 	/* USART1_IRQ = 37 */
 	NVIC_EnableIRQ (USART1_IRQn);
 		
