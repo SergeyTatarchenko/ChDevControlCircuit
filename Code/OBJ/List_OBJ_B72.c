@@ -35,7 +35,7 @@ void ADC1_Handler(OBJ_STRUCT *obj)
 	/*AIN1 - lac300 выходной ток*/
 	uint16_t value = obj->obj_value;
 	value = (value*(uint16_t)INT_ADC_REF)/(uint16_t)ADC_DEPTH;
-	this_obj(IND_obj_aOUTC)->obj_value = get_dvl1000_value(value);
+	this_obj(IND_obj_aOUTC)->obj_value = get_lac300_value(value);
 }
 
 void ADC2_Handler(OBJ_STRUCT *obj)
@@ -86,7 +86,7 @@ void USART_Handler(OBJ_STRUCT *obj){
 /**/
 void _Diagnostic_(OBJ_STRUCT *obj)
 {
-	static int diagnostic_array[] = {_diagnostic_};
+//	static int diagnostic_array[] = {_diagnostic_};
 	
 }
 /*таймер отключения контактора */
@@ -116,8 +116,13 @@ void BUCK_Mode_Handler(OBJ_STRUCT *obj)
 	{
 		/*вкл контактор*/
 		obj_state_on(IND_obj_KM1);
+		/*конфиг ШИМ модуля в понижающем режиме*/
 		pwm_module_init(ChargerConfig.Frequency,BUCK_MODE);
+		/*вкл. obj pwm*/
+		this_obj(IND_obj_PWM_ON)->obj_state = 1;
+		/*настройка начальной скважности */
 		pwm_control(BUCK_MODE,ChargerConfig.MinDutyCycle,NULL,&ChargerConfig);	
+		/*вкл. ШИМ !!!*/
 		PWM_ON;
 	}
 	else

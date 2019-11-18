@@ -26,6 +26,7 @@ void obj_model_setup()
 	/*adc init*/
 	ADC1_On
 	/*usart interrupt enable*/
+//	obj_state_on(IND_obj_KM1);
 	/* USART1_IRQ = 37 */
 	NVIC_EnableIRQ (USART1_IRQn);
 		
@@ -118,7 +119,7 @@ void vTask_regulator(void *pvParameters)
 			/*установка значения ШИМ ключей от ПИД регулятора*/
 			//this_obj(IND_obj_PWM_ON)->obj_value = PID_controller(&pid_current_out);
 			/*установка значения ШИМ ключей от регулятора и обновления состояния объекта*/
-			this_obj(IND_obj_PWM_ON)->obj_value = pd_regulator(this_obj(IND_obj_PID_ON)->obj_value,this_obj(IND_obj_aOUTC)->obj_value,2);
+			this_obj(IND_obj_PWM_ON)->obj_value = pd_regulator(this_obj(IND_obj_PID_ON)->obj_value,this_obj(IND_obj_aOUTC)->obj_value,1);
 			obj_update(IND_obj_PWM_ON);
 //			if(fabs_function(value_of_obj(IND_obj_PID_ON),value_of_obj(IND_obj_aOUTC))>2)
 //			{

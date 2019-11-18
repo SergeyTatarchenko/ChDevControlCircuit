@@ -175,7 +175,7 @@ typedef struct{
 }value_ADC_REGISTR;
 #pragma pack(pop)
 /*----------- global variables-------------------*/
-#define ADC1_BUF_SIZE	7
+#define ADC1_BUF_SIZE	9
 extern uint16_t ADC1_DataArray[ADC1_BUF_SIZE];
 
 extern PortState_REGISTR IO_STATE;
