@@ -27,7 +27,7 @@ v 0.3
 #define _obj_ADC3_init	       IND_obj_aADC3        ,IND_obj_CAS  ,obj_hard  ,   adc_3   ,NULL         ,ADC3_Handler
 #define _obj_ADC4_init	       IND_obj_aADC4        ,IND_obj_CAS  ,obj_hard  ,   adc_4   ,NULL         ,ADC4_Handler
 #define _obj_ADC5_init	       IND_obj_aADC5        ,IND_obj_CAS  ,obj_hard  ,   adc_5   ,NULL         ,ADC5_Handler
-#define _obj_ADC6_init	       IND_obj_aADC6        ,IND_obj_CAS  ,obj_hard  ,   adc_6   ,NULL         ,NULL
+#define _obj_ADC6_init	       IND_obj_aADC6        ,IND_obj_CAS  ,obj_hard  ,   adc_6   ,NULL         ,ADC6_Handler
 #define _obj_ADC7_init	       IND_obj_aADC7        ,IND_obj_CAS  ,obj_hard  ,   adc_7   ,NULL         ,NULL
 /*---------------------------------------------------------------------------------------------------*/
 #define _obj_IN0_init	       IND_obj_iInput0      ,IND_obj_CAS  ,obj_hard  ,   in_0   ,NULL         ,NULL
@@ -48,7 +48,7 @@ v 0.3
 #define _obj_OUT6_init	       IND_obj_PredZar      ,IND_obj_CAS  ,obj_hard  ,   out_5   ,NULL         ,NULL
 #define _obj_OUT7_init	       IND_obj_KM1          ,IND_obj_CAS  ,obj_hard  ,   out_4   ,NULL         ,NULL
 /*---------------------------------------------------------------------------------------------------*/
-#define _obj_USART_TX_init     IND_obj_USART_TX     ,IND_obj_SWC  ,obj_timer ,   NULL    ,200          ,USART_Handler
+#define _obj_USART_TX_init     IND_obj_USART_TX     ,IND_obj_SWC  ,obj_timer ,   NULL    ,150          ,USART_Handler
 #define _obj_tKM_Off_init      IND_obj_tKM_Off      ,IND_obj_SWC  ,obj_timer ,   NULL    ,200          ,KM_Off_Handler
 /*---------------------------------------------------------------------------------------------------*/
 #define obj_aINV_init	       IND_obj_aINV         ,IND_obj_SWC  ,obj_soft  ,   NULL ,NULL         ,NULL
@@ -57,6 +57,7 @@ v 0.3
 #define obj_aOUTC_init	       IND_obj_aOUTC        ,IND_obj_SWC  ,obj_soft  ,   NULL ,NULL         ,NULL
 #define obj_aDRV_init	       IND_obj_aDRV         ,IND_obj_SWC  ,obj_soft  ,   NULL ,NULL         ,NULL
 #define obj_aDRC_init	       IND_obj_aDRC         ,IND_obj_SWC  ,obj_soft  ,   NULL ,NULL         ,NULL
+#define obj_TempRadiator_init  IND_obj_TempRadiator ,IND_obj_SWC  ,obj_soft  ,   NULL ,NULL         ,NULL
 /*---------------------------------------------------------------------------------------------------*/
 #define _obj_PID1_KP_init      IND_obj_PID1_KP      ,IND_obj_COM  ,obj_soft  ,   NULL   ,NULL          ,PID_COEF_Handler
 #define _obj_PID1_KI_init      IND_obj_PID1_KI      ,IND_obj_COM  ,obj_soft  ,   NULL   ,NULL          ,PID_COEF_Handler
@@ -94,7 +95,7 @@ v 0.3
 {_obj_IN0_init},{_obj_IN1_init},{_obj_IN2_init},{_obj_IN3_init},{_obj_IN4_init},{_obj_IN5_init},{_obj_IN6_init},{_obj_IN7_init}, \
 {_obj_OUT0_init},{_obj_OUT1_init},{_obj_OUT2_init},{_obj_OUT3_init},{_obj_OUT4_init},{_obj_OUT5_init},{_obj_OUT6_init},{_obj_OUT7_init}, \
 {_obj_USART_TX_init}, \
-{obj_aINV_init},{obj_aINC_init},{obj_aOUTV_init},{obj_aOUTC_init},{obj_aDRV_init},{obj_aDRC_init}, \
+{obj_aINV_init},{obj_aINC_init},{obj_aOUTV_init},{obj_aOUTC_init},{obj_aDRV_init},{obj_aDRC_init},{obj_TempRadiator_init}, \
 {_obj_PID1_KP_init},{_obj_PID1_KI_init},{_obj_PID1_KD_init},{_obj_PID1_KP_init},{_obj_PID_init}, \
 {obj_cPMinV_init},{obj_cPMax_Vinit},{obj_cSVError_init},{obj_cSCError_init},{obj_cMaxDutyC_init},{obj_cMinDutyC_init},{obj_cMaxTemp_init},{obj_cFreq_init},{obj_cGysteresis_init},{obj_cSync_init}, \
 {_obj_ACUR_C_init},{_obj_ACUR_G_init},{_obj_CUR_C_init},{_obj_CUR_G_init},{_obj_ECE_init},{_obj_Q_init},{_obj_ERR_init}, \
@@ -112,6 +113,7 @@ void ADC2_Handler(OBJ_STRUCT *obj);
 void ADC3_Handler(OBJ_STRUCT *obj);
 void ADC4_Handler(OBJ_STRUCT *obj);
 void ADC5_Handler(OBJ_STRUCT *obj);
+void ADC6_Handler(OBJ_STRUCT *obj);
 /*-------------------------------------------------*/
 void USART_Handler(OBJ_STRUCT *obj);
 /*-------------------------------------------------*/

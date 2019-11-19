@@ -5,6 +5,9 @@
 * Description        : ADC1 with DMA
 *************************************************/
 #include "adc.h"
+#include "termo.h"
+
+static const uint16_t termo_table[]={_thermistor_};
 /*************************************************
 Init ADC1 function
 *************************************************/
@@ -55,3 +58,19 @@ void ADC_Init()
 	ADC1->CR2 |= ADC_CR2_CAL;
 	while((ADC1->CR2 & ADC_CR2_CAL) == 1);
 }
+
+int16_t ADC_B57045_1K21 (uint16_t val)
+{
+	int i,tab_size = sizeof(termo_table)/sizeof(uint16_t); 
+	for(i = 0;i < tab_size;i++)
+	{
+		if(termo_table[i] < val)
+		{
+			break;
+		}
+	}
+	/*y = 5x-40 */
+	return (int16_t)(i*5 - 40);	
+}
+
+

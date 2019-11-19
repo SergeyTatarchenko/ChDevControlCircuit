@@ -1,6 +1,7 @@
 
 #include "B72.h"
 #include "global.h"
+
 /************************************************************************************/
 /* 									 OBJ_Handlers									*/
 /************************************************************************************/
@@ -70,6 +71,15 @@ void ADC5_Handler(OBJ_STRUCT *obj)
 	this_obj(IND_obj_aDRC)->obj_value = get_lf510_value(value);		
 }
 
+void ADC6_Handler(OBJ_STRUCT *obj)
+{
+	uint16_t temp_radiator;
+	/*AIN6 - температура радиатора */
+	uint16_t value = obj->obj_value;
+	temp_radiator = ADC_B57045_1K21 (value);
+	this_obj(IND_obj_aDRC)->obj_value = temp_radiator ;
+}
+
 /*Отправка через последовательный порт обратной связи об объектах (загрузка таблицы в приложение)*/
 void USART_Handler(OBJ_STRUCT *obj){
 	obj->obj_value++;
@@ -116,13 +126,9 @@ void BUCK_Mode_Handler(OBJ_STRUCT *obj)
 	{
 		/*вкл контактор*/
 		obj_state_on(IND_obj_KM1);
-		/*конфиг ШИМ модуля в понижающем режиме*/
 		pwm_module_init(ChargerConfig.Frequency,BUCK_MODE);
-		/*вкл. obj pwm*/
 		this_obj(IND_obj_PWM_ON)->obj_state = 1;
-		/*настройка начальной скважности */
 		pwm_control(BUCK_MODE,ChargerConfig.MinDutyCycle,NULL,&ChargerConfig);	
-		/*вкл. ШИМ !!!*/
 		PWM_ON;
 	}
 	else

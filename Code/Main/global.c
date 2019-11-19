@@ -42,9 +42,7 @@ void Core_Init(){
 	I2CInit();
 	/*usart init*/
 	usart_init();
-	usart_speed(56000);
-	
-	
+	usart_speed(57600);
 	/*external interrupt init (for MCP23017)*/
 	EXTI_Init();
 	/*NVIC config */

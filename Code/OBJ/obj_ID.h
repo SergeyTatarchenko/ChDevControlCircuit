@@ -80,5 +80,6 @@
 #define IND_obj_tChDevOff		(IND_obj_NULL + 65)		// [Отключение преобразователя ]
 #define IND_obj_BuckPWMValue	(IND_obj_NULL + 66)		// [Значение D верхнего ключа]
 #define IND_obj_BoostPWMValue	(IND_obj_NULL + 67)		// [Значение D нижнего ключа]
+#define IND_obj_TempRadiator	(IND_obj_NULL + 68)		// [Температура радиатора, С]
 /*-----------------------------------------------*/
 #endif

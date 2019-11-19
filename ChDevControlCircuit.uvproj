@@ -921,6 +921,11 @@
               <FileType>1</FileType>
               <FilePath>.\Code\OBJ\AlgorithmCD.c</FilePath>
             </File>
+            <File>
+              <FileName>termo.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\Code\OBJ\termo.h</FilePath>
+            </File>
           </Files>
         </Group>
       </Groups>
@@ -1839,6 +1844,11 @@
               <FileName>AlgorithmCD.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\Code\OBJ\AlgorithmCD.c</FilePath>
+            </File>
+            <File>
+              <FileName>termo.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\Code\OBJ\termo.h</FilePath>
             </File>
           </Files>
         </Group>
@@ -2860,6 +2870,11 @@
               <FileName>AlgorithmCD.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\Code\OBJ\AlgorithmCD.c</FilePath>
+            </File>
+            <File>
+              <FileName>termo.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\Code\OBJ\termo.h</FilePath>
             </File>
           </Files>
         </Group>
