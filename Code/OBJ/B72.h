@@ -27,8 +27,8 @@ v 0.3
 #define _obj_ADC3_init	       IND_obj_aADC3        ,IND_obj_CAS  ,obj_hard  ,   adc_3   ,NULL         ,ADC3_Handler
 #define _obj_ADC4_init	       IND_obj_aADC4        ,IND_obj_CAS  ,obj_hard  ,   adc_4   ,NULL         ,ADC4_Handler
 #define _obj_ADC5_init	       IND_obj_aADC5        ,IND_obj_CAS  ,obj_hard  ,   adc_5   ,NULL         ,ADC5_Handler
-#define _obj_ADC6_init	       IND_obj_aADC6        ,IND_obj_CAS  ,obj_hard  ,   adc_6   ,NULL         ,ADC6_Handler
-#define _obj_ADC7_init	       IND_obj_aADC7        ,IND_obj_CAS  ,obj_hard  ,   adc_7   ,NULL         ,NULL
+#define _obj_ADC6_init	       IND_obj_aADC6        ,IND_obj_CAS  ,obj_hard  ,   adc_6   ,NULL         ,NULL
+#define _obj_ADC7_init	       IND_obj_aADC7        ,IND_obj_CAS  ,obj_hard  ,   adc_7   ,NULL         ,ADC7_Handler
 /*---------------------------------------------------------------------------------------------------*/
 #define _obj_IN0_init	       IND_obj_iInput0      ,IND_obj_CAS  ,obj_hard  ,   in_0   ,NULL         ,NULL
 #define _obj_IN1_init	       IND_obj_iInput1      ,IND_obj_CAS  ,obj_hard  ,   in_1   ,NULL         ,NULL
@@ -88,6 +88,10 @@ v 0.3
 #define _obj_BUCK_init         IND_obj_M_BUCK_MODE  ,IND_obj_CAS  ,obj_soft  ,   NULL   ,NULL          ,BUCK_Mode_Handler
 #define _obj_BOOST_init        IND_obj_M_BOOST_MODE ,IND_obj_CAS  ,obj_soft  ,   NULL   ,NULL          ,BOOST_Mode_Handler
 
+#define _obj_PWMCOM_init       IND_obj_PWM_COMMON   ,IND_obj_CAS  ,obj_soft  ,   NULL   ,NULL          ,pwm_common
+#define _obj_PWMCH4_init       IND_obj_PWM_CHANNEL4 ,IND_obj_CAS  ,obj_soft  ,   NULL   ,NULL          ,pwm_channel_4
+#define _obj_PWMCH3_init       IND_obj_PWM_CHANNEL3 ,IND_obj_CAS  ,obj_soft  ,   NULL   ,NULL          ,pwm_channel_3
+
 /*init struct for obj model setup*/
 #define _obj_cofig_	\
 {_obj_STATUS_init}, \
@@ -99,7 +103,7 @@ v 0.3
 {_obj_PID1_KP_init},{_obj_PID1_KI_init},{_obj_PID1_KD_init},{_obj_PID1_KP_init},{_obj_PID_init}, \
 {obj_cPMinV_init},{obj_cPMax_Vinit},{obj_cSVError_init},{obj_cSCError_init},{obj_cMaxDutyC_init},{obj_cMinDutyC_init},{obj_cMaxTemp_init},{obj_cFreq_init},{obj_cGysteresis_init},{obj_cSync_init}, \
 {_obj_ACUR_C_init},{_obj_ACUR_G_init},{_obj_CUR_C_init},{_obj_CUR_G_init},{_obj_ECE_init},{_obj_Q_init},{_obj_ERR_init}, \
-{_obj_PWM_FRQ_init},{_obj_PWM_ON_init},{_obj_BUCK_init},{_obj_BOOST_init},{_obj_tKM_Off_init}
+{_obj_PWM_FRQ_init},{_obj_PWM_ON_init},{_obj_BUCK_init},{_obj_BOOST_init},{_obj_tKM_Off_init},{_obj_PWMCOM_init},{_obj_PWMCH4_init},{_obj_PWMCH3_init}
 
 
 #define _diagnostic_	IND_obj_aINV,IND_obj_aINC,IND_obj_aOUTV,IND_obj_aOUTC,IND_obj_aDRV,IND_obj_aDRC
@@ -113,7 +117,7 @@ void ADC2_Handler(OBJ_STRUCT *obj);
 void ADC3_Handler(OBJ_STRUCT *obj);
 void ADC4_Handler(OBJ_STRUCT *obj);
 void ADC5_Handler(OBJ_STRUCT *obj);
-void ADC6_Handler(OBJ_STRUCT *obj);
+void ADC7_Handler(OBJ_STRUCT *obj);
 /*-------------------------------------------------*/
 void USART_Handler(OBJ_STRUCT *obj);
 /*-------------------------------------------------*/
@@ -127,4 +131,8 @@ void PID_COEF_Handler(OBJ_STRUCT *obj);
 void PID_Control_Handler(OBJ_STRUCT *obj);
 void KM_Off_Handler(OBJ_STRUCT *obj);
 void key_on(OBJ_STRUCT *obj);
+/*-----------------------------*/
+void pwm_common(OBJ_STRUCT *obj);
+void pwm_channel_4(OBJ_STRUCT *obj);
+void pwm_channel_3(OBJ_STRUCT *obj);
 #endif

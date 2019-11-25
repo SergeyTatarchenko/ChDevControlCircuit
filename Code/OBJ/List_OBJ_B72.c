@@ -18,7 +18,10 @@ void board_START(OBJ_STRUCT *obj)
 	else
 	{
 		board_power = 0;
-		set_all_obj_off();
+		PWM_OFF;
+		pwm_control(OFF,NULL,NULL,&ChargerConfig);	
+		/*выкл контактор*/
+		OBJ_Event(IND_obj_tKM_Off);
 		SYNC_LED_OFF;
 	}
 }
@@ -33,10 +36,15 @@ void ADC0_Handler(OBJ_STRUCT *obj)
 
 void ADC1_Handler(OBJ_STRUCT *obj)
 {
+//	static int overcurrent = 0;
 	/*AIN1 - lac300 выходной ток*/
 	uint16_t value = obj->obj_value;
 	value = (value*(uint16_t)INT_ADC_REF)/(uint16_t)ADC_DEPTH;
 	this_obj(IND_obj_aOUTC)->obj_value = get_lac300_value(value);
+//	if(1)
+//	{
+//		
+//	}
 }
 
 void ADC2_Handler(OBJ_STRUCT *obj)
@@ -71,13 +79,13 @@ void ADC5_Handler(OBJ_STRUCT *obj)
 	this_obj(IND_obj_aDRC)->obj_value = get_lf510_value(value);		
 }
 
-void ADC6_Handler(OBJ_STRUCT *obj)
+void ADC7_Handler(OBJ_STRUCT *obj)
 {
 	uint16_t temp_radiator;
 	/*AIN6 - температура радиатора */
 	uint16_t value = obj->obj_value;
 	temp_radiator = ADC_B57045_1K21 (value);
-	this_obj(IND_obj_aDRC)->obj_value = temp_radiator ;
+	this_obj(IND_obj_TempRadiator)->obj_value = temp_radiator ;
 }
 
 /*Отправка через последовательный порт обратной связи об объектах (загрузка таблицы в приложение)*/
@@ -119,6 +127,33 @@ void KM_Off_Handler(OBJ_STRUCT *obj)
 	}
 }
 
+void pwm_common(OBJ_STRUCT *obj)
+{
+	if(obj->obj_state == 1)
+	{
+		PWM_ON;	
+	}
+	else
+	{
+		PWM_OFF;
+	}	
+}
+
+void pwm_channel_4(OBJ_STRUCT *obj)
+{
+	if(obj-> obj_state == 1)
+	{
+		PWMSetValue(CH4,obj->obj_value);	
+	}
+}
+void pwm_channel_3(OBJ_STRUCT *obj)
+{
+	if(obj-> obj_state == 1)
+	{
+		PWMSetValue(CH3,obj->obj_value);	
+	}
+}
+
 /*включение режима понижающего преобразователя*/
 void BUCK_Mode_Handler(OBJ_STRUCT *obj)
 {
@@ -145,18 +180,11 @@ void BOOST_Mode_Handler(OBJ_STRUCT *obj)
 {
 	if(obj->obj_state == 1)
 	{
-		/*вкл контактор*/
-		obj_state_on(IND_obj_KM1);
-		pwm_module_init(ChargerConfig.Frequency,BOOST_MODE);
-		pwm_control(BOOST_MODE,NULL,ChargerConfig.MinDutyCycle,&ChargerConfig);	
-		PWM_ON;
+		pwm_module_init(ChargerConfig.Frequency,BUCK_BOOST_MODE);
 	}
 	else
-	{	
-		PWM_OFF;
-		pwm_control(OFF,NULL,NULL,&ChargerConfig);	
-		/*выкл контактор*/
-		OBJ_Event(IND_obj_tKM_Off);
+	{
+		pwm_module_init(0,OFF);	
 	}
 }
 

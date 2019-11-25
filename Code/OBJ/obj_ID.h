@@ -81,5 +81,8 @@
 #define IND_obj_BuckPWMValue	(IND_obj_NULL + 66)		// [Значение D верхнего ключа]
 #define IND_obj_BoostPWMValue	(IND_obj_NULL + 67)		// [Значение D нижнего ключа]
 #define IND_obj_TempRadiator	(IND_obj_NULL + 68)		// [Температура радиатора, С]
+#define IND_obj_PWM_COMMON		(IND_obj_NULL + 69)		// [вкл./выкл. таймера ШИМ каналов (тест)]
+#define IND_obj_PWM_CHANNEL4	(IND_obj_NULL + 70)		// [вкл./выкл. ШИМ канала 4 (тест)]
+#define IND_obj_PWM_CHANNEL3	(IND_obj_NULL + 71)		// [вкл./выкл. ШИМ канала 3 (тест)]
 /*-----------------------------------------------*/
 #endif

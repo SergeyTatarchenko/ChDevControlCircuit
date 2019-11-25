@@ -61,10 +61,10 @@ void ADC_Init()
 
 int16_t ADC_B57045_1K21 (uint16_t val)
 {
-	int i,tab_size = sizeof(termo_table)/sizeof(uint16_t); 
-	for(i = 0;i < tab_size;i++)
+	int i = 0; 
+	for(i = 0;i < 33;i++)
 	{
-		if(termo_table[i] < val)
+		if(termo_table[i] > val)
 		{
 			break;
 		}

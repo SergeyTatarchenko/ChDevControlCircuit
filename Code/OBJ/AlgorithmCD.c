@@ -127,7 +127,8 @@ void pwm_control(CD_MODE mode,uint16_t D1,uint16_t D2,ChargerConfig_TypeDef* con
 			PWMSetValue(CH4,PERIOD_PWM);
 			break;
 		case BUCK_BOOST_MODE:
-		//	PWMSetValue(ALL_CH_ON,D);
+			PWMSetValue(CH4,D1);
+			PWMSetValue(CH3,D2);
 			break;
 		case OFF:
 			PWMSetValue(CH3,NULL);
