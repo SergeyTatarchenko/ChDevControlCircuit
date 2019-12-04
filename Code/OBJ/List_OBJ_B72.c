@@ -5,6 +5,8 @@
 /************************************************************************************/
 /* 									 OBJ_Handlers									*/
 /************************************************************************************/
+static uint8_t current_limit_trigger = 0;
+
 /*first obj*/
 void board_START(OBJ_STRUCT *obj)
 {
@@ -18,10 +20,12 @@ void board_START(OBJ_STRUCT *obj)
 	else
 	{
 		board_power = 0;
+		//set_all_obj_off();
 		PWM_OFF;
 		pwm_control(OFF,NULL,NULL,&ChargerConfig);	
 		/*выкл контактор*/
 		OBJ_Event(IND_obj_tKM_Off);
+		
 		SYNC_LED_OFF;
 	}
 }
@@ -36,15 +40,24 @@ void ADC0_Handler(OBJ_STRUCT *obj)
 
 void ADC1_Handler(OBJ_STRUCT *obj)
 {
-//	static int overcurrent = 0;
 	/*AIN1 - lac300 выходной ток*/
 	uint16_t value = obj->obj_value;
 	value = (value*(uint16_t)INT_ADC_REF)/(uint16_t)ADC_DEPTH;
 	this_obj(IND_obj_aOUTC)->obj_value = get_lac300_value(value);
-//	if(1)
-//	{
-//		
-//	}
+	if((current_limit_trigger == 0)&&(value_of_obj(IND_obj_aOUTC)>value_of_obj(IND_obj_CURLIMIT)))
+	{
+		obj_state_off(IND_obj_M_BUCK_MODE);
+		state_of_obj(IND_obj_CURLIMIT) = 1;
+		current_limit_trigger = 1;
+	}
+}
+
+void CurrentLimit(OBJ_STRUCT *obj)
+{
+	if(obj->obj_state == 0)
+	{
+		current_limit_trigger = 0;
+	}
 }
 
 void ADC2_Handler(OBJ_STRUCT *obj)
@@ -157,13 +170,13 @@ void pwm_channel_3(OBJ_STRUCT *obj)
 /*включение режима понижающего преобразователя*/
 void BUCK_Mode_Handler(OBJ_STRUCT *obj)
 {
-	if(obj->obj_state == 1)
+	if((obj->obj_state == 1) &&(current_limit_trigger == 0))
 	{
 		/*вкл контактор*/
-		obj_state_on(IND_obj_KM1);
 		pwm_module_init(ChargerConfig.Frequency,BUCK_MODE);
-		this_obj(IND_obj_PWM_ON)->obj_state = 1;
-		pwm_control(BUCK_MODE,ChargerConfig.MinDutyCycle,NULL,&ChargerConfig);	
+		obj_state_on(IND_obj_KM1);
+		value_of_obj(IND_obj_PWM_ON)= ChargerConfig.MinDutyCycle;
+		obj_state_on(IND_obj_PWM_ON);
 		PWM_ON;
 	}
 	else

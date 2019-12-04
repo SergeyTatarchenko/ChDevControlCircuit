@@ -15,6 +15,7 @@ CD_STATE device_state = IDLE;
 int load_configuration(ChargerConfig_TypeDef* configuration)
 {
 	configuration->Frequency = 10000;
+	//configuration->Frequency = 5000;
 	configuration->MaxDutyCycle = 800;
 	configuration->MinDutyCycle = 200;
 	configuration->PermissibleVoltageSensorError = 20;

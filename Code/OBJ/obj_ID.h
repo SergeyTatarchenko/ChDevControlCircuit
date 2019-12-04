@@ -84,5 +84,6 @@
 #define IND_obj_PWM_COMMON		(IND_obj_NULL + 69)		// [вкл./выкл. таймера ШИМ каналов (тест)]
 #define IND_obj_PWM_CHANNEL4	(IND_obj_NULL + 70)		// [вкл./выкл. ШИМ канала 4 (тест)]
 #define IND_obj_PWM_CHANNEL3	(IND_obj_NULL + 71)		// [вкл./выкл. ШИМ канала 3 (тест)]
+#define IND_obj_CURLIMIT		(IND_obj_NULL + 72)		// [Ограничение выходного тока]
 /*-----------------------------------------------*/
 #endif

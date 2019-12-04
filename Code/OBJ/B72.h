@@ -91,6 +91,7 @@ v 0.3
 #define _obj_PWMCOM_init       IND_obj_PWM_COMMON   ,IND_obj_CAS  ,obj_soft  ,   NULL   ,NULL          ,pwm_common
 #define _obj_PWMCH4_init       IND_obj_PWM_CHANNEL4 ,IND_obj_CAS  ,obj_soft  ,   NULL   ,NULL          ,pwm_channel_4
 #define _obj_PWMCH3_init       IND_obj_PWM_CHANNEL3 ,IND_obj_CAS  ,obj_soft  ,   NULL   ,NULL          ,pwm_channel_3
+#define _obj_CRLM_init         IND_obj_CURLIMIT     ,IND_obj_CAS  ,obj_soft  ,   NULL   ,NULL          ,CurrentLimit
 
 /*init struct for obj model setup*/
 #define _obj_cofig_	\
@@ -103,7 +104,7 @@ v 0.3
 {_obj_PID1_KP_init},{_obj_PID1_KI_init},{_obj_PID1_KD_init},{_obj_PID1_KP_init},{_obj_PID_init}, \
 {obj_cPMinV_init},{obj_cPMax_Vinit},{obj_cSVError_init},{obj_cSCError_init},{obj_cMaxDutyC_init},{obj_cMinDutyC_init},{obj_cMaxTemp_init},{obj_cFreq_init},{obj_cGysteresis_init},{obj_cSync_init}, \
 {_obj_ACUR_C_init},{_obj_ACUR_G_init},{_obj_CUR_C_init},{_obj_CUR_G_init},{_obj_ECE_init},{_obj_Q_init},{_obj_ERR_init}, \
-{_obj_PWM_FRQ_init},{_obj_PWM_ON_init},{_obj_BUCK_init},{_obj_BOOST_init},{_obj_tKM_Off_init},{_obj_PWMCOM_init},{_obj_PWMCH4_init},{_obj_PWMCH3_init}
+{_obj_PWM_FRQ_init},{_obj_PWM_ON_init},{_obj_BUCK_init},{_obj_BOOST_init},{_obj_tKM_Off_init},{_obj_PWMCOM_init},{_obj_PWMCH4_init},{_obj_PWMCH3_init},{_obj_CRLM_init}
 
 
 #define _diagnostic_	IND_obj_aINV,IND_obj_aINC,IND_obj_aOUTV,IND_obj_aOUTC,IND_obj_aDRV,IND_obj_aDRC
@@ -135,4 +136,5 @@ void key_on(OBJ_STRUCT *obj);
 void pwm_common(OBJ_STRUCT *obj);
 void pwm_channel_4(OBJ_STRUCT *obj);
 void pwm_channel_3(OBJ_STRUCT *obj);
+void CurrentLimit(OBJ_STRUCT *obj);
 #endif
