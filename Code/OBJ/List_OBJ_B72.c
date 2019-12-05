@@ -44,8 +44,10 @@ void ADC1_Handler(OBJ_STRUCT *obj)
 	uint16_t value = obj->obj_value;
 	value = (value*(uint16_t)INT_ADC_REF)/(uint16_t)ADC_DEPTH;
 	this_obj(IND_obj_aOUTC)->obj_value = get_lac300_value(value);
+	/*защита от превышения тока - контроль внутри модели в функции obj_adc_driver()*/
 	if((current_limit_trigger == 0)&&(value_of_obj(IND_obj_aOUTC)>value_of_obj(IND_obj_CURLIMIT)))
 	{
+		
 		obj_state_off(IND_obj_M_BUCK_MODE);
 		state_of_obj(IND_obj_CURLIMIT) = 1;
 		current_limit_trigger = 1;

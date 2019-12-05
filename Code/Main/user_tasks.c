@@ -49,8 +49,9 @@ void obj_model_task(int tick)
 	/*while power enable adc conversions*/
 	if(board_power)
 	{
-	obj_input_driver(&(IO_STATE.INPUTS),1,8,in_0);
-	obj_adc_driver(ADC1_DataArray);
+		/*функция только для выполнения в прерывании*/
+		//obj_input_driver(&(IO_STATE.INPUTS),1,8,in_0);
+		obj_adc_driver(ADC1_DataArray);
 	}	
 }
 
@@ -115,97 +116,104 @@ void vTask_regulator(void *pvParameters)
 			{
 				/*обратная связь - датчик тока в нагрузке*/
 				/*установка значения ШИМ ключей от регулятора и обновления состояния объекта*/
-				this_obj(IND_obj_PWM_ON)->obj_value = pd_regulator(this_obj(IND_obj_PID_ON)->obj_value,this_obj(IND_obj_aOUTC)->obj_value,1,0);
+				this_obj(IND_obj_PWM_ON)->obj_value = pd_regulator(this_obj(IND_obj_PID_ON)->obj_value,
+				this_obj(IND_obj_aOUTC)->obj_value,ChargerConfig.MaxDutyCycle,ChargerConfig.MinDutyCycle,1,0);
 				obj_update(IND_obj_PWM_ON);
 			}
 			else
 			{
-				this_obj(IND_obj_PWM_ON)->obj_value = pd_regulator(this_obj(IND_obj_PID_ON)->obj_value,this_obj(IND_obj_aOUTC)->obj_value,1,1);
+				this_obj(IND_obj_PWM_ON)->obj_value = pd_regulator(this_obj(IND_obj_PID_ON)->obj_value,
+				this_obj(IND_obj_aOUTC)->obj_value,ChargerConfig.MaxDutyCycle,ChargerConfig.MinDutyCycle,1,1);
 				obj_update(IND_obj_PWM_ON);
 			}
 		}
-		vTaskDelay(10);
+		vTaskDelay(1);
+		//vTaskDelay(10);
 	}
 }
 
-/*test  P regulator*/
-uint16_t pd_regulator(uint16_t set_value,uint16_t feedback,uint16_t gisteresis,uint8_t reset)
+
+uint16_t pd_regulator(uint16_t set_value,uint16_t feedback,int max_value,int min_value,uint16_t gisteresis,uint8_t reset)
 {
-/*
-	F(PWM,feedback value of current) = set value of current
-	*/
+/***********************************************************************************
+Регулятор параметра по заданной ОС с программируемым гистерезисом и триггером сброса 
+***********************************************************************************/
 	
-	/*минимальное и максимальное значение скважности зависит от драйвера*/
-	const int max_control_value = 900,min_control_value = 100;
+	/*минимальное и максимальное выходное значение */
+//	const int max_control_value = 900,min_control_value = 100;
 	/*минимальный инкремент аргумента функции управления*/
 	const int minimal_point = 1;
-	/* приращение аргумента функции управления при переходном процессе */
+	/* приращение аргумента функции (n) для (n+1) */
 	static int point = minimal_point;
-	/*значение аргумента функции управления*/
-	static uint16_t control = min_control_value;
-	/*предыдущее значение функции,текущее значение функции*/
+	/*начальное значение выходного сигнала*/
+	static uint16_t control = 0;
+	/*предыдущее и текущее значение функции*/
 	static uint16_t last_feedback = 0,current_feedback = 0;
-	/*приращение значения функции от ее аргумента */
+	/*приращение значения функции от ее аргумента df/dt = f(n+1) - f(n) */
 	int function_increment = 0;
-	/*установка текущего значения функции*/
+	
+	/****************************************************************/
+	/*************************АЛГОРИТМ*******************************/
+	/****************************************************************/
+	/*установка значения обратной связи f(n) для сравнения с f(n-1) */
 	current_feedback = feedback;
 	
-	/*PI reg disable*/
-	if(reset == 1)
+	if(control < min_value)
+	{
+		control = min_value;
+	}
+	
+	if(set_value <= gisteresis)/*ошибка ввода прараметра в функцию */
+	{
+		return min_value;
+	}
+	
+	if(reset == 1)/*Триггер сброса регулятора в начальное положение*/
 	{
 		current_feedback = last_feedback;
-		control = min_control_value;
+		control = min_value;
 		return control;
 	}
 	
-	/****************************************************************************** */
-	/*дифференциальное звено, изменение значения функции от приращения ее аргумента */
+	/*вычисление приращения функции f(n+1) от f(n)*/
 	function_increment = fabs_function(current_feedback,last_feedback);
 	
-	/*увеличить значение значение приращения */
-	if((function_increment < gisteresis)&&(point >minimal_point))
+	/*увеличить значение приращения аргумента в случае минимальной разницы*/
+	if((function_increment < gisteresis)&&(point > minimal_point))
 	{
 		point ++;
 	}
 	/*уменьшить значение значение приращения при превышении значения гистерезиса*/
-	if((function_increment > gisteresis)&&(point >minimal_point))
+	if((function_increment > gisteresis)&&(point > minimal_point))
 	{
 		point --;
 	}
-	/*ошибка - переходной процесс не устойчив*/
+	/*ошибка - переходной процесс не устойчив, возврат минимального значения*/
 	else if(point == minimal_point)
 	{
-	
+		return min_value;	
 	}
 	/*сохранение значения обратной связи для следующей итерации*/
 	last_feedback = current_feedback;
-	/*ошибка ввода прараметра в функцию */
-	if(set_value <= gisteresis){
-		return min_control_value;
-	}
-	/****************************************************************************** */
 	
-	/*пропорциональное звено*/
-	/* feedback is << that set value */
-	if((feedback < (set_value - gisteresis))&&(control <= max_control_value))
+	/*увеличение значения f(n) при ОС меньше чем заданное число*/
+	if((feedback < (set_value - gisteresis))&&(control <= max_value))
 	{
 		control += point;
 		return control;
 	}
-	/* feedback is >> that set value */
-	if((feedback > (set_value + gisteresis))&&(control > min_control_value))
+	/*уменьшение значения f(n) при ОС больше чем заданное число*/
+	if((feedback > (set_value + gisteresis))&&(control > min_value))
 	{
 		control -= point;
 		return control;
 	}
-	/*working area*/
+	/*устойчивое значение,погрешность задана гистерезисом*/
 	if((feedback > (set_value - gisteresis))&&(feedback < (set_value + gisteresis)))
 	{
 		return control;
-		/*устойчивое значение,добавить алгоритм сужения области в центр гистерезиса*/
 	}
-	/****************************************************************************** */
-	//return (uint16_t)min_control_value;
+	/*в нормальном режиме эта точка недостижима*/
 	return control;
 }
 
