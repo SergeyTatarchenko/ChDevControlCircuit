@@ -22,7 +22,9 @@ void PWM_Init(){
 				  GPIO_CRL_CNF1_1|GPIO_CRL_MODE1);	//PB1 AF PP
 
 	/*prescaler value*/
-	TIM3->PSC = TIM3_PSC;
+	//TIM3->PSC = TIM3_PSC;
+	
+	/* no prescaler, max pwm step number*/
 	
 	/*main output enable*/
 	TIM3->BDTR |= TIM_BDTR_MOE;
@@ -60,7 +62,7 @@ void PWMSetActiveChannel(PWM_CHANNEL channel){
 }
 /* PWM frequency config get value in Hz*/
 void PWMSetFrequency(int frequency){
-	int TimerFrequency = 1000000;
+	int TimerFrequency = 72000000;
 	int prescaler = 0;
 	PWM_OFF;
 	prescaler = TimerFrequency/frequency;

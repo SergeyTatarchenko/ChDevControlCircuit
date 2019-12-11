@@ -62,6 +62,9 @@ typedef enum
 	#include "RTOS.h"
 #endif
 
+#define USE_HWOBJ	TRUE
+#define USE_TIMERS	TRUE
+
 /*-------------------------------------------------
            !board special! (remove to other file)
 -------------------------------------------------*/

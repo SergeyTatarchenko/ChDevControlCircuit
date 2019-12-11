@@ -13,8 +13,9 @@
 /*-----------local define-----------------------*/
 #define	TIM3_CLK	APB2_FREQ
 #define	TIM3_PSC	TIM3_CLK/1000000UL	// get 1 MHz timer freq
-#define PWM_MAX_VALUE	1000
 
+#define PWM_MAX_VALUE	7200			// for 10 kHz freq
+//#define PWM_MAX_VALUE	14400			// for 5  kHz freq
 
 #define		PWM_PIN_0	0
 #define		PWM_PIN_1	1

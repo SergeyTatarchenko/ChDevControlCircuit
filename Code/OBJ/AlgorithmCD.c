@@ -14,10 +14,11 @@ CD_STATE device_state = IDLE;
 /*load configuration from flash memory*/
 int load_configuration(ChargerConfig_TypeDef* configuration)
 {
+	//configuration->Frequency = 15000;
 	configuration->Frequency = 10000;
 	//configuration->Frequency = 5000;
-	configuration->MaxDutyCycle = 800;
-	configuration->MinDutyCycle = 200;
+	configuration->MaxDutyCycle = PWM_MAX_VALUE/10;  // 10 %
+	configuration->MinDutyCycle = PWM_MAX_VALUE - PWM_MAX_VALUE/10;	// 10 %
 	configuration->PermissibleVoltageSensorError = 20;
 	configuration->PermissibleCurrentSensorError = 2;
 	
