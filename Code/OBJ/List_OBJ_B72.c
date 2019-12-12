@@ -250,21 +250,21 @@ void PID_Control_Handler(OBJ_STRUCT *obj){
 /*запись конфигурации в flash память МК*/
 void Write_config_Handler(OBJ_STRUCT *obj)
 {
-	ChargerConfig.PrechargeMinVoltage = value_of_obj(IND_obj_cPMinV);
-	ChargerConfig.PrechargeMaxVoltage = value_of_obj(IND_obj_cPMaxV);
-	
-	ChargerConfig.PermissibleVoltageSensorError = value_of_obj(IND_obj_cSVError);
-	ChargerConfig.PermissibleCurrentSensorError = value_of_obj(IND_obj_cSCError);
+//	ChargerConfig.PrechargeMinVoltage = value_of_obj(IND_obj_cPMinV);
+//	ChargerConfig.PrechargeMaxVoltage = value_of_obj(IND_obj_cPMaxV);
+//	
+//	ChargerConfig.PermissibleVoltageSensorError = value_of_obj(IND_obj_cSVError);
+//	ChargerConfig.PermissibleCurrentSensorError = value_of_obj(IND_obj_cSCError);
 	
 	ChargerConfig.MaxDutyCycle = value_of_obj(IND_obj_cMaxDutyC);
 	ChargerConfig.MinDutyCycle = value_of_obj(IND_obj_cMinDutyC);
 	
-	ChargerConfig.MaxCurrrent = value_of_obj(IND_obj_cMaxTemp);
-	ChargerConfig.Frequency = value_of_obj(IND_obj_cFreq);
-	ChargerConfig.VoltageGysteresisMode = value_of_obj(IND_obj_cFreq);
-	
-	if(obj->obj_state == 1){
-		/*!!! stop executing main program*/
-		write_configuration(&ChargerConfig);
-	}
+//	ChargerConfig.MaxCurrrent = value_of_obj(IND_obj_cMaxTemp);
+//	ChargerConfig.Frequency = value_of_obj(IND_obj_cFreq);
+//	ChargerConfig.VoltageGysteresisMode = value_of_obj(IND_obj_cFreq);
+
+//	if(obj->obj_state == 1){
+//		/*!!! stop executing main program*/
+//		write_configuration(&ChargerConfig);
+//	}
 }
