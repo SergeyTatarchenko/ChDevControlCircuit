@@ -19,6 +19,6 @@
 /*-----------global function prototypes---------*/
 extern void DMA_ADC1_Setup(void);
 extern void DMA_USART1_Setup(void);
-extern void DMA_Ch4_Reload(int type,int new_buf_size);
+extern void DMA_Ch4_Reload(uint32_t memory_adress,int new_buf_size);
 /*-----------global variables-------------------*/
 #endif

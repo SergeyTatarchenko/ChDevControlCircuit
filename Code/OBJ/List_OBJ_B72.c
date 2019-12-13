@@ -20,7 +20,6 @@ void board_START(OBJ_STRUCT *obj)
 	else
 	{
 		board_power = 0;
-		//set_all_obj_off();
 		PWM_OFF;
 		pwm_control(OFF,NULL,NULL,&ChargerConfig);	
 		/*выкл контактор*/
@@ -108,7 +107,7 @@ void USART_Handler(OBJ_STRUCT *obj){
 	
 	if(board_power == 1){
 		FAST_Upd_All_OBJ_USART();
-		OBJ_Event(IND_obj_USART_TX);		
+		OBJ_Event(IND_obj_USART_TX);
 	}else{
 		SYNC_LED_OFF;
 		obj->obj_value = 0;

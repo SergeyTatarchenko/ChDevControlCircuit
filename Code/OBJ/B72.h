@@ -18,7 +18,7 @@ v 0.6
            index          |     class        |   type    | hw_snap   |    delay    |   Handler         
 ----------------------------------------------------------------------------------------------------------------;
 */
-#define _obj_cofig_                                                                                         	\
+#define _obj_cofig_                                                                                             \
 { obj_STATUS             ,IND_obj_CAS        ,obj_soft  ,    NSD    ,NSD            ,board_START             }, \
 { IND_obj_aADC0          ,IND_obj_CAS        ,obj_hard  ,   adc_0   ,NSD            ,ADC0_Handler            }, \
 { IND_obj_aADC1          ,IND_obj_CAS        ,obj_hard  ,   adc_1   ,NSD            ,ADC1_Handler            }, \

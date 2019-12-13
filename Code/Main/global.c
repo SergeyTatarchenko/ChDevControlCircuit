@@ -149,15 +149,9 @@ void DifPinInit(){
 /*************************************************
 send USART message, use DMA , medium priority 
 *************************************************/
-void send_usart_message(uint8_t *message,uint32_t buf_size){
-	
-	if(buf_size <= USART1_DEFAULT_BUF_SIZE){
-		memcpy(usart_data_transmit_array,message,buf_size);
-		DMA_Ch4_Reload(USART_DATA_TYPE1,buf_size);
-	}
-	else {
-		memcpy(usart_data_stream,message,buf_size);
-		DMA_Ch4_Reload(USART_DATA_TYPE2,buf_size);}
+void send_usart_message(uint8_t *message,uint32_t buf_size)
+{
+	DMA_Ch4_Reload((uint32_t)message,buf_size);
 }
 
 /*implement of SOM function*/
