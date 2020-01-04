@@ -63,7 +63,41 @@ int16_t PID_controller(K_PID *val)
 	return (int16_t)(set_ctrl_val);
 }
 
-
+int pid_regulator(K_PID *val,uint8_t reset)
+{
+	/* итерация текущей и прошлой ошибки */
+	static int last_error = 0, current_error = 0;
+	/* составные части ПИД регулятора*/
+	static float proportional,integral,derivative;
+	/*выходное значение*/
+	static int output = 0;
+	/*-------------сброс регудятора-------------------*/
+	if(reset)
+	{
+		return val->out_Min;
+	}
+	/*---------пропорциональное звено-----------------*/
+	current_error = val->setpoint_val - val->feedback; /*текущая ошибка системы */
+	proportional = current_error * val->Kp;			    /*Kp*e(t)*/
+	/*-------------интегральное звено-----------------*/
+	integral+= ((current_error + last_error)/2)*val->Ki; 
+	/*---------дифференциальное звено-----------------*/
+	derivative = val->Kd*(current_error - last_error);
+	/*------------выход ПИД регулятора----------------*/
+	output = (int)(proportional + integral + derivative);
+	/*-------сохранение текущей ошибки----------------*/
+	last_error = current_error;
+	/*-------ограничение выходного значения-----------*/
+	if(output < val->out_Min)
+	{
+		output = val->out_Min;
+	}
+	if(output > val->out_Max)
+	{
+		output = val->out_Max;
+	}
+	return output;
+}
 
 
 

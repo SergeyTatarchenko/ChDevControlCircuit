@@ -14,8 +14,8 @@ typedef struct K_pid{
 	uint16_t feedback;
 	
 	/* Range value out*/
-	int16_t out_Max;
-	int16_t out_Min;
+	uint16_t out_Max;
+	uint16_t out_Min;
 	
     int32_t iSum;
     int32_t last_iSum;

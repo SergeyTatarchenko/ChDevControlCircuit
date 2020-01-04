@@ -29,14 +29,16 @@ void obj_model_setup()
 //	obj_state_on(IND_obj_KM1);
 	/* USART1_IRQ = 37 */
 	NVIC_EnableIRQ (USART1_IRQn);
-		
+	
+	load_configuration(&ChargerConfig);
+	value_of_obj(IND_obj_PWM_FREQ) = ChargerConfig.Frequency; 
+
 	/*init coef of regulator*/
 	pid_current_out.Kp = 0.8;
 	pid_current_out.Ki = 0.001;
 	pid_current_out.Kd = 0.5;
 	
-	pid_current_out.out_Max = 1000; 
-	pid_current_out.out_Min = 0;
+	
 	this_obj(IND_obj_PID1_KP)->dWordL = (uint32_t)(pid_current_out.Kp*10000);
 	this_obj(IND_obj_PID1_KI)->dWordL = (uint32_t)(pid_current_out.Ki*10000);
 	this_obj(IND_obj_PID1_KD)->dWordL = (uint32_t)(pid_current_out.Kd*10000);

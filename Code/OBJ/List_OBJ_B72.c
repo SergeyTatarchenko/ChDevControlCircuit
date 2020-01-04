@@ -12,8 +12,6 @@ void board_START(OBJ_STRUCT *obj)
 {
 	if(obj->obj_state == 1)
 	{
-		load_configuration(&ChargerConfig);
-		value_of_obj(IND_obj_PWM_FREQ) = ChargerConfig.Frequency; 
 		board_power = 1;
 		OBJ_Event(IND_obj_USART_TX);
 	}
