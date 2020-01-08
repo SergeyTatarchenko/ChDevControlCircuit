@@ -29,6 +29,7 @@ extern K_PID pid_inductance;
 extern K_PID pid_current_out;
 
 
-int16_t PID_controller(K_PID *val);	
+int16_t PID_controller(K_PID *val);
+int pid_regulator(K_PID *val,uint8_t reset);
 
 #endif

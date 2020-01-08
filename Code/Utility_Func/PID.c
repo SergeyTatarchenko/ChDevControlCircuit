@@ -74,7 +74,9 @@ int pid_regulator(K_PID *val,uint8_t reset)
 	/*-------------сброс регудятора-------------------*/
 	if(reset)
 	{
-		return val->out_Min;
+		integral = 0;
+		output = val->out_Min;
+		return output;
 	}
 	/*---------пропорциональное звено-----------------*/
 	current_error = val->setpoint_val - val->feedback; /*текущая ошибка системы */

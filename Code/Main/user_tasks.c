@@ -35,9 +35,11 @@ void obj_model_setup()
 
 	/*init coef of regulator*/
 	pid_current_out.Kp = 0.8;
-	pid_current_out.Ki = 0.001;
+	pid_current_out.Ki = 0.1;
 	pid_current_out.Kd = 0.5;
 	
+	pid_current_out.out_Max = ChargerConfig.MaxDutyCycle;
+	pid_current_out.out_Min = ChargerConfig.MinDutyCycle;
 	
 	this_obj(IND_obj_PID1_KP)->dWordL = (uint32_t)(pid_current_out.Kp*10000);
 	this_obj(IND_obj_PID1_KI)->dWordL = (uint32_t)(pid_current_out.Ki*10000);
@@ -113,19 +115,22 @@ void vTask_regulator(void *pvParameters)
 	for(;;){
 		if(state_of_obj(IND_obj_M_BUCK_MODE) == 1)
 		{
+			
 			if(state_of_obj(IND_obj_PID_ON) == 1)
 			{
-				/*обратная связь - датчик тока в нагрузке*/
-				/*установка значения ШИМ ключей от регулятора и обновления состояния объекта*/
-				this_obj(IND_obj_PWM_ON)->obj_value = pd_regulator(this_obj(IND_obj_PID_ON)->obj_value,this_obj(IND_obj_aOUTC)->obj_value,1,0);
-				obj_update(IND_obj_PWM_ON);
+				pid_current_out.setpoint_val = value_of_obj(IND_obj_PID_ON);
+				pid_current_out.feedback = value_of_obj(IND_obj_aOUTC);
+				value_of_obj(IND_obj_PWM_ON) = pid_regulator(&pid_current_out,0);
+				pwm_control(BUCK_MODE,value_of_obj(IND_obj_PWM_ON),NULL,&ChargerConfig);
 			}
 			else
 			{
-				this_obj(IND_obj_PWM_ON)->obj_value = pd_regulator(this_obj(IND_obj_PID_ON)->obj_value,this_obj(IND_obj_aOUTC)->obj_value,1,1);
-				obj_update(IND_obj_PWM_ON);
+				value_of_obj(IND_obj_PWM_ON) = pid_regulator(&pid_current_out,1);
+				pwm_control(BUCK_MODE,value_of_obj(IND_obj_PWM_ON),NULL,&ChargerConfig);
 			}
 		}else{
+			PWM_OFF;
+			pwm_control(OFF,NULL,NULL,&ChargerConfig);
 			this_obj(IND_obj_PWM_ON)->obj_value = 0;
 		}
 		vTaskDelay(10);

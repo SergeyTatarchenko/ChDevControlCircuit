@@ -69,8 +69,8 @@ int16_t ADC_B57045_1K21 (uint16_t val)
 			break;
 		}
 	}
-	/*y = 5x-40 */
-	return (int16_t)(i*5 - 40);	
+	/*y = x-40 */
+	return (int16_t)(i - 40);	
 }
 
 
