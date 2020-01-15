@@ -11,12 +11,14 @@
 #include "system_stm32f10x.h"
 #include "string.h"
 
+#include "global.h"
 
 /*-----------local define-----------------------*/
 /*define can clock in MHz*/
 #define CAN_CLOCK	36
 
 #define CAN1_REMAP	0
+//#define CAN_IRQ  TRUE
 /*----------------------------------------------*/
 typedef struct {
 	

@@ -25,6 +25,8 @@
 #include "mcp23x17.h"
 #include "adg72x.h"
 #include "mcp3221.h"
+
+#include "OBJ_MODEL.h"
 /*-----------------------------------------------*/
 /*----------- global define----------------------*/
 
@@ -112,6 +114,7 @@ uint16_t get_lf510_value(uint16_t adc_voltage);
 /*--------------filter block(debug mode)---------*/
 #define adc_filter_size	60
 extern uint16_t adc_moving_average_filter(uint16_t *buff, uint32_t buff_size);
+
 /*-----------------------------------------------*/
 /*low priority tasks**********************************************************
 ******************************************************************************/
@@ -191,6 +194,10 @@ extern uint16_t adc_ch4_buffer[adc_filter_size];
 extern uint16_t adc_ch5_buffer[adc_filter_size];
 extern uint16_t adc_ch6_buffer[adc_filter_size];
 
+/* data array for usart obj receive */
+extern uint8_t usart_data_receive_array[LEN_USART_MSG_OBJ];
+/*usart data byte counter */
+extern uint8_t usart_irq_counter;
 
 #define pU16(val) *((uint16_t*)&val)
 #define OPAM_ADC_REF		3300

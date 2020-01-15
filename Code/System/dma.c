@@ -49,7 +49,7 @@ void DMA_USART1_Setup(){
 	/*peripheral address*/
 	DMA1_Channel4->CPAR |= (uint32_t)&(USART1->DR);
 	/*number of data to transfer*/
-	DMA1_Channel4->CNDTR = (uint32_t)USART1_DEFAULT_BUF_SIZE;
+	DMA1_Channel4->CNDTR = (uint32_t)LEN_USART_MSG_OBJ;
 	/*Transfer complete interrupt enable */
 	DMA1_Channel4->CCR |= DMA_CCR1_TCIE;
 	

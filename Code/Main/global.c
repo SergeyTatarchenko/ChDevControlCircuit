@@ -26,6 +26,12 @@ uint16_t adc_ch3_buffer[adc_filter_size];
 uint16_t adc_ch4_buffer[adc_filter_size];
 uint16_t adc_ch5_buffer[adc_filter_size];
 uint16_t adc_ch6_buffer[adc_filter_size];
+
+/* data array for usart obj receive */
+uint8_t usart_data_receive_array[LEN_USART_MSG_OBJ];
+/*usart data byte counter */
+uint8_t usart_irq_counter = 0;
+
 /*************************************************
 init all system core drivers
 *************************************************/
@@ -158,11 +164,11 @@ void send_usart_message(uint8_t *message,uint32_t buf_size)
 #ifdef TARGET
 void HWOBJ_Event(int obj_id){
 	
-	OBJ_STRUCT* obj = objDefault + obj_id;
+	OBJ_STRUCT_TypeDef* obj = OBJ_MODEL_CLASS.objDefault + obj_id;
 	
 	/*output event*/
-	if((obj->hardware_adress >= out_0)&&((obj->hardware_adress <= out_7))){
-			Set_IO_State((int)(obj->hardware_adress - out_offset),(int)obj->obj_state);
+	if((obj->OBJ_BIND.HW_adress >= out_0)&&((obj->OBJ_BIND.HW_adress <= out_7))){
+			Set_IO_State((int)(obj->OBJ_BIND.HW_adress - out_offset),(int)obj->OBJ_STATUS.hardware.state);
 	}
 }
 #endif

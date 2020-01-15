@@ -4,21 +4,27 @@
 #ifndef OBJ_CONFIG_H_
 #define	OBJ_CONFIG_H_
 
-#define RTOS_USAGE	TRUE
-#define SOM_MODE	APP_MODE
-#define DEBUG_MODE TRUE
 #define REVISION	1
 
-/*<hw snap>*/
+#define USE_HWOBJ		TRUE
+#define USE_TIMERS		TRUE
+#define USE_SERIAL_PORT	TRUE
+#define USE_RTOS		TRUE
+
+#define USE_CAN_BUS		TRUE
+
+#define SOM_MODE	APP_MODE
+
+/*<hw snap/>*/
 #define NUM_OF_OBJ_ADC	8
 #define NUM_OF_OBJ_INPUTS	8
 #define NUM_OF_OBJ_OUTPUTS	8
 #define NUM_OF_PWM	2
 
-#define in_offset	1
-#define out_offset	(NUM_OF_OBJ_INPUTS+1)
-#define adc_offset	(out_offset + NUM_OF_OBJ_OUTPUTS+1)
-#define pwm_offset	(adc_offset + NUM_OF_OBJ_ADC + 1)
+#define in_offset	0
+#define out_offset	(in_offset +  NUM_OF_OBJ_INPUTS)
+#define adc_offset	(out_offset + NUM_OF_OBJ_OUTPUTS)
+#define pwm_offset	(adc_offset + NUM_OF_OBJ_ADC)
 
 typedef enum
 {
@@ -29,46 +35,27 @@ typedef enum
 }OBJ_HW;
 /*</hw snap>*/
 /*-----------------------------------------------
-************communication channels***************
------------------------------------------------*/
-#define USART_COM_ENABLE	TRUE
-#define CAN_COM_ENABLE    	FALSE
-/*-----------------------------------------------
 ************SOM memory usage config**************
 -----------------------------------------------*/
-
 #if SOM_MODE == APP_MODE
-	
-	#define HARDWARE_OBJECT TRUE
-	#define USART_DATA_FAST	TRUE
-	#define OBJECT_TIMER	TRUE
 
-	#define	num_of_all_obj		100
-	#define MES_BUF_SIZE		20
+#define	num_of_all_obj		100
+#define MES_BUF_SIZE		20
+#define NUM_OF_HWOBJ		50
+#define NUM_OF_TIMER		20
 
-	#if HARDWARE_OBJECT == TRUE
-		#define NUM_OF_HWOBJ    50
-	#endif
-	#if OBJECT_TIMER == TRUE
-		#define NUM_OF_TIMER    20
-	#endif
+#define CAN_MSG_SIZE		20
 
-	#ifndef TARGET
-		#include "DEFAULT.h"
-	#endif
+#ifndef TARGET
+#include "DEFAULT.h"
 #endif
 
-#if RTOS_USAGE == TRUE
-	#include "RTOS.h"
+#ifdef USE_RTOS
+#include "RTOS.h"
 #endif
 
-//#define USE_HWOBJ		TRUE
-//#define USE_TIMERS		TRUE
-//#define USE_SERIAL_PORT	TRUE
+#endif
 
-/*-------------------------------------------------
-           !board special! (remove to other file)
--------------------------------------------------*/
 #ifdef	TARGET
 #if	TARGET == 0
 	#include "TEST.h"

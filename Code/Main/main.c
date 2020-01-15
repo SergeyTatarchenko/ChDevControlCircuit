@@ -10,6 +10,7 @@
 #include "queue.h"
 /*----------------------------------------------*/
 #include "service_tasks.h"
+#include "OBJ_MODEL.h"
 
 void Init_(void);
 
@@ -21,7 +22,6 @@ void Init_(){
 		SYNC_LED_OFF;
 		Set_IO_Byte(0x00);
 		InputEvent = xSemaphoreCreateCounting(3,0);
-		FilterReady = xSemaphoreCreateBinary();
 		xMutex_BUS_BUSY = xSemaphoreCreateMutex();
 		
 		/*run with higher priority (use I2C)*/
@@ -33,7 +33,7 @@ void Init_(){
 		xTaskCreate(vTask_led_driver,"led", configMINIMAL_STACK_SIZE, NULL,user_prior, NULL );
 		
 		/*start obj model*/
-		OBJ_task_init(&task_priority,tick_50ms);
+		OBJ_task_init(&OBJ_MODEL_MEM_ALLOCATION,tick_50ms);
 	}else{
 		SYNC_LED_ON;
 		FAULT_LED_ON;
@@ -45,7 +45,6 @@ void Init_(){
 int main(void){
 	
 	Init_();
-	
 	/*run RTOS*/
 	vTaskStartScheduler();
 	/*add handler for stack overflow */	

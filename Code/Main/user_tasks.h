@@ -8,6 +8,7 @@
 #define USER_TASKS_H
 
 #include "global.h"
+#include "hw_support.h"
 /*----------------------------------------------*/
 #include "RTOS.h"
 /*----------------------------------------------*/

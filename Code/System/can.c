@@ -125,21 +125,39 @@ static void can_id_filter_config(){
 /*************************************************
  CAN RX handler
 *************************************************/
-void USB_LP_CAN1_RX0_IRQHandler(){
-	CanRxMsg Mes;
-	GPIOA->BSRR |=GPIO_BSRR_BS8;
+void USB_LP_CAN1_RX0_IRQHandler()
+{	
+	/*event to RTOS scheduler*/
+	static portBASE_TYPE xTaskWoken = pdFALSE;
+	CanRxMsg MesExt;
+	CAN_MSG_TypeDef MesInt;
 	
-	if((CAN1->RF0R & CAN_RF0R_FMP0)!=0){
-		CAN_ReceiveMailBox(&Mes,CAN_FIFO0);
-		
+	if((CAN1->RF0R & CAN_RF0R_FMP0)!=0)
+	{
+		CAN_ReceiveMailBox(&MesExt,CAN_FIFO0);	
 	}
-	/*test*/	
-//	if(Mes.Data[0] == 1){
-//		GPIOA->BSRR |=GPIO_BSRR_BS8;
-//	}
-//	if(Mes.Data[0] == 2){
-//		GPIOA->BSRR |=GPIO_BSRR_BR8;
-//	}
+	/*написать нормальное копирование*/
+	MesInt.ExtId = MesExt.ExtId;
+	MesInt.StdId = MesExt.StdId;
+	MesInt.IDE = MesExt.IDE;
+	MesInt.DLC = MesExt.DLC;
+	
+	MesInt.Data[0] = MesExt.Data[0];
+	MesInt.Data[1] = MesExt.Data[1];
+	MesInt.Data[2] = MesExt.Data[2];
+	MesInt.Data[3] = MesExt.Data[3];
+	MesInt.Data[4] = MesExt.Data[4];
+	MesInt.Data[5] = MesExt.Data[5];
+	MesInt.Data[6] = MesExt.Data[6];
+	MesInt.Data[7] = MesExt.Data[7];
+	
+	//fault_led_invertor();
+	xQueueSendFromISR(can_receive_buffer,&MesInt,0);
+	/*force stop systic */
+	if(xTaskWoken == pdTRUE)
+	{
+		taskYIELD();
+	}
 }
 
 //void CAN1_RX1_IRQHandler(){

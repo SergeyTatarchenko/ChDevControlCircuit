@@ -13,20 +13,19 @@ xSemaphoreHandle FilterReady;
 /*setup before loop*/
 void obj_model_setup()
 {
-	task_priority.system_priority = configMAX_PRIORITIES-1;
-	task_priority.rx_priority     = configMAX_PRIORITIES-2;
-	task_priority.tx_priority     = configMAX_PRIORITIES-3;
-	task_priority.user_priority   = configMAX_PRIORITIES-4;
+	OBJ_MODEL_MEM_ALLOCATION.system_priority = configMAX_PRIORITIES-1;
+	OBJ_MODEL_MEM_ALLOCATION.rx_priority     = configMAX_PRIORITIES-2;
+	OBJ_MODEL_MEM_ALLOCATION.tx_priority     = configMAX_PRIORITIES-3;
+	OBJ_MODEL_MEM_ALLOCATION.user_priority   = configMAX_PRIORITIES-4;
 	
 	/*256*2 byte block */
-	task_priority.stack_user  = 512; 
-	task_priority.stack_tx_rx = 256;
-	task_priority.tick_update_rate = 50;
+	OBJ_MODEL_MEM_ALLOCATION.stack_user  = 512; 
+	OBJ_MODEL_MEM_ALLOCATION.stack_tx_rx = 256;
+	OBJ_MODEL_MEM_ALLOCATION.tick_update_rate = 50;
 	
 	/*adc init*/
 	ADC1_On
 	/*usart interrupt enable*/
-//	obj_state_on(IND_obj_KM1);
 	/* USART1_IRQ = 37 */
 	NVIC_EnableIRQ (USART1_IRQn);
 	
@@ -41,9 +40,9 @@ void obj_model_setup()
 	pid_current_out.out_Max = ChargerConfig.MaxDutyCycle;
 	pid_current_out.out_Min = ChargerConfig.MinDutyCycle;
 	
-	this_obj(IND_obj_PID1_KP)->dWordL = (uint32_t)(pid_current_out.Kp*10000);
-	this_obj(IND_obj_PID1_KI)->dWordL = (uint32_t)(pid_current_out.Ki*10000);
-	this_obj(IND_obj_PID1_KD)->dWordL = (uint32_t)(pid_current_out.Kd*10000);
+//	this_obj(IND_obj_PID1_KP)->dWordL = (uint32_t)(pid_current_out.Kp*10000);
+//	this_obj(IND_obj_PID1_KI)->dWordL = (uint32_t)(pid_current_out.Ki*10000);
+//	this_obj(IND_obj_PID1_KD)->dWordL = (uint32_t)(pid_current_out.Kd*10000);
 }
 
 /*1 ms loop after setup*/
@@ -53,8 +52,7 @@ void obj_model_task(int tick)
 	/*while power enable adc conversions*/
 	if(board_power)
 	{
-	//obj_input_driver(&(IO_STATE.INPUTS),1,8,in_0);
-	obj_adc_driver(ADC1_DataArray);
+		hw_obj_value_driver(ADC1_DataArray,adc_offset,8);
 	}	
 }
 
@@ -129,8 +127,8 @@ void vTask_regulator(void *pvParameters)
 				pwm_control(BUCK_MODE,value_of_obj(IND_obj_PWM_ON),NULL,&ChargerConfig);
 			}
 		}else{
-			PWM_OFF;
-			pwm_control(OFF,NULL,NULL,&ChargerConfig);
+//			PWM_OFF;
+//			pwm_control(OFF,NULL,NULL,&ChargerConfig);
 			this_obj(IND_obj_PWM_ON)->obj_value = 0;
 		}
 		vTaskDelay(10);
