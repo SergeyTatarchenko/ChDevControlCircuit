@@ -6,23 +6,33 @@
 /************************************************************************************/
 static uint8_t current_limit_trigger = 0;
 
-void general_CAN_Handler(CAN_MSG_TypeDef *msg){
+void general_CAN_Handler(CAN_MSG_TypeDef *msg)
+{
 	
-	/*test can handler*/
-	if(msg->Data[0] == 1){
-		value_of_obj(IND_obj_Q)= msg->Data[1];
-	}
 }
 /*first obj*/
 void board_START(OBJ_STRUCT_TypeDef *obj)
 {
+	int permission = 0;
 	if(obj->OBJ_STATUS.soft.state == 1)
 	{
 		load_configuration(&ChargerConfig);
 		value_of_obj(IND_obj_PWM_FREQ) = ChargerConfig.Frequency; 
 		board_power = 1;
+		
 		OBJ_Event(IND_obj_USART_TX);
 		OBJ_Event(IND_obj_CAN_SEND);
+		
+		permission = PowerBoardInit(&ChargerErrors,&ChargerConfig,
+		value_of_obj(IND_obj_aINV),value_of_obj(IND_obj_aINC),
+		value_of_obj(IND_obj_aOUTV),value_of_obj(IND_obj_aOUTV));
+		
+		if(permission)
+		{
+			/*вкл. питание драйвера IGBT и контроля О.С.*/
+			obj_state_on(IND_obj_DrOn);
+		}
+		value_of_obj(IND_obj_ERR_ARRAY) = ChargerErrors.value.value;
 	}
 	else
 	{
@@ -198,7 +208,9 @@ void BUCK_Mode_Handler(OBJ_STRUCT_TypeDef *obj)
 	{
 		/*вкл контактор*/
 		pwm_module_init(value_of_obj(IND_obj_PWM_FREQ),BUCK_MODE);
+		
 		obj_state_on(IND_obj_KM1);
+		
 		value_of_obj(IND_obj_PWM_ON)= ChargerConfig.MinDutyCycle;
 		obj_state_on(IND_obj_PWM_ON);
 		PWM_ON;
