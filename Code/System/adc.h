@@ -20,7 +20,7 @@
 #define num_of_adc_conversion	9
 /*-----------global function prototypes---------*/
 extern void ADC_Init(void);
-int16_t ADC_B57045_1K21 (uint16_t val);
+uint16_t ADC_B57045_1K21 (uint16_t val);
 /*-----------local function prototypes----------*/
 
 #endif

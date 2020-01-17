@@ -59,10 +59,10 @@ void ADC_Init()
 	while((ADC1->CR2 & ADC_CR2_CAL) == 1);
 }
 
-int16_t ADC_B57045_1K21 (uint16_t val)
+uint16_t ADC_B57045_1K21 (uint16_t val)
 {
 	int i = 0; 
-	for(i = 0;i < 33;i++)
+	for(i = 0;i < 165;i++)
 	{
 		if(termo_table[i] > val)
 		{
@@ -70,7 +70,7 @@ int16_t ADC_B57045_1K21 (uint16_t val)
 		}
 	}
 	/*y = x-40 */
-	return (int16_t)(i - 40);	
+	return (uint16_t)(i - 40);	
 }
 
 
